@@ -1,0 +1,129 @@
+﻿@model PagedList.IPagedList<DATechShop.Models.ChitietSP>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "ChiTietSP";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="text-center">Chi tiết về sản phẩm</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+            <tr>
+                <th>
+                    Gía Sản Phẩm
+                </th>
+                <th>
+                    Ảnh
+                </th>
+                <th>
+                    Tên Màu
+                </th>
+                <th>
+                    Tên Sản Phẩm
+                </th>
+                <th>
+                    Tên Tùy chọn
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.giaSP)
+                    </td>
+
+                    <td><img style="width:50px;height:auto" src="~/Upload/imgSP/@item.anhSP" /></td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MauSac.tenMau)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SanPham.tenSP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TuyChon.tenTuyChon)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.id_chiTietSP }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.id_chiTietSP }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.id_chiTietSP })
+                    </td>
+                </tr>
+            }
+
+        </table>
+        <div class="container center">
+            <div class="pagination">
+                @Html.PagedListPager(Model, page => Url.Action("ChiTietSP", new { page }), PagedListRenderOptions.Classic)
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .pagination {
+        display: inline-block;
+        padding-left: 0;
+        margin: 20px 0;
+        border-radius: 4px;
+    }
+
+        .pagination > li {
+            display: inline;
+        }
+
+            .pagination > li > a,
+            .pagination > li > span {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.42857143;
+                color: #007bff;
+                text-decoration: none;
+                background-color: #fff;
+                border: 1px solid #ddd;
+            }
+
+        .pagination > .active > a,
+        .pagination > .active > span,
+        .pagination > .active > a:hover,
+        .pagination > .active > span:hover,
+        .pagination > .active > a:focus,
+        .pagination > .active > span:focus {
+            z-index: 2;
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+            cursor: default;
+        }
+
+        .pagination > li > a:hover,
+        .pagination > li > span:hover,
+        .pagination > li > a:focus,
+        .pagination > li > span:focus {
+            z-index: 2;
+            color: #0056b3;
+            background-color: #e9ecef;
+            border-color: #ddd;
+        }
+
+        .pagination > .disabled > span,
+        .pagination > .disabled > span:hover,
+        .pagination > .disabled > span:focus,
+        .pagination > .disabled > a,
+        .pagination > .disabled > a:hover,
+        .pagination > .disabled > a:focus {
+            color: #999;
+            cursor: not-allowed;
+            background-color: #fff;
+            border-color: #ddd;
+        }
+</style>

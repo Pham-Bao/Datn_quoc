@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f1670af84d0a416799561cffa3ea5d15" Name="Diagram1">
+        <EntityTypeShape EntityType="DATotNghiepModel.ChiTietHoaDon" Width="1.5" PointX="8.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.ChitietSP" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.DanhGia" Width="1.5" PointX="6" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.DanhMuc" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.HoaDon" Width="1.5" PointX="6" PointY="16.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.KhuyenMai" Width="1.5" PointX="3.75" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.MauSac" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.NguoiDung" Width="1.5" PointX="3.75" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.SanPham" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.sysdiagram" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.ThongSoKyThuat" Width="1.5" PointX="3" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DATotNghiepModel.TuyChon" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
+        <AssociationConnector Association="DATotNghiepModel.FK__ChiTietHo__id_ch__625A9A57" ManuallyRouted="false" />
+        <AssociationConnector Association="DATotNghiepModel.FK__ChiTietHo__id_Ho__6166761E" ManuallyRouted="false" />
+        <AssociationConnector Association="DATotNghiepModel.FK__ChitietSP__id_Ma__4C6B5938" ManuallyRouted="false" />
+        <AssociationConnector Association="DATotNghiepModel.FK__ChitietSP__id_sa__4B7734FF" ManuallyRouted="false" />
+        <AssociationConnector Association="DATotNghiepModel.FK__ChitietSP__id_tu__4D5F7D71" ManuallyRouted="false" />
+        <AssociationConnector Association="DATotNghiepModel.FK__DanhGia__id_Nguo__57DD0BE4" ManuallyRouted="false" />
+        <AssociationConnector Association="DATotNghiepModel.FK__DanhGia__id_sanP__56E8E7AB" ManuallyRouted="false" />
+        <AssociationConnector Association="DATotNghiepModel.FK__HoaDon__id_Khuye__5E8A0973" ManuallyRouted="false" />
+        <AssociationConnector Association="DATotNghiepModel.FK__HoaDon__id_Nguoi__5D95E53A" ManuallyRouted="false" />
+        <AssociationConnector Association="DATotNghiepModel.FK__ThongSoKy__id_sa__531856C7" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,129 @@
+﻿@model DATechShop.Models.KhuyenMai
+@{
+    ViewBag.Title = "ThemKM";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<body>
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    }
+
+    <div class="form-horizontal container " style="width:100%">
+
+        <p class="h2 text-center mt-3">Thêm Khuyến Mãi Mới</p>
+        <form action="" method="post" enctype="multipart/form-data">
+            <div class="row">
+
+                <div class="col">
+                    <div class="form-group mt-4">
+                        <p class="label">Chọn Hình Ảnh</p>
+                        <input type="file" id="uploadhinh" name="uploadhinh" accept="image/*" onchange="ImagerFileAsURL()" />
+
+                    </div>
+                    <div class="mx-3 mt-3 rounded-pill" id="displayImg" style="width:200px">
+
+                    </div>
+                </div>
+
+
+                <div class="col">
+                    <div class="form-group mt-5">
+                        <p class="label mx-3">Mã Khuyến mãi</p>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.tenMa, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.tenMa, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <p class="label mx-3">Phần trăm giảm</p>
+                        <div class="col-md-10">
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.phanTramGiam, new { htmlAttributes = new { @class = "form-control" } })
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.phanTramGiam, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <p class="label mx-3">Mô tả khuyến mãi</p>
+                        <div class="col-md-10">
+
+                            @Html.EditorFor(model => model.moTaKhuyenMai, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.moTaKhuyenMai, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <p class="label mx-3">Ngày hết</p>
+                        <div class="col-md-10">
+
+                            @Html.EditorFor(model => model.ngayHet, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                            @Html.ValidationMessageFor(model => model.ngayHet, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <p class="label mx-3">Trạng thái</p>
+                        <div class="col-md-10">
+
+                            @Html.EditorFor(model => model.trangThai, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.trangThai, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary mt-3 mx-3" type="submit"> Thêm Sản Phẩm </button>
+                    <p class="text-primary"> @ViewBag.err</p>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+
+    <!-- <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="label"> Chọn ảnh </label>
+            <input type="file" name"fileanh" onchange="ImagerFileAsURL()" />
+        </div>
+    </form>
+
+
+    <div id="displayImg" style="width:200px">
+
+    </div> -->
+    <script type="text/javascript">
+        function ImagerFileAsURL() {
+            var file = document.getElementById('uploadhinh').files;
+            if (file.length > 0) {
+                var fileToLoad = file[0];
+                var fieReader = new FileReader();
+                fieReader.onload = function (fileLoaderEvent) {
+                    var srcData = fileLoaderEvent.target.result;
+                    var newImage = document.createElement("img");
+                    newImage.src = srcData;
+                    document.getElementById('displayImg').innerHTML = newImage.outerHTML;
+
+                }
+                fieReader.readAsDataURL(fileToLoad);
+            }
+        }
+
+    </script>
+
+
+</body>
+
+<style>
+    #displayImg img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>

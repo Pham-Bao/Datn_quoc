@@ -1,0 +1,69 @@
+﻿@model DATechShop.Models.SanPham
+
+@{
+    ViewBag.Title = "ThemSanPham";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal container " style="width:70%">
+        <form action="" method="post" enctype="multipart/form-data">
+            <h2 class="text-center">Sản Phẩm Mới</h2>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <label>Tên Sản Phẩm</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.tenSP, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.tenSP, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+          
+            <div class="form-group">
+                <label>Loại sản phẩm</label>
+                <div class="col-md-10">
+                    <select id="loaiSP" name="loaiSP" class="form-control">
+                        <option value="DienThoai">Điện thoại</option>
+                        <option value="LapTop">LapTop</option>
+                        <option value="AmThanh">Âm thanh</option>
+                        <option value="PhuKien">Phụ kiện</option>
+                        <option value="DoChoi">Đồ chơi</option>
+
+                        <!-- Thêm các option khác nếu cần -->
+                    </select>
+                    @Html.ValidationMessageFor(model => model.loaiSP, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label>Mô tả sản phẩm</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.moTa, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.moTa, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Ghi chú</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ghiChu, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ghiChu, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </div>
+</div>
+
+}
+

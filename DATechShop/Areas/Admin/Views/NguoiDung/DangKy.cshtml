@@ -1,0 +1,137 @@
+﻿@model DATechShop.Models.NguoiDung
+@{
+    ViewBag.Title = "DangKy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+    @using (Html.BeginForm())
+    {
+        <div class="form-horizontal container" style="width:1000px">
+
+            <form class="mt-5 " method="post">
+                <div class="row">
+                    <div class="col" style="width:100%;">
+                        <img src="~/Areas/imgAdmin/TND_M402_010 1.jpeg" alt="Logo" style="width:100%;" class="rounded-pill">
+                    </div>
+
+                    <div class="col">
+                        <p class="h4 mt-3">Đăng ký</p>
+                        <div class="field">
+                            <label class="label">Tên, Họ:</label>
+                            <div class="control">
+                                <input class="input" type="text">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Số điện thoại:</label>
+                            <div class="control">
+                                <input class="input" type="text">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Email:</label>
+                            <div class="control">
+                                <input class="input" type="text">
+                            </div>
+                        </div>
+
+
+                        <div class="field">
+                            <label class="label">Địa chỉ:</label>
+
+                            <div class="control">
+                                <input i class="input" type="text">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Mật khẩu:</label>
+                            <div class="control">
+                                <input class="input" type="password">
+                            </div>
+                        </div>
+                        <p>Lưu ý: Mật khẩu tối thiểu 8 ký tự bao gồm chữ, số và các ký tự đặc biệt khác.</p>
+                        <div class="field">
+                            <label class="label">Xác nhận mật khẩu:</label>
+                            <div class="control">
+                                <input class="input" type="password">
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            <button id="btnDangKy" type="submit" class="button is-primary" style="width: 100%">Đăng Ký ngay</button>
+                            <p class="">Bạn chưa có tài khoản?</p>
+                            <a class="pe-auto" href="~/khachhang/dangky">Tạo tài khoản ngay.</a>
+                            <p class="text-danger">@ViewBag.err</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    }
+    </body>
+<script>
+    
+    function validateEmail() {
+        // Lấy giá trị từ ô input có id là 'email'
+        var email = document.getElementById('email').value;
+
+        // Regex để kiểm tra định dạng email
+       var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+
+        // Kiểm tra xem email có đúng định dạng không
+        if (emailRegex.test(email)) {
+            // Email hợp lệ
+            return true;
+        } else {
+            // Email không hợp lệ, hiển thị thông báo hoặc thực hiện các hành động cần thiết
+            alert('Định dạng email không hợp lệ!');
+            return false;
+        }
+    }
+
+    function validatePassword() {
+    // Lấy giá trị từ ô input có id là 'password'
+    var password = document.getElementById('password').value;
+
+    // Regex để kiểm tra mật khẩu (tối thiểu 8 ký tự bao gồm chữ số và ký tự đặc biệt)
+    var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@@$!%*?&])[A-Za-z\d@@$!%*?&]{8,}$/;
+
+    // Kiểm tra xem mật khẩu có đúng định dạng không
+    if (passwordRegex.test(password)) {
+        // Mật khẩu hợp lệ
+        return true;
+    } else {
+        // Mật khẩu không hợp lệ, hiển thị thông báo hoặc thực hiện các hành động cần thiết
+        alert('Mật khẩu phải có ít nhất 8 ký tự bao gồm chữ số và ký tự đặc biệt!');
+        return false;
+         }
+    }
+
+    function validatePhoneNumber() {
+        // Lấy giá trị từ ô input có id là 'phoneNumber'
+        var phoneNumber = document.getElementById('phoneNumber').value;
+
+        // Regex để kiểm tra số điện thoại (ví dụ: 123-456-7890)
+        var phoneNumberRegex = /^\d{3}-\d{3}-\d{4}$/;
+
+        // Kiểm tra xem số điện thoại có đúng định dạng không
+        if (phoneNumberRegex.test(phoneNumber)) {
+            // Số điện thoại hợp lệ
+           // document.getElementById('phoneNumberError').innerText = "";  // Xóa thông báo lỗi nếu có
+            return true;
+        } else {
+            // Số điện thoại không hợp lệ, hiển thị thông báo lỗi
+            alert('số điện thoại k đúng');
+            return false;
+        }
+    }
+
+    // Gán hàm kiểm tra email cho sự kiện onclick của nút đăng ký
+    document.getElementById('btnDangKy').onclick = function () {
+        validateEmail();
+        validatePassword();
+        validatePhoneNumber();
+    };
+</script>
