@@ -141,6 +141,7 @@
     <Compile Include="Areas\Admin\Controllers\KhuyenMaiController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\SanPhamController.cs" />
+    <Compile Include="Controllers\DemoVNPayController.cs" />
     <Compile Include="Controllers\KhuyenMaiUserController.cs" />
     <Compile Include="Controllers\MuaHangController.cs" />
     <Compile Include="Controllers\TrangChuController.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Models\ChitietSP.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChiTietSPDTO.cs" />
     <Compile Include="Models\DanhGia.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -168,6 +170,7 @@
     <Compile Include="Models\KhuyenMai.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\mapHoaDon.cs" />
     <Compile Include="Models\mapKhuyenMai.cs" />
     <Compile Include="Models\mapMuaHang.cs" />
     <Compile Include="Models\mapNguoiDung.cs" />
@@ -213,6 +216,9 @@
     <Compile Include="Models\ward.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Others\PayCompare.cs" />
+    <Compile Include="Others\PayLib.cs" />
+    <Compile Include="Others\Util.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2159,7 +2165,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Views\HoaDon\" />
     <Folder Include="Upload\imgSPChung\" />
     <Folder Include="Upload\imgSP\" />
     <Folder Include="Upload\img\" />
@@ -2184,12 +2189,13 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Areas\Admin\Views\NguoiDung\DangKyTaiKhoan.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\ThongKe.cshtml" />
+    <Content Include="Areas\Admin\Views\HoaDon\DanhSachHoaDon.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\MuaHang\row.cshtml" />
     <Content Include="Views\KhuyenMaiUser\DanhSachKM.cshtml" />
     <Content Include="Views\MuaHang\datHang.cshtml" />
-    <Content Include="Views\MuaHang\test.cshtml" />
-    <Content Include="Views\MuaHang\ChonDiaChi.cshtml" />
+    <Content Include="Views\DemoVNPay\Index.cshtml" />
+    <Content Include="Views\DemoVNPay\PaymentConfirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

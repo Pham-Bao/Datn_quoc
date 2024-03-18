@@ -18,11 +18,11 @@ namespace DATechShop.Areas.Admin.Controllers
 		public ActionResult DanhSachNguoiDung(int? page)
 		{
 			mapNguoiDung map = new mapNguoiDung();
-			var data = map.DanhSachNguoiDung().OrderByDescending(x => x.id_NguoiDung); // Sắp xếp theo ID hoặc trường khác nếu cần
-			int pageSize = 6; // Số mục trên mỗi trang
-			int pageNumber = (page ?? 1); // Số trang hiện tại, mặc định là trang 1 nếu không có giá trị page
+			var data = map.DanhSachNguoiDung().OrderByDescending(x => x.id_NguoiDung); 
+			int pageSize = 6; 
+			int pageNumber = (page ?? 1);
 
-			// Sử dụng PagedList để phân trang dữ liệu
+			
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 
 			return View(pagedList);
@@ -107,7 +107,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			Session.Remove("DiaChi");
 			Session.Remove("tk");
 
-			return View();
+			return RedirectToAction("DangNhap", "NguoiDung");
 		}
 
 

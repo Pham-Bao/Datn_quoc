@@ -19,7 +19,7 @@ namespace DATechShop.Models
         {
             this.ChiTietHoaDons = new HashSet<ChiTietHoaDon>();
         }
-    
+        
         public int id_chiTietSP { get; set; }
         public Nullable<int> id_sanPham { get; set; }
         public Nullable<int> id_tuyChon { get; set; }

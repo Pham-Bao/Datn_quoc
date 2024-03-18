@@ -24,7 +24,7 @@
 
         var cart = this.Get();
 
-        // Gửi yêu cầu AJAX để lấy id_chiTietSP từ Controller
+    
         $.ajax({
             url: '/MuaHang/LayIdChiTietSP',
             type: 'POST',

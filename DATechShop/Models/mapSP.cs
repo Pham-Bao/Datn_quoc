@@ -76,5 +76,28 @@ namespace DATechShop.Models
 		}
 
 
+		public ChiTietSPDTO layChiTietSP(int id)
+		{
+			var db = new DATotNghiepEntities();
+			var chitietSP = db.ChitietSPs.Find(id);
+
+			// Kiểm tra xem chi tiết sản phẩm có tồn tại không
+			if (chitietSP == null)
+			{
+				return null; // Trả về null nếu không tìm thấy
+			}
+
+			// Tạo đối tượng DTO và gán các giá trị từ đối tượng chitietSP
+			var chitietSPDTO = new ChiTietSPDTO
+			{
+				ID = chitietSP.id_chiTietSP,
+				tenSP = chitietSP.SanPham.tenSP,
+				giaSP = chitietSP.giaSP,
+				// Gán các thuộc tính khác cần thiết
+			};
+
+			return chitietSPDTO;
+		}
+
 	}
 }

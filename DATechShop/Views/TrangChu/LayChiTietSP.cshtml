@@ -94,7 +94,7 @@
                             <p class="text-decoration-line-through h4 mx-4" style="color: #808080;">0đ</p>
                         </div>
 
-                        <!--nút chọn cấu hình-->
+                   
                     </div>
                     <p class="h4">Tùy Chọn:</p>
                     @{
@@ -110,14 +110,14 @@
                     <p class="h4">Màu sắc:</p>
                     @foreach (var item in chitietSPs)
                     {
-                        // Kiểm tra xem mã màu đã xuất hiện chưa
+                       
                         if (!maMauDaXuatHien.Contains(item.MauSac.maMau))
                         {
                             <button class="btn btn-mausac" data-color="@item.MauSac.maMau" data-hinhanh="@Url.Content("~/Upload/imgSP/" + item.anhSP)" style="background-color: @item.MauSac.maMau; border: 1px solid #CBD4F1;">
                                 @item.MauSac.maMau
                             </button>
 
-                            // Thêm mã màu vào HashSet
+                            
                             maMauDaXuatHien.Add(item.MauSac.maMau);
                         }
                     }
@@ -143,70 +143,76 @@
 <script src="~/Script/Cart.js"></script>
 
 <script>
-    var productId = '@Model.id_sanPham'; // Chuyển giá trị của Model.id_sanPham thành chuỗi JavaScript
+    var productId = '@Model.id_sanPham'; 
     $('.btn-tuychon').click(function () {
         var gia = $(this).data('gia');
-        console.log('Giá: ', gia); // Hiển thị giá trong console để kiểm tra
+        console.log('Giá: ', gia); 
         $('#selected-price').text(gia + 'đ');
 
-        // Lấy tùy chọn từ nút đã chọn
+      
         var option = $(this).text();
-        // Cập nhật tùy chọn vào phần tử ẩn
+        
         $('#selected-option').text(option);
-        console.log('Tùy chọn: ', option); // Hiển thị tùy chọn trong console để kiểm tra
+        console.log('Tùy chọn: ', option); 
     });
 
     $('.btn-mausac').click(function () {
-        // Lấy màu sắc từ thuộc tính data-color của nút
+       
         var color = $(this).data('color');
-        // Lấy đường dẫn hình ảnh từ thuộc tính data-hinhanh của nút
+        
         var imageUrl = $(this).data('hinhanh');
-        // Cập nhật màu sắc được chọn vào phần tử ẩn
+       
         $('#selected-color').text(color);
-        console.log('Màu sắc: ', color); // Hiển thị màu sắc trong console để kiểm tra
+        console.log('Màu sắc: ', color); 
 
-        // Cập nhật ảnh sản phẩm
+        
         $('#productImage').attr('src', imageUrl);
-        console.log('Ảnh sản phẩm: ', imageUrl); // Hiển thị đường dẫn ảnh trong console để kiểm tra
+        console.log('Ảnh sản phẩm: ', imageUrl);
     });
 
     $('.btn-add-to-cart').click(function () {
-        // Lấy ID sản phẩm từ thuộc tính data-product-id của nút
+      
         var productId = $(this).data('product-id');
-        // Lấy màu sắc từ phần tử ẩn
-        var color = $('#selected-color').text();
-        // Lấy tùy chọn từ phần tử ẩn
-        var option = $('#selected-option').text();
+
+        
+        var color = $('.btn-mausac.selected').data('color');
+
+        
+        var option = $('.btn-tuychon.selected').text();
+
+        console.log('Color:', color);
+        console.log('Option:', option);
+
+       
         CartClass.addToCart(productId, color, option);
     });
 
+
     var selectedButton = document.querySelector('.mt-3 button#btn_moTa');
 
-    // Kiểm tra nếu không có nút được chọn, thì mặc định chọn nút "Mô tả sản phẩm"
     if (!selectedButton) {
         selectedButton = document.querySelector('.mt-3 button');
         selectedButton.classList.remove('btn-outline-secondary');
         selectedButton.classList.add('btn-secondary');
     }
 
-    // Gọi hàm changeStyle khi mở view lên để hiển thị mô tả sản phẩm
     changeStyle(selectedButton, 'description');
 
     function changeStyle(button, tab) {
         if (selectedButton !== null) {
-            // Nếu có nút được chọn trước đó, đặt lại màu nền và chữ về trạng thái mặc định
+           
             selectedButton.classList.remove('btn-secondary');
             selectedButton.classList.add('btn-outline-secondary');
         }
 
-        // Thêm class màu xanh cho nút được bấm
+       
         button.classList.remove('btn-outline-secondary');
         button.classList.add('btn-secondary');
 
-        // Lưu trữ nút được bấm vào biến selectedButton để sử dụng sau này
+        
         selectedButton = button;
 
-        // Hiển thị hoặc ẩn phần thông tin tùy thuộc vào nút được chọn
+        
         var thongSoKT = document.getElementById('thongSoKT');
         var moTa = document.getElementById('moTa');
 
@@ -223,26 +229,25 @@
         $('.btn-mausac').click(function () {
             var color = $(this).data('color');
 
-            // Hiển thị mã màu
+          
             $('#selected-color').text(color).show();
 
-            // Loại bỏ border của tất cả các nút tùy chọn màu trước đó
+            
             $('.btn-mausac').removeClass('selected');
 
-            // Thêm border cho nút tùy chọn màu được chọn
+          
             $(this).addClass('selected');
         });
 
         $('.btn-tuychon').click(function () {
             var option = $(this).text();
 
-            // Hiển thị tùy chọn được chọn
+         
             $('#selected-option').text(option).show();
 
-            // Loại bỏ border của tất cả các nút tùy chọn trước đó
+          
             $('.btn-tuychon').removeClass('selected');
 
-            // Thêm border cho nút tùy chọn được chọn
             $(this).addClass('selected');
         });
     });
