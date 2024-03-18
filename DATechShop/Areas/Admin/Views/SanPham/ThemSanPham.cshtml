@@ -5,65 +5,113 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("ThemSanPham", "SanPham", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal container " style="width:70%">
-        <form action="" method="post" enctype="multipart/form-data">
-            <h2 class="text-center">Sản Phẩm Mới</h2>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                <label>Tên Sản Phẩm</label>
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.tenSP, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.tenSP, "", new { @class = "text-danger" })
+        <h2 class="text-center">Sản Phẩm Mới</h2>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group mt-4">
+                    <p class="label">Chọn Hình Ảnh</p>
+                    <input type="file" id="uploadhinh" name="uploadhinh" accept="image/*" onchange="ImagerFileAsURL()" />
                 </div>
+                <div class="mx-3 mt-3 rounded-pill" id="displayImg" style="width:200px"></div>
             </div>
 
-          
-            <div class="form-group">
-                <label>Loại sản phẩm</label>
-                <div class="col-md-10">
-                    <select id="loaiSP" name="loaiSP" class="form-control">
-                        <option value="DienThoai">Điện thoại</option>
-                        <option value="LapTop">LapTop</option>
-                        <option value="AmThanh">Âm thanh</option>
-                        <option value="PhuKien">Phụ kiện</option>
-                        <option value="DoChoi">Đồ chơi</option>
+            <div class="col">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <label>Tên Sản Phẩm</label>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.tenSP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.tenSP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
-                        <!-- Thêm các option khác nếu cần -->
-                    </select>
-                    @Html.ValidationMessageFor(model => model.loaiSP, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <label>Loại sản phẩm</label>
+                    <div class="col-md-10">
+                        <select id="loaiSP" name="loaiSP" class="form-control">
+                            <option value="DienThoai">Điện thoại</option>
+                            <option value="LapTop">LapTop</option>
+                            <option value="AmThanh">Âm thanh</option>
+                            <option value="PhuKien">Phụ kiện</option>
+                            <option value="DoChoi">Đồ chơi</option>
+                            <!-- Thêm các option khác nếu cần -->
+                        </select>
+                        @Html.ValidationMessageFor(model => model.loaiSP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Mô tả sản phẩm</label>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.moTa, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.moTa, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Ghi chú</label>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ghiChu, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ghiChu, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <p class="label mx-3">Phần trăm giảm</p>
+                    <div class="col-md-10">
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.khuyenMai, new { htmlAttributes = new { @class = "form-control" } })
+                            <div class="input-group-append">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.khuyenMai, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="text-primary">@ViewBag.err</p>
                 </div>
             </div>
-
-
-            <div class="form-group">
-                <label>Mô tả sản phẩm</label>
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.moTa, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.moTa, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Ghi chú</label>
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.ghiChu, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ghiChu, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-            </div>
-</div>
-
+        </div>
+    </div>
 }
+
+
+<script type="text/javascript">
+    function ImagerFileAsURL() {
+        var file = document.getElementById('uploadhinh').files;
+        if (file.length > 0) {
+            var fileToLoad = file[0];
+            var fieReader = new FileReader();
+            fieReader.onload = function (fileLoaderEvent) {
+                var srcData = fileLoaderEvent.target.result;
+                var newImage = document.createElement("img");
+                newImage.src = srcData;
+                document.getElementById('displayImg').innerHTML = newImage.outerHTML;
+            }
+            fieReader.readAsDataURL(fileToLoad);
+        }
+    }
+</script>
+
+<style>
+    #displayImg img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
 

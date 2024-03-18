@@ -1,7 +1,140 @@
-﻿
+﻿@model PagedList.IPagedList<DATechShop.Models.NguoiDung>
+@using PagedList.Mvc;
+
 @{
     ViewBag.Title = "DanhSachNguoiDung";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>DanhSachNguoiDung</h2>
+<h2 class="text-center">Danh Sách Người Dùng</h2>
 
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="">
+                <tr>
+                    <th>
+                        Tên Khách Hàng
+                    </th>
+                    <th>
+                        Số điện thoại
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Dịa chỉ
+                    </th>
+                    <th>
+                        Mật khẩu
+                    </th>
+                    <th></th>
+                </tr>
+             </thead>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ten)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.sdt)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.diaChi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.matKhau)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.id_NguoiDung }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.id_NguoiDung }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.id_NguoiDung })
+                        </td>
+                    </tr>
+                }
+
+        </table>
+        <div class="container center">
+            <ul class="pagination">
+                @Html.PagedListPager(Model, page => Url.Action("DanhSachNguoiDung", new { page }), PagedListRenderOptions.Classic)
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .mauMau {
+        width: 40px; /* Đảm bảo kích thước của ô đủ lớn để hiển thị màu */
+        height: 20px;
+        display: inline-block;
+    }
+
+    .pagination {
+        display: inline-block;
+        padding-left: 0;
+        margin: 20px 0;
+        border-radius: 4px;
+    }
+
+        .pagination > li {
+            display: inline;
+        }
+
+            .pagination > li > a,
+            .pagination > li > span {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.42857143;
+                color: #007bff;
+                text-decoration: none;
+                background-color: #fff;
+                border: 1px solid #ddd;
+            }
+
+        .pagination > .active > a,
+        .pagination > .active > span,
+        .pagination > .active > a:hover,
+        .pagination > .active > span:hover,
+        .pagination > .active > a:focus,
+        .pagination > .active > span:focus {
+            z-index: 2;
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+            cursor: default;
+        }
+
+        .pagination > li > a:hover,
+        .pagination > li > span:hover,
+        .pagination > li > a:focus,
+        .pagination > li > span:focus {
+            z-index: 2;
+            color: #0056b3;
+            background-color: #e9ecef;
+            border-color: #ddd;
+        }
+
+        .pagination > .disabled > span,
+        .pagination > .disabled > span:hover,
+        .pagination > .disabled > span:focus,
+        .pagination > .disabled > a,
+        .pagination > .disabled > a:hover,
+        .pagination > .disabled > a:focus {
+            color: #999;
+            cursor: not-allowed;
+            background-color: #fff;
+            border-color: #ddd;
+        }
+</style>

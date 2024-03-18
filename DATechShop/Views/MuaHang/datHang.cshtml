@@ -1,0 +1,358 @@
+﻿
+@{
+    ViewBag.Title = "datHang";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>chiTietSPLoai</h2>
+<div class="container px-4 mt-5">
+    <div class="row gx-5">
+
+        <div class="col-7">
+            @{
+                // Lấy giá trị của Session
+                var tenNguoiDung = Session["TenNguoiDung"] as string;
+                var soDienThoai = Session["SoDienThoai"] as string;
+                var diaChi = Session["DiaChi"] as string;
+                var id = Session["id_NguoiDung"] as string;
+            }
+
+
+            <div class="p-3 border rounded-4 bg-light container">
+                <p class="h4 mx-5 text-center">Thông tin giao hàng:</p>
+                <ul>
+                    <li class="">
+                        <label>ID:</label>
+                        <span class="font-weight-bold text-dark">@id</span>
+                    </li>
+                    <li class="">
+                        <label>Tên khách hàng:</label>
+                        <span class="font-weight-bold text-dark"> @tenNguoiDung</span>
+                    </li>
+                    <li class="">
+                        <label>Ngày đặt:</label>
+                        <span id="ngayDat" class="font-weight-bold text-dark"></span>
+                    </li>
+                    <li class="">
+                        <label>Số điện thoại:</label>
+                        <span class="font-weight-bold text-dark">@soDienThoai</span>
+                    </li>
+                    <li class="">
+                        <label>Tình trạng:</label>
+                        <span class="font-weight-bold text-success">Đang xử lý</span>
+                    </li>
+                </ul>
+                <hr class="border-top border-2 border-dark">
+
+                <p class="text-danger mx-5">(*)Yêu cầu khách ghi đúng thông tin cá nhân</p>
+                <form class="container">
+                    <div class="form-group">
+                        <label class="h5" for="phoneNumber">Số người nhận:</label>
+                        <br> <!-- Thêm thẻ br ở đây để xuống dòng -->
+                        <input id="phoneNumber" class="form-control mt-2" type="text" placeholder="Nhập số liên hệ của bạn người nhận...">
+                    </div>
+                    <label class="h5"> Địa chỉ:</label>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+
+
+
+                        <!-- Tỉnh/Thành phố -->
+                        <select id="provinceSelect" class="form-control" style="width: 200px; margin-right: 10px;">
+                            <option value="">Chọn Tỉnh/Thành phố</option>
+                            @foreach (var province in ViewBag.Provinces)
+                            {
+                                <option value="@province.Value">@province.Text</option>
+                            }
+                        </select>
+
+                        <!-- Quận/Huyện -->
+                        <select id="districtSelect" class="form-control" style="width: 200px; margin-right: 10px;">
+                            <option value="">Chọn Quận/Huyện</option>
+                        </select>
+
+                        <!-- Xã/Phường -->
+                        <select id="wardSelect" class="form-control" style="width: 200px;">
+                            <option value="">Chọn Xã/Phường</option>
+                        </select>
+                    </div>
+
+
+                    <input class="form-control mt-2" type="text" placeholder="Số Nhà/Đường" />
+
+
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label h5">Ghi chú:</label>
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+
+
+                </form>
+
+                <hr class="border-top border-2 border-dark">
+                <div class="container">
+                    <p class="h5">Phương thức thanh toán:</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="btn-wrapper">
+                                <div class="btn border-2 border-secondary payment-option" style="display: inline-flex; align-items: center;">
+                                    <span class="icon text-white-50 mx-1">
+                                        <img src="~/img/tien.png" alt="Icon" class="l" style="width: 24px; height: 24px;">
+                                    </span>
+                                    <span class="text">Trực tiếp</span>
+                                </div>
+                            </div>
+
+                            <div class="btn-wrapper">
+                                <div class="btn border-2 border-secondary payment-option" style="display: inline-flex; align-items: center;">
+                                    <span class="icon text-white-50 mx-1">
+                                        <img src="~/img/momo.png" alt="Icon" style="width: 24px; height: 24px;">
+                                    </span>
+                                    <span class="text">MOMO</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="btn-wrapper">
+                                <div class="btn border-2 border-secondary payment-option" style="display: inline-flex; align-items: center;">
+                                    <span class="icon text-white-50 mx-1">
+                                        <img src="~/img/vnpay.png" alt="Icon">
+                                    </span>
+                                    <span class="text">VNpay</span>
+                                </div>
+                            </div>
+                            <div class="btn-wrapper">
+                                <div class="btn border-2 border-secondary payment-option" style="display: inline-flex; align-items: center;">
+                                    <span class="icon text-white-50 mx-1">
+                                        <img src="~/img/thanhtoan.png" alt="Icon" style="width: 24px; height: 24px;">
+                                    </span>
+                                    <span class="text">Thẻ quốc tế</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="btn-wrapper">
+                                <div class="btn border-2 border-secondary payment-option" style="display: inline-flex; align-items: center;">
+                                    <span class="icon text-white-50 mx-1">
+                                        <img src="~/img/zalopay.png" alt="Icon" style="width: 24px; height: 24px;">
+                                    </span>
+                                    <span class="text">ZaloPay</span>
+                                </div>
+                            </div>
+                            <div class="btn-wrapper">
+                                <div class="btn border-2 border-secondary payment-option" style="display: inline-flex; align-items: center;">
+                                    <span class="icon text-white-50 mx-1">
+                                        <img src="~/img/banking.jpg" alt="Icon" style="width: 24px; height: 24px;">
+                                    </span>
+                                    <span class="text">Chuyển khoản</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        <div class="col-5">
+
+            <div class="p-3 border rounded-4 bg-light">
+                <p class="h4 text-center">Hóa Đơn</p>
+                <table class="table" id="tableSanPham">
+
+                    <thead>
+
+                        <tr>
+
+                            <th scope="col">Tên Sản Phẩm</th>
+
+                            <th scope="col">Số Lượng</th>
+
+                            <th scope="col">Thành Tiền</th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                            <th>11promax</th>
+
+                            <th>1</th>
+
+                            <th>3.000.500đ</th>
+
+                        </tr>
+                        <tr>
+
+                            <th scope="col">15promax</th>
+
+                            <th scope="col">4</th>
+
+                            <th scope="col">3.000.500đ</th>
+
+                        </tr>
+                        <tr>
+
+                            <th scope="col">Cường lực</th>
+
+                            <th scope="col">4</th>
+
+                            <th scope="col">3.000.500đ</th>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+
+                <div class="container">
+                    <table class="container-fluid mt-3">
+                        <tbody>
+                            <tr class="mb-3">
+                                <td class="text-start">Mã giảm giá:</td>
+                                <td class="text-end" id="tongThanhTien">NNSVC</td>
+                            </tr>
+                            <tr class="mb-3">
+                                <td class="text-start">Tổng phụ:</td>
+                                <td class="text-end" id="tongThanhTien">0đ</td>
+                            </tr>
+                            <tr class="mb-3">
+                                <td class="text-start">Phần trăm Giảm:</td>
+                                <td class="text-end" id="phanTramGiam">0%</td>
+                            </tr>
+                            <tr>
+                                <td class="text-start">Tiền Giảm:</td>
+                                <td class="text-end" id="tienGiam">0đ</td>
+                            </tr>
+                            <tr>
+                                <td class="text-start h4 text-dark font-weight-bold">Tổng cộng:</td>
+                                <td class="text-end h4 text-primary font-weight-bold" id="tongCong">0đ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="container">
+                    <hr class="border-top border-2 border-dark">
+                    <div class="mx-3">
+                        <input class="form-check-input checkbox " type="checkbox">
+                        <p class="text-primary">Tôi đã đọc và đồng ý điều khoản và điều kiện của hệ thống</p>
+                    </div>
+                    <a class=" mx-auto btn btn-success btn-lg  mx-auto">Tiến hành đặt hàng</a>
+                    <p class="text-danger mt-2">(*)Phí phụ thu sẽ được tính khi bạn tiến hành thanh toán.</p>
+                </div>
+            </div>
+
+           
+
+        </div>
+    </div>
+</div>
+
+<script>
+     $(document).ready(function () {
+         $('#provinceSelect').on('change', function () {
+             var provinceId = $(this).val();
+             console.log('Province ID selected:', provinceId);
+
+             // Gửi AJAX request để lấy danh sách quận/huyện
+             $.ajax({
+                 url: '/MuaHang/LayQuanHuyen',
+                 type: 'GET',
+                 data: { provinceId: provinceId },
+                 success: function (response) {
+                     console.log('AJAX request for districts sent successfully:', response);
+                     // Cập nhật dropdown quận/huyện dựa trên response
+                     $('#districtSelect').empty();
+                     $('#districtSelect').append($('<option>', {
+                         value: '',
+                         text: 'Chọn Quận/Huyện'
+                     }));
+                     $.each(response, function (index, district) {
+                         $('#districtSelect').append($('<option>', {
+                             value: district.id,
+                             text: district.name
+                         }));
+                     });
+                 },
+                 error: function (xhr, status, error) {
+                     console.error('Error sending AJAX request:', error);
+                 }
+             });
+         });
+
+         $('#districtSelect').on('change', function () {
+             var districtId = $(this).val();
+             console.log('District ID selected:', districtId);
+
+             // Gửi AJAX request để lấy danh sách xã/phường
+             $.ajax({
+                 url: '/MuaHang/LayXaPhuong',
+                 type: 'GET',
+                 data: { districtId: districtId },
+                 success: function (response) {
+                     console.log('AJAX request for wards sent successfully:', response);
+                     // Cập nhật dropdown xã/phường dựa trên response
+                     $('#wardSelect').empty();
+                     $('#wardSelect').append($('<option>', {
+                         value: '',
+                         text: 'Chọn Xã/Phường'
+                     }));
+                     $.each(response, function (index, ward) {
+                         $('#wardSelect').append($('<option>', {
+                             value: ward.id,
+                             text: ward.name
+                         }));
+                     });
+                 },
+                 error: function (xhr, status, error) {
+                     console.error('Error sending AJAX request:', error);
+                 }
+             });
+         });
+     });
+    // Get all payment options
+    const paymentOptions = document.querySelectorAll('.payment-option');
+
+    // Add click event listener to each payment option
+    paymentOptions.forEach(option => {
+        option.addEventListener('click', function () {
+            
+            paymentOptions.forEach(opt => {
+                opt.classList.remove('selected');
+            });
+
+         
+            this.classList.add('selected');
+        });
+    });
+
+    // Lấy thẻ span bằng id
+    var ngayDatSpan = document.getElementById("ngayDat");
+
+    // Tạo một đối tượng Date mới để lấy thời gian hiện tại
+    var ngayHienTai = new Date();
+
+    // Lấy ngày, tháng, năm từ thời gian hiện tại
+    var ngay = ngayHienTai.getDate();
+    var thang = ngayHienTai.getMonth() + 1; // Tháng bắt đầu từ 0 nên cần +1
+    var nam = ngayHienTai.getFullYear();
+
+    // Định dạng lại chuỗi ngày/tháng/năm
+    var ngayDat = ngay + '/' + thang + '/' + nam;
+
+    // Gán chuỗi đã định dạng vào nội dung của thẻ span
+    ngayDatSpan.innerHTML = ngayDat;
+
+</script>
+
+<style>
+    .btn-wrapper {
+    margin-bottom: 10px; /
+}
+    .payment-option.selected {
+        background-color: rgba(0, 123, 255, 0.3); 
+        border-color: rgba(0, 123, 255, 0.8);
+    }
+</style>

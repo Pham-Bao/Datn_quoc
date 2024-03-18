@@ -13,7 +13,7 @@
 </p>
 <div class="card-body">
     <div class="table-responsive">
-        <table class="table table-bordered table-hover" id="dataTable" width="90%" cellspacing="0">
+        <table class="table" id="dataTable" width="90%" cellspacing="0">
             <thead>
                 <tr>
                     <th>
@@ -29,7 +29,13 @@
                         Ghi Chú
                     </th>
                     <th>
-                        Chức năng
+                        Khuyến mãi
+                    </th>
+                    <th>
+                       ẢNh
+                    </th>
+                    <th>
+                        CHức Năng
                     </th>
                 </tr>
 
@@ -49,9 +55,30 @@
                             @Html.DisplayFor(modelItem => item.ghiChu)
                         </td>
                         <td>
-                            
-                            @Html.ActionLink("Thêm Chi Tiết", "ThemChiTietSP", new { id = item.id_sanPham }) |
-                            @Html.ActionLink("Thêm Thông Số ", "ChiTietSP", new { id = item.id_sanPham })
+                            @Html.DisplayFor(modelItem => item.khuyenMai)
+                        </td>
+                       
+                        <td>
+                            <img style="width:50px;height:auto" src="~/Upload/imgSPChung/@item.anhSPChung" />
+                        </td>
+                        <td>
+                            <div class="d-inline mx-3">
+                                <a href="#" class="btn btn-danger btn-circle btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                            <div class="dropdown d-inline">
+                                <button class="btn " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i> <!-- Icon ba chấm của Font Awesome -->
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li>@Html.ActionLink("Thêm Chi Tiết", "ThemChiTietSP", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Xem Các SP", "ChiTietSP", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Thêm Thông Số", "DanhSachThongSo", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
+                                </ul>
+                            </div>
+
+
                         </td>
                     </tr>
                 }

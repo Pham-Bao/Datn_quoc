@@ -37,5 +37,8 @@ namespace DATechShop.Models
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<ThongSoKyThuat> ThongSoKyThuats { get; set; }
         public virtual DbSet<TuyChon> TuyChons { get; set; }
+        public virtual DbSet<district> districts { get; set; }
+        public virtual DbSet<province> provinces { get; set; }
+        public virtual DbSet<ward> wards { get; set; }
     }
 }

@@ -1,0 +1,69 @@
+﻿@model DATechShop.Models.NguoiDung
+
+@{
+    ViewBag.Title = "DangKyTaiKhoan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>DangKyTaiKhoan</h2>
+
+@using (Html.BeginForm("DangKyTaiKhoan", "NguoiDung", FormMethod.Post, new { @class = "mt-5 container", style = "width: 1000px" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col" style="width: 100%;">
+            <img src="~/Areas/imgAdmin/TND_M402_010 1.jpeg" alt="Logo" style="width: 100%;" class="rounded-pill">
+        </div>
+
+        <div class="col">
+            <p class=" h4 text-center"> Tạo tài khoản</p>
+
+            <div class="form-group">
+                <label class="label">Họ tên</label>
+                @Html.EditorFor(model => model.ten, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ten, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label class="label">Số điện thoại</label>
+                <p class="text-danger">@ViewBag.phone</p>
+                @Html.EditorFor(model => model.sdt, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.sdt, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label class="label">Email</label>
+                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label class="label">Địa chỉ</label>
+                @Html.EditorFor(model => model.diaChi, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.diaChi, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label class="label">Mật khẩu</label>
+                @Html.EditorFor(model => model.matKhau, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.matKhau, "", new { @class = "text-danger" })
+            </div>
+
+            <p class="col-md-10">Lưu ý: Mật khẩu tối thiểu 8 ký tự bao gồm chữ, số và các ký tự đặc biệt khác.</p>
+
+            <div class="form-group">
+                <label class="label">Xác nhận mật khẩu</label>
+                <input id="mk" class="input form-control" type="password" placeholder="********" name="mk">
+
+                <p class="text-danger">@ViewBag.error</p>
+                <p class="text-primary">@ViewBag.success</p>
+            </div>
+
+
+            <div class="mx-5 mt-3">
+                <button type="submit" class="btn btn-primary" style="width: 100%">Đăng Ký</button>
+            </div>
+        </div>
+    </div>
+}

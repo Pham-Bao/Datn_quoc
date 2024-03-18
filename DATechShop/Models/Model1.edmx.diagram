@@ -27,6 +27,11 @@
         <AssociationConnector Association="DATotNghiepModel.FK__HoaDon__id_Khuye__5E8A0973" ManuallyRouted="false" />
         <AssociationConnector Association="DATotNghiepModel.FK__HoaDon__id_Nguoi__5D95E53A" ManuallyRouted="false" />
         <AssociationConnector Association="DATotNghiepModel.FK__ThongSoKy__id_sa__531856C7" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DATotNghiepModel.district" Width="1.5" PointX="9.625" PointY="0.875" />
+        <EntityTypeShape EntityType="DATotNghiepModel.province" Width="1.5" PointX="7.375" PointY="1.125" />
+        <EntityTypeShape EntityType="DATotNghiepModel.ward" Width="1.5" PointX="11.875" PointY="0.875" />
+        <AssociationConnector Association="DATotNghiepModel.fk82doq1t64jhly7a546lpvnu2c" />
+        <AssociationConnector Association="DATotNghiepModel.fkfjqt744bo800mb5uax74lav8k" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

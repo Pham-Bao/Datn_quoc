@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Chọn Địa Chỉ";
+    Layout = null; // Không sử dụng layout
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chọn Địa Chỉ</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <h2>Chọn Địa Chỉ</h2>
+
+    <!-- Tỉnh/Thành phố -->
+    <select id="provinceSelect" class="form-control" style="width: 200px;">
+        <option value="">Chọn Tỉnh/Thành phố</option>
+        @foreach (var province in ViewBag.Provinces)
+        {
+            <option value="@province.Value">@province.Text</option>
+        }
+    </select>
+
+    <!-- Quận/Huyện -->
+    <select id="districtSelect" class="form-control" style="width: 200px;">
+        <option value="">Chọn Quận/Huyện</option>
+    </select>
+
+    <!-- Xã/Phường -->
+    <select id="wardSelect" class="form-control" style="width: 200px;">
+        <option value="">Chọn Xã/Phường</option>
+    </select>
+
+    <script>
+        $(document).ready(function () {
+            $('#provinceSelect').on('change', function () {
+                var provinceId = $(this).val();
+                console.log('Province ID selected:', provinceId);
+
+                // Gửi AJAX request để lấy danh sách quận/huyện
+                $.ajax({
+                    url: '/MuaHang/LayQuanHuyen',
+                    type: 'GET',
+                    data: { provinceId: provinceId },
+                    success: function (response) {
+                        console.log('AJAX request for districts sent successfully:', response);
+                        // Cập nhật dropdown quận/huyện dựa trên response
+                        $('#districtSelect').empty();
+                        $('#districtSelect').append($('<option>', {
+                            value: '',
+                            text: 'Chọn Quận/Huyện'
+                        }));
+                        $.each(response, function (index, district) {
+                            $('#districtSelect').append($('<option>', {
+                                value: district.id,
+                                text: district.name
+                            }));
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error sending AJAX request:', error);
+                    }
+                });
+            });
+
+            $('#districtSelect').on('change', function () {
+                var districtId = $(this).val();
+                console.log('District ID selected:', districtId);
+
+                // Gửi AJAX request để lấy danh sách xã/phường
+                $.ajax({
+                    url: '/MuaHang/LayXaPhuong',
+                    type: 'GET',
+                    data: { districtId: districtId },
+                    success: function (response) {
+                        console.log('AJAX request for wards sent successfully:', response);
+                        // Cập nhật dropdown xã/phường dựa trên response
+                        $('#wardSelect').empty();
+                        $('#wardSelect').append($('<option>', {
+                            value: '',
+                            text: 'Chọn Xã/Phường'
+                        }));
+                        $.each(response, function (index, ward) {
+                            $('#wardSelect').append($('<option>', {
+                                value: ward.id,
+                                text: ward.name
+                            }));
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error sending AJAX request:', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

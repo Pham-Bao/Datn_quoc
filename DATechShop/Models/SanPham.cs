@@ -27,6 +27,8 @@ namespace DATechShop.Models
         public string loaiSP { get; set; }
         public string moTa { get; set; }
         public string ghiChu { get; set; }
+        public string anhSPChung { get; set; }
+        public string khuyenMai { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChitietSP> ChitietSPs { get; set; }

@@ -1,0 +1,140 @@
+﻿@model DATechShop.Models.ChitietSP
+@{
+    ViewBag.Title = "row";
+    Layout = "";
+}
+<tr class="row_@Model.id_chiTietSP">
+    <th scope="row"> <input class="form-check-input mx-auto" type="checkbox"></th>
+    <td>
+        <p class="h5 text-dark font-weight-bold">@Model.SanPham.tenSP </p>
+        <p>Màu Sắc: @Model.MauSac.tenMau</p>
+    </td>
+    <td>@Model.TuyChon.tenTuyChon</td>
+    <td><img src="~/Upload/imgSP/@Model.anhSP" style="width: 60px; height: auto;" /></td>
+    <td class="gia">@Model.giaSP</td>
+    <td>
+        <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary btn-sm" type="button" onclick="decrementValue(this)">-</button>
+            </div>
+            <input value="1" class="form-control text-center soLuong" data-product-id="@Model.id_chiTietSP" onchange="tinhThanhTien(this)" style="width:40px;">
+
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary btn-sm" type="button" onclick="incrementValue(this)">+</button>
+            </div>
+        </div>
+    </td>
+    <td class="ThanhTien">@Model.giaSP</td>
+    <td>
+        <a class="btn">
+            <i class="fas fa-trash"></i> <!-- Sử dụng icon xóa từ Font Awesome -->
+        </a>
+    </td>
+</tr>
+<script src="~/Script/Cart.js"></script>
+
+<script>
+
+
+    function decrementValue(input) {
+        var inputElement = $(input).closest('.input-group').find('.soLuong');
+        var value = parseInt(inputElement.val());
+        if (!isNaN(value) && value > 1) {
+            inputElement.val(value - 1).trigger('change');
+        }
+    }
+
+    function incrementValue(input) {
+        var inputElement = $(input).closest('.input-group').find('.soLuong');
+        var value = parseInt(inputElement.val());
+        if (!isNaN(value)) {
+            inputElement.val(value + 1).trigger('change');
+        }
+    }
+
+    function tinhThanhTien(input) {
+        var row = $(input).closest('tr');
+        var gia = parseFloat(row.find('.gia').text());
+        var soLuong = parseFloat(input.value);
+        var chiTietSPId = row.attr('class').split('_')[1];
+
+        if (!isNaN(gia) && !isNaN(soLuong)) {
+            var thanhTien = gia * soLuong;
+            row.find('.ThanhTien').text(thanhTien.toFixed());
+
+
+            var cart = CartClass.Get();
+
+
+            var index = cart.findIndex(item => item.chiTietSPId == chiTietSPId);
+
+            // Cập nhật số lượng sản phẩm trong giỏ hàng
+            if (index !== -1) {
+                cart[index].soLuong = soLuong;
+                // Lưu giỏ hàng mới vào local storage
+                CartClass.Set(cart);
+
+                // Tính lại tổng thành tiền và cập nhật vào local storage
+                var tongThanhTien = 0;
+                $('.ThanhTien').each(function () {
+                    tongThanhTien += parseFloat($(this).text());
+                });
+                localStorage.setItem('tongThanhTien', tongThanhTien.toFixed());
+
+                // Load lại trang để cập nhật tổng thành tiền trên giao diện
+                location.reload();
+            }
+        } else {
+            console.error('Giá hoặc số lượng không hợp lệ.');
+        }
+    }
+
+
+
+
+
+    $(document).ready(function () {
+       
+        // Lấy giỏ hàng từ local storage khi trang được tải lần đầu
+        var cart = CartClass.Get();
+
+        // Đặt số lượng cho các sản phẩm dựa trên dữ liệu trong giỏ hàng
+        $('.soLuong').each(function () {
+            var chiTietSPId = $(this).closest('tr').attr('class').split('_')[1];
+            var item = cart.find(item => item.chiTietSPId == chiTietSPId);
+            if (item) {
+                $(this).val(item.soLuong);
+                var gia = parseFloat($(this).closest('tr').find('.gia').text());
+                var thanhTien = gia * item.soLuong;
+                $(this).closest('tr').find('.ThanhTien').text(thanhTien.toFixed());
+            }
+        });
+
+     
+    });
+
+    $(document).ready(function () {
+       
+        var tongThanhTien = 0;
+        $('.ThanhTien').each(function () {
+            tongThanhTien += parseFloat($(this).text());
+        });
+      
+        updateTongThanhTien(tongThanhTien);
+    });
+
+    function updateTongThanhTien(tongThanhTien) {
+        localStorage.setItem('tongThanhTien', tongThanhTien.toFixed());
+    }
+
+    function loadTongThanhTien() {
+        var tongThanhTien = localStorage.getItem('tongThanhTien');
+        $('#tongThanhTien').text(tongThanhTien + 'đ');
+    }
+
+    $(document).ready(function () {
+        loadTongThanhTien();
+    });
+
+
+</script>

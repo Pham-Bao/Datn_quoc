@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "test";
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Selection</title>
+    <!-- Include Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- Tỉnh/Thành phố -->
+    <select id="provinceSelect" class="form-control" style="width: 200px;">
+        <option value="">Chọn Tỉnh/Thành phố</option>
+        <!-- Populate with data -->
+    </select>
+
+    <!-- Quận/Huyện -->
+    <select id="districtSelect" class="form-control" style="width: 200px;">
+        <option value="">Chọn Quận/Huyện</option>
+        <!-- Populate with data -->
+    </select>
+
+    <!-- Xã/Phường -->
+    <select id="wardSelect" class="form-control" style="width: 200px;">
+        <option value="">Chọn Xã/Phường</option>
+        <!-- Populate with data -->
+    </select>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo Select2 cho các dropdown
+            $('#provinceSelect').select2();
+            $('#districtSelect').select2();
+            $('#wardSelect').select2();
+
+            // Lắng nghe sự kiện khi chọn tỉnh/thành phố
+            $('#provinceSelect').on('change', function () {
+                var provinceId = $(this).val();
+                // Gọi API để lấy danh sách quận/huyện dựa trên provinceId và cập nhật vào dropdown quận/huyện
+            });
+
+            // Lắng nghe sự kiện khi chọn quận/huyện
+            $('#districtSelect').on('change', function () {
+                var districtId = $(this).val();
+                // Gọi API để lấy danh sách xã/phường dựa trên districtId và cập nhật vào dropdown xã/phường
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+

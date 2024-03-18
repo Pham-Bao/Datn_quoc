@@ -1,0 +1,74 @@
+﻿@model IEnumerable<DATechShop.Models.SanPham>
+
+@{
+    ViewBag.Title = "chiTietSPLoai";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>chiTietSPLoai</h2>
+<div class="container mt-5">
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-3">
+
+                    <div onclick="location.href='@Url.Action("LayChiTietSP", "TrangChu", new { id_sanPham = @item.id_sanPham})'" class="card" style="cursor: pointer;">
+                        <div class="container">
+                            <img src="@Url.Content("~/Upload/imgSPChung/" + item.anhSPChung)" class="card-img-top mt-2">
+                        </div>
+                        <div class="card-body mt-5">
+                            <label class="label fs-3 ">@item.tenSP</label>
+
+                            @{
+
+                                var gia = item.ChitietSPs.FirstOrDefault()?.giaSP;
+                            }
+                            <p class="h5 d-inline font-weight-bold text-primary mt-3" id="giaCuoi"></p>
+                            <p class="text-decoration-line-through d-inline text-secondary" id="giaSP">@gia đ</p>
+                            <p class="d-inline text-secondary" id="khuyenMai">-@item.khuyenMai%</p>
+
+                        </div>
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <p>Danh sách sản phẩm trống</p>
+        }
+    </div>
+</div>
+
+
+<script>
+    // Hàm tính toán giá cuối cùng dựa trên giá và tỉ lệ khuyến mãi
+    function tinhGiaCuoiCung() {
+        // Lấy giá sản phẩm từ thẻ HTML
+        var gia = parseFloat(document.getElementById('giaSP').innerText.replace('"', '')); // Loại bỏ dấu ngoặc kép
+
+        // Lấy tỉ lệ khuyến mãi từ thẻ HTML
+        var khuyenMai = parseFloat(document.getElementById('khuyenMai').innerText); // Không cần chia 100 vì giá trị đã được hiển thị dưới dạng phần trăm
+
+        // Tính toán giá cuối cùng sau khi áp dụng khuyến mãi
+        var giaCuoiCung = gia * (1 - khuyenMai / 100);
+
+       
+        document.getElementById('giaCuoi').innerText = giaCuoiCung.toFixed() + '₫'
+    }
+
+    // Thực thi hàm tính toán giá cuối cùng khi trang web được tải hoàn toàn
+    document.addEventListener('DOMContentLoaded', tinhGiaCuoiCung);
+    /* CSS */
+
+
+</script>
+<style>
+    .card:hover {
+        transform: scale(1.05); /* Phóng to thẻ khi hover */
+        filter: brightness(110 %); /* Tăng độ sáng của thẻ khi hover */
+        transition: transform 0.3s ease, filter 0.3s ease; /* Thêm hiệu ứng chuyển động */
+    }
+</style>

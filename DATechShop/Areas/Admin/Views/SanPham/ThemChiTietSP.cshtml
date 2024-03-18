@@ -6,7 +6,7 @@
     ViewBag.Title = "ThemChiTietSP";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-<body>
+
 
     <h2 class="text-center">Thêm Chi Tiết Sản Phẩm</h2>
 
@@ -48,7 +48,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.SelectedTuyChon, "Chọn Phiên Bản", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
-                            @Html.DropDownListFor(model => model.SelectedTuyChon, new SelectList(Model.DanhSachTuyChon, "id_tuyChon", "tenTuyChon"), "Chọn phiên bản...", new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.SelectedTuyChon, new SelectList(Model.DanhSachTuyChon, "id_tuyChon", "tuyChon1"), "Chọn phiên bản...", new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.SelectedTuyChon, "", new { @class = "text-danger" })
                         </div>
                     </div>

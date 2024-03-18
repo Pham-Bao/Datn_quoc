@@ -1,0 +1,62 @@
+﻿@model PagedList.IPagedList<DATechShop.Models.ThongSoKyThuat>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "DanhSachThongSo";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container mt-5">
+   
+    <p class="h2 text-center">Thêm thông số</p>
+    <div class="row">
+        <div class="col-4">
+            <p class="h4 mt-2">Bảng thông số</p>
+            <table class="table table-bordered ">
+                <tr>
+
+                    <th>
+                        Thông Số
+                    </th>
+                    <th>
+                        Giá trị
+                    </th>
+                    <th> Chắc Năng</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.tenThongSo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.giaTri)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Delete", "Delete", new { id = item.id_ThongSo })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="col-8">
+            
+            @using (Html.BeginForm("ThemThongSo", "SanPham", FormMethod.Post))
+            {
+                @Html.Hidden("id_sanPham", (int)ViewBag.IdSanPham)
+                <div class="form-group">
+                    <label for="tenThongSo">Tên Thông Số:</label>
+                    <input type="text" name="tenThongSo" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="giaTri">Giá Trị:</label>
+                    <input type="text" name="giaTri" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-primary">Thêm</button>
+            }
+            
+        </div>
+    </div>
+ </div>

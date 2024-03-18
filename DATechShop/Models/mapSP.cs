@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace DATechShop.Models
 {
@@ -51,7 +49,31 @@ namespace DATechShop.Models
 		}
 
 
+		public List<SanPham> danhSachSPLoai(string loaiSP)
+		{
+			var db = new DATotNghiepEntities();
+			var data = db.SanPhams.Where(m => m.loaiSP.ToLower().Contains(loaiSP.ToLower()) == true || string.IsNullOrEmpty(loaiSP)).ToList();
+			return data;
+		}
 
+		public List<ChitietSP> danhSachCTSPLoai(string loaiSP)
+		{
+			var db = new DATotNghiepEntities();
+			var data = db.ChitietSPs.Where(m => string.IsNullOrEmpty(loaiSP) || m.SanPham.loaiSP.ToLower().Contains(loaiSP.ToLower())).ToList();
+			return data;
+		}
+
+		public List<ThongSoKyThuat> chiTietThongSo(int id)
+		{
+			var db = new DATotNghiepEntities();
+			var data = db.ThongSoKyThuats.Where(m => m.id_sanPham == id).ToList();
+			return data;
+		}
+		public ChitietSP chiTiet(int id)
+		{
+			var db = new DATotNghiepEntities();
+			return db.ChitietSPs.Find(id);
+		}
 
 
 	}

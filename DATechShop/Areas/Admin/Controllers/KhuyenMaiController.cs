@@ -6,12 +6,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
+using DATechShop.Areas.Admin.Content;
 
 namespace DATechShop.Areas.Admin.Controllers
 {
     public class KhuyenMaiController : Controller
     {
 		// GET: Admin/KhuyenMai
+		[Auth]
 		public ActionResult DanhSachKhuyenMai(int? page)
 		{
 			mapKhuyenMai map = new mapKhuyenMai();
@@ -25,7 +27,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View(pagedList);
 		}
 
-
+		[Auth]
 		public ActionResult ThemKM()
 		{
 			return View();

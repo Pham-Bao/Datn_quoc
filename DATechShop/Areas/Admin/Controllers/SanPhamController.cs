@@ -1,4 +1,5 @@
-﻿using DATechShop.Models;
+﻿using DATechShop.Areas.Admin.Content;
+using DATechShop.Models;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,19 @@ namespace DATechShop.Areas.Admin.Controllers
     public class SanPhamController : Controller
     {
 		DATotNghiepEntities db = new DATotNghiepEntities();
+		public ActionResult ThongKe()
+		{
+			return View();
+		}
+
 		// GET: Admin/SanPham
+		[Auth]
 		public ActionResult ThemMauSac()
 		{
 
 			return View();
 		}
+		[Auth]
 		[HttpPost]
 		public ActionResult ThemMauSac(MauSac mode)
 		{
@@ -26,8 +34,8 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View();
 		}
 
-	
 
+		[Auth]
 		public ActionResult DanhSachMau(int? page)
 		{
 			mapSP map = new mapSP();
@@ -41,7 +49,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View(pagedList);
 		}
 
-
+		[Auth]
 		public ActionResult TuyChon()
 		{
 
@@ -55,6 +63,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View();
 		}
 
+		[Auth]
 		public ActionResult DanhSachTuyChon(int? page)
 		{
 			mapSP map = new mapSP();
@@ -67,20 +76,52 @@ namespace DATechShop.Areas.Admin.Controllers
 
 			return View(pagedList);
 		}
-
+		[Auth]
 		public ActionResult ThemSanPham()
 		{
 
 			return View();
 		}
 		[HttpPost]
-		public ActionResult ThemSanPham(SanPham mode)
+		public ActionResult ThemSanPham(SanPham mode, HttpPostedFileBase uploadhinh)
 		{
-			db.SanPhams.Add(mode);
-			db.SaveChanges();
+			if (uploadhinh != null && uploadhinh.ContentLength > 0)
+			{
+				try
+				{
+					DATotNghiepEntities db = new DATotNghiepEntities();
+					db.SanPhams.Add(mode);
+					db.SaveChanges();
+
+					int id = int.Parse(db.SanPhams.ToList().Last().id_sanPham.ToString());
+
+					string _FileName = "";
+					int index = uploadhinh.FileName.IndexOf('.');
+					_FileName = "sp" + id.ToString() + "." + uploadhinh.FileName.Substring(index + 1);
+					string _path = Path.Combine(Server.MapPath("~/Upload/imgSPChung"), _FileName);
+					uploadhinh.SaveAs(_path);
+
+					SanPham unv = db.SanPhams.FirstOrDefault(x => x.id_sanPham == id);
+					unv.anhSPChung = _FileName;
+					db.SaveChanges();
+
+					ViewBag.err = "Thêm thành công";
+					return View();
+				}
+				catch (Exception ex)
+				{
+					ViewBag.err = "Lỗi khi thêm sản phẩm: " + ex.Message;
+				}
+			}
+			else
+			{
+				ViewBag.err = "Không có ảnh" ;
+			}
+
 			return View();
 		}
 
+		[Auth]
 		public ActionResult DanhSachSP(int? page)
 		{
 			mapSP map = new mapSP();
@@ -94,7 +135,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View(pagedList);
 		}
 
-
+		[Auth]
 		public ActionResult ThemChiTietSP(int id)
 		{
 			// Lấy thông tin chi tiết của sản phẩm từ id được chọn
@@ -164,7 +205,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			// Nếu ModelState không hợp lệ, quay lại view để hiển thị thông báo lỗi
 			return View(viewModel);
 		}
-
+		[Auth]
 		public ActionResult ChiTietSP(int id, int? page)
 		{
 			mapSP map = new mapSP();
@@ -178,8 +219,60 @@ namespace DATechShop.Areas.Admin.Controllers
 
 			return View(pagedList);
 		}
+		[Auth]
+		public ActionResult DanhSachThongSo(int id, int? page)
+		{
+			mapSP map = new mapSP();
+			var data = map.chiTietThongSo(id);
 
+			int pageSize = 5; // Số lượng mục trên mỗi trang
+			int pageNumber = (page ?? 1); // Trang hiện tại, mặc định là trang 1 nếu không có giá trị page
 
+			// Sử dụng PagedList để phân trang dữ liệu
+			var pagedList = data.ToPagedList(pageNumber, pageSize);
+
+			ViewBag.IdSanPham = id; // Truyền id sản phẩm sang view
+
+			return View(pagedList);
+		}
+
+		[HttpPost]
+		public ActionResult ThemThongSo(FormCollection form)
+		{
+			// Lấy giá trị id_sanPham từ form post
+			int id_sanPham;
+			if (!int.TryParse(form["id_sanPham"], out id_sanPham))
+			{
+				// Xử lý nếu không có giá trị id_sanPham
+				return HttpNotFound();
+			}
+
+			// Kiểm tra xem id_sanPham có hợp lệ không
+			SanPham sanPham = db.SanPhams.Find(id_sanPham);
+			if (sanPham == null)
+			{
+				return HttpNotFound();
+			}
+
+			// Lấy thông tin từ form post
+			string tenThongSo = form["tenThongSo"];
+			string giaTri = form["giaTri"];
+
+			// Tạo một đối tượng mới ThongSoKyThuat
+			ThongSoKyThuat thongSo = new ThongSoKyThuat
+			{
+				id_sanPham = id_sanPham,
+				tenThongSo = tenThongSo,
+				giaTri = giaTri
+			};
+
+			// Thêm thông số mới vào cơ sở dữ liệu
+			db.ThongSoKyThuats.Add(thongSo);
+			db.SaveChanges();
+
+			// Redirect về action hiển thị danh sách thông số
+			return RedirectToAction("DanhSachThongSo", new { id = id_sanPham });
+		}
 
 
 	}

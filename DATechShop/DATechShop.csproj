@@ -141,6 +141,8 @@
     <Compile Include="Areas\Admin\Controllers\KhuyenMaiController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\SanPhamController.cs" />
+    <Compile Include="Controllers\KhuyenMaiUserController.cs" />
+    <Compile Include="Controllers\MuaHangController.cs" />
     <Compile Include="Controllers\TrangChuController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -157,6 +159,9 @@
     <Compile Include="Models\DanhMuc.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\district.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\HoaDon.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -164,6 +169,8 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\mapKhuyenMai.cs" />
+    <Compile Include="Models\mapMuaHang.cs" />
+    <Compile Include="Models\mapNguoiDung.cs" />
     <Compile Include="Models\mapSP.cs" />
     <Compile Include="Models\MauSac.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -186,6 +193,9 @@
     <Compile Include="Models\NguoiDung.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\province.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SanPham.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -196,7 +206,11 @@
     <Compile Include="Models\ThongSoKyThuat.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ThongSoViewModel.cs" />
     <Compile Include="Models\TuyChon.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ward.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1909,11 +1923,17 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\banking.jpg" />
     <Content Include="img\icons8-cart-48.png" />
     <Content Include="img\icons8-circuit-50 %281%29.png" />
     <Content Include="img\icons8-circuit-50.png" />
     <Content Include="img\icons8-user-32 %281%29.png" />
     <Content Include="img\icons8-user-32.png" />
+    <Content Include="img\momo.png" />
+    <Content Include="img\thanhtoan.png" />
+    <Content Include="img\tien.png" />
+    <Content Include="img\vnpay.png" />
+    <Content Include="img\zalopay.png" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Model1.Context.cs</LastGenOutput>
@@ -1924,12 +1944,6 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
-    <Content Include="Scripts\bootstrap.bundle.js" />
-    <Content Include="Scripts\bootstrap.bundle.min.js" />
-    <Content Include="Scripts\bootstrap.esm.js" />
-    <Content Include="Scripts\bootstrap.esm.min.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Content\scss\navs\_global.scss" />
     <Content Include="Areas\Content\scss\navs\_sidebar.scss" />
@@ -2114,7 +2128,6 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
     <Content Include="Areas\Admin\Views\SanPham\DanhSachMau.cshtml" />
-    <Content Include="Areas\Admin\Views\NguoiDung\DangKy.cshtml" />
     <Content Include="Areas\Admin\Views\NguoiDung\DangNhap.cshtml" />
     <Content Include="Areas\Admin\Views\KhuyenMai\DanhSachKhuyenMai.cshtml" />
     <Content Include="Areas\Admin\Views\KhuyenMai\ThemKM.cshtml" />
@@ -2125,17 +2138,8 @@
     <Content Include="Areas\Admin\Views\SanPham\DanhSachSP.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\ThemChiTietSP.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\ChiTietSP.cshtml" />
-    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.4.1.js" />
-    <Content Include="Scripts\jquery-3.4.1.min.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Areas\Admin\Views\SanPham\DanhSachThongSo.cshtml" />
+    <Content Include="Script\Cart.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -2148,10 +2152,15 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\TrangChu\Home.cshtml" />
+    <Content Include="Views\TrangChu\chiTietSP.cshtml" />
+    <Content Include="Views\TrangChu\chiTietSPLoai.cshtml" />
+    <Content Include="Views\TrangChu\LayChiTietSP.cshtml" />
+    <Content Include="Views\MuaHang\GioHang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\HoaDon\" />
+    <Folder Include="Upload\imgSPChung\" />
     <Folder Include="Upload\imgSP\" />
     <Folder Include="Upload\img\" />
     <Folder Include="Views\TrangChut\" />
@@ -2173,15 +2182,14 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Areas\Admin\Views\NguoiDung\DangKyTaiKhoan.cshtml" />
+    <Content Include="Areas\Admin\Views\SanPham\ThongKe.cshtml" />
     <None Include="packages.config" />
-    <Content Include="Scripts\bootstrap.min.js.map" />
-    <Content Include="Scripts\bootstrap.js.map" />
-    <Content Include="Scripts\bootstrap.esm.min.js.map" />
-    <Content Include="Scripts\bootstrap.esm.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.js.map" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Views\MuaHang\row.cshtml" />
+    <Content Include="Views\KhuyenMaiUser\DanhSachKM.cshtml" />
+    <Content Include="Views\MuaHang\datHang.cshtml" />
+    <Content Include="Views\MuaHang\test.cshtml" />
+    <Content Include="Views\MuaHang\ChonDiaChi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

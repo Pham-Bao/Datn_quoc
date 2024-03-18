@@ -4,31 +4,32 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="form-horizontal container" style="width: 100% ; height:800px ">
 
+<div class="form-horizontal container" style="width: 100% ; height:800px ">
+    <p class="h1">xuống</p>
     <div class="container mt-5 ">
         <div class="row mt-5">
             <div class="col">
                 <img src="~/Areas/imgAdmin/VNU_M492_08 1.jpeg" alt="Logo" style="width:100%;" class="rounded-pill">
             </div>
-            
+
             <div class="col">
                 <p class="h4 mt-3">Đăng nhập</p>
                 <form role="form" method="post">
                     <div class="field">
                         <label id="phoneNumber" class="label">Số điện thoại:</label>
                         <div class="control">
-                            <input class="input" type="text" name="tk">
+                            <input class="input" type="text" name="sdt">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Mật khẩu:</label>
+                        <div class="control position-relative">
+                            <input type="password" name="mk" id="password" class="form-control">
+                            <i class="far fa-eye position-absolute top-50 translate-middle-y" id="togglePassword" style="cursor: pointer; right: 10px;"></i>
                         </div>
                     </div>
 
-                    <div class="field">
-                        <label class="label">Mật khẩu:</label>
-                        <div class="control">
-                            <input type="password" name="mk" id="password" class="form-control">
-                            <i class="far fa-eye position-absolute bg-dark top-50  translate-middle-y" id="togglePassword" style="padding-left:95%                      ``  2       `       sa    "></i>
-                        </div>
-                    </div>
 
 
 
@@ -49,54 +50,31 @@
                     <div class="container mt-3">
                         <button id="btnDangKy" type="submit" class="button is-primary" style="width: 100%">Đăng Nhập</button>
                         <p class="">Bạn chưa có tài khoản?</p>
-                        <a class="pe-auto" href="~/NguoiDung/DanhSachNguoiDung">Tạo tài khoản ngay.</a>
-                        <p class="text-danger">@ViewBag.err</p>
+                        <a class="pe-auto" href="#">Tạo tài khoản ngay.</a>
+                        <p class="text-danger">@ViewBag.Error</p>
                     </div>
                 </form>
             </div>
+
+            @{
+                // Lấy giá trị của Session
+                var tenNguoiDung = Session["TenNguoiDung"] as string;
+                var soDienThoai = Session["SoDienThoai"] as string;
+                var diaChi = Session["DiaChi"] as string;
+                var id = Session["id_NguoiDung"] as string;
+            }
+
+        <div>
+            <p>Tên người dùng: @tenNguoiDung</p>
+            <p>Số điện thoại: @soDienThoai</p>
+            <p>Địa chỉ: @diaChi</p>
+            <p>Id: @id</p>
+        </div>
+
         </div>
     </div>
 
 </div>
 
-<script>
 
-
-    function validatePhoneNumber() {
-        // Lấy giá trị từ ô input có id là 'phoneNumber'
-        var phoneNumber = document.getElementById('phoneNumber').value;
-
-        // Regex để kiểm tra số điện thoại (ví dụ: 123-456-7890)
-        var phoneNumberRegex = /^\d{3}-\d{3}-\d{4}$/;
-
-        // Kiểm tra xem số điện thoại có đúng định dạng không
-        if (phoneNumberRegex.test(phoneNumber)) {
-            // Số điện thoại hợp lệ
-            // document.getElementById('phoneNumberError').innerText = "";  // Xóa thông báo lỗi nếu có
-            return true;
-        } else {
-            // Số điện thoại không hợp lệ, hiển thị thông báo lỗi
-            alert('số điện thoại k đúng');
-            return false;
-        }
-    }
-
-    // Gán hàm kiểm tra email cho sự kiện onclick của nút đăng ký
-    document.getElementById('btnDangKy').onclick = function () {
-        validateEmail();
-        validatePassword();
-        validatePhoneNumber();
-    };
-
-
-    const togglePassword = document.querySelector('#togglePassword');
-    const password = document.querySelector('#password');
-
-    togglePassword.addEventListener('click', function () {
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        this.classList.toggle('fa-eye-slash');
-    });
-</script>
->
 

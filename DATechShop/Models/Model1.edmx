@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DATotNghiepModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DATotNghiepModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ChiTietHoaDon">
           <Key>
             <PropertyRef Name="id_chiTietHD" />
@@ -43,6 +43,15 @@
           </Key>
           <Property Name="id_DoanhMuc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenDanhMuc" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="districts">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="255" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" />
+          <Property Name="province_id" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="HoaDon">
           <Key>
@@ -89,6 +98,14 @@
           <Property Name="diaChi" Type="nvarchar" MaxLength="255" />
           <Property Name="matKhau" Type="nvarchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="provinces">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="255" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="SanPham">
           <Key>
             <PropertyRef Name="id_sanPham" />
@@ -98,6 +115,8 @@
           <Property Name="loaiSP" Type="nvarchar" MaxLength="100" />
           <Property Name="moTa" Type="nvarchar(max)" />
           <Property Name="ghiChu" Type="nvarchar(max)" />
+          <Property Name="anhSPChung" Type="varchar(max)" />
+          <Property Name="khuyenMai" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -125,6 +144,16 @@
           <Property Name="id_tuyChon" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="tenTuyChon" Type="nvarchar" MaxLength="50" />
           <Property Name="tuyChon" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="wards">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="255" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" />
+          <Property Name="province_id" Type="bigint" />
+          <Property Name="district_id" Type="bigint" Nullable="false" />
         </EntityType>
         <Association Name="FK__ChiTietHo__id_ch__625A9A57">
           <End Role="ChitietSP" Type="Self.ChitietSP" Multiplicity="0..1" />
@@ -246,19 +275,46 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk82doq1t64jhly7a546lpvnu2c">
+          <End Role="provinces" Type="Self.provinces" Multiplicity="1" />
+          <End Role="districts" Type="Self.districts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="provinces">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="districts">
+              <PropertyRef Name="province_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkfjqt744bo800mb5uax74lav8k">
+          <End Role="districts" Type="Self.districts" Multiplicity="1" />
+          <End Role="wards" Type="Self.wards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="districts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="wards">
+              <PropertyRef Name="district_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DATotNghiepModelStoreContainer">
           <EntitySet Name="ChiTietHoaDon" EntityType="Self.ChiTietHoaDon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChitietSP" EntityType="Self.ChitietSP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DanhGia" EntityType="Self.DanhGia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DanhMuc" EntityType="Self.DanhMuc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="districts" EntityType="Self.districts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HoaDon" EntityType="Self.HoaDon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KhuyenMai" EntityType="Self.KhuyenMai" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MauSac" EntityType="Self.MauSac" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NguoiDung" EntityType="Self.NguoiDung" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="provinces" EntityType="Self.provinces" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SanPham" EntityType="Self.SanPham" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ThongSoKyThuat" EntityType="Self.ThongSoKyThuat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TuyChon" EntityType="Self.TuyChon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="wards" EntityType="Self.wards" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__ChiTietHo__id_ch__625A9A57" Association="Self.FK__ChiTietHo__id_ch__625A9A57">
             <End Role="ChitietSP" EntitySet="ChitietSP" />
             <End Role="ChiTietHoaDon" EntitySet="ChiTietHoaDon" />
@@ -299,9 +355,16 @@
             <End Role="SanPham" EntitySet="SanPham" />
             <End Role="ThongSoKyThuat" EntitySet="ThongSoKyThuat" />
           </AssociationSet>
+          <AssociationSet Name="fk82doq1t64jhly7a546lpvnu2c" Association="Self.fk82doq1t64jhly7a546lpvnu2c">
+            <End Role="provinces" EntitySet="provinces" />
+            <End Role="districts" EntitySet="districts" />
+          </AssociationSet>
+          <AssociationSet Name="fkfjqt744bo800mb5uax74lav8k" Association="Self.fkfjqt744bo800mb5uax74lav8k">
+            <End Role="districts" EntitySet="districts" />
+            <End Role="wards" EntitySet="wards" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DATotNghiepModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -416,6 +479,8 @@
           <NavigationProperty Name="ChitietSPs" Relationship="Self.FK__ChitietSP__id_sa__4B7734FF" FromRole="SanPham" ToRole="ChitietSP" />
           <NavigationProperty Name="DanhGias" Relationship="Self.FK__DanhGia__id_sanP__56E8E7AB" FromRole="SanPham" ToRole="DanhGia" />
           <NavigationProperty Name="ThongSoKyThuats" Relationship="Self.FK__ThongSoKy__id_sa__531856C7" FromRole="SanPham" ToRole="ThongSoKyThuat" />
+          <Property Name="anhSPChung" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="khuyenMai" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -619,7 +684,73 @@
             <End Role="SanPham" EntitySet="SanPhams" />
             <End Role="ThongSoKyThuat" EntitySet="ThongSoKyThuats" />
           </AssociationSet>
+          <EntitySet Name="districts" EntityType="DATotNghiepModel.district" />
+          <EntitySet Name="provinces" EntityType="DATotNghiepModel.province" />
+          <EntitySet Name="wards" EntityType="DATotNghiepModel.ward" />
+          <AssociationSet Name="fk82doq1t64jhly7a546lpvnu2c" Association="DATotNghiepModel.fk82doq1t64jhly7a546lpvnu2c">
+            <End Role="province" EntitySet="provinces" />
+            <End Role="district" EntitySet="districts" />
+          </AssociationSet>
+          <AssociationSet Name="fkfjqt744bo800mb5uax74lav8k" Association="DATotNghiepModel.fkfjqt744bo800mb5uax74lav8k">
+            <End Role="district" EntitySet="districts" />
+            <End Role="ward" EntitySet="wards" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="district">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="province_id" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="province" Relationship="DATotNghiepModel.fk82doq1t64jhly7a546lpvnu2c" FromRole="district" ToRole="province" />
+          <NavigationProperty Name="wards" Relationship="DATotNghiepModel.fkfjqt744bo800mb5uax74lav8k" FromRole="district" ToRole="ward" />
+        </EntityType>
+        <EntityType Name="province">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="districts" Relationship="DATotNghiepModel.fk82doq1t64jhly7a546lpvnu2c" FromRole="province" ToRole="district" />
+        </EntityType>
+        <EntityType Name="ward">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="province_id" Type="Int64" />
+          <Property Name="district_id" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="district" Relationship="DATotNghiepModel.fkfjqt744bo800mb5uax74lav8k" FromRole="ward" ToRole="district" />
+        </EntityType>
+        <Association Name="fk82doq1t64jhly7a546lpvnu2c">
+          <End Type="DATotNghiepModel.province" Role="province" Multiplicity="1" />
+          <End Type="DATotNghiepModel.district" Role="district" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="province">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="district">
+              <PropertyRef Name="province_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkfjqt744bo800mb5uax74lav8k">
+          <End Type="DATotNghiepModel.district" Role="district" Multiplicity="1" />
+          <End Type="DATotNghiepModel.ward" Role="ward" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="district">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ward">
+              <PropertyRef Name="district_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -721,6 +852,8 @@
           <EntitySetMapping Name="SanPhams">
             <EntityTypeMapping TypeName="DATotNghiepModel.SanPham">
               <MappingFragment StoreEntitySet="SanPham">
+                <ScalarProperty Name="khuyenMai" ColumnName="khuyenMai" />
+                <ScalarProperty Name="anhSPChung" ColumnName="anhSPChung" />
                 <ScalarProperty Name="id_sanPham" ColumnName="id_sanPham" />
                 <ScalarProperty Name="tenSP" ColumnName="tenSP" />
                 <ScalarProperty Name="loaiSP" ColumnName="loaiSP" />
@@ -756,6 +889,36 @@
                 <ScalarProperty Name="id_tuyChon" ColumnName="id_tuyChon" />
                 <ScalarProperty Name="tenTuyChon" ColumnName="tenTuyChon" />
                 <ScalarProperty Name="tuyChon1" ColumnName="tuyChon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="districts">
+            <EntityTypeMapping TypeName="DATotNghiepModel.district">
+              <MappingFragment StoreEntitySet="districts">
+                <ScalarProperty Name="province_id" ColumnName="province_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="provinces">
+            <EntityTypeMapping TypeName="DATotNghiepModel.province">
+              <MappingFragment StoreEntitySet="provinces">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="wards">
+            <EntityTypeMapping TypeName="DATotNghiepModel.ward">
+              <MappingFragment StoreEntitySet="wards">
+                <ScalarProperty Name="district_id" ColumnName="district_id" />
+                <ScalarProperty Name="province_id" ColumnName="province_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
