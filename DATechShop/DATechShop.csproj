@@ -2168,7 +2168,6 @@
     <Folder Include="Upload\imgSPChung\" />
     <Folder Include="Upload\imgSP\" />
     <Folder Include="Upload\img\" />
-    <Folder Include="Views\TrangChut\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
