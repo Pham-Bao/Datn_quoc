@@ -8,80 +8,96 @@
 
 <h2 class="text-center">Danh Sách Sản Phẩm</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <div class="card-body">
     <div class="table-responsive">
-        <table class="table" id="dataTable" width="90%" cellspacing="0">
+
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+            <div>
+             
+            </div>
+        </div>
+        <table class="table table-bordered" id="dataTable" width="90%" cellspacing="0">
             <thead>
                 <tr>
-                    <th>
+                    <th colspan="7" class="text-end">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="h3 text-dark mb-0">Sản Phẩm</p>
+                            <a class="btn btn-primary" href="@Url.Action("Themsanpham")">
+                                <i class="fas fa-plus"></i> Thêm Sản phẩm
+                            </a>
+                        </div>
+                    </th>
+
+                </tr>
+                <tr>
+                    <th class="text-dark">
                         Tên Sản Phẩm
                     </th>
-                    <th>
+                    <th class="text-dark">
                         Loại Sản Phẩm
                     </th>
-                    <th>
+                    <th class="text-dark">
                         Mô Tả
                     </th>
-                    <th>
+                    <th class="text-dark">
                         Ghi Chú
                     </th>
-                    <th>
+                    <th class="text-dark">
                         Khuyến mãi
                     </th>
-                    <th>
-                       ẢNh
+                    <th class="text-dark">
+                        ẢNh
                     </th>
-                    <th>
-                        CHức Năng
+                    <th class="text-dark">
+                        Chức Năng
                     </th>
                 </tr>
+            </thead>
 
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.tenSP)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.loaiSP)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.moTa)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ghiChu)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.khuyenMai)
-                        </td>
-                       
-                        <td>
-                            <img style="width:50px;height:auto" src="~/Upload/imgSPChung/@item.anhSPChung" />
-                        </td>
-                        <td>
-                            <div class="d-inline mx-3">
-                                <a href="#" class="btn btn-danger btn-circle btn-sm">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </div>
-                            <div class="dropdown d-inline">
-                                <button class="btn " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i> <!-- Icon ba chấm của Font Awesome -->
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <li>@Html.ActionLink("Thêm Chi Tiết", "ThemChiTietSP", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
-                                    <li>@Html.ActionLink("Xem Các SP", "ChiTietSP", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
-                                    <li>@Html.ActionLink("Thêm Thông Số", "DanhSachThongSo", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
-                                </ul>
-                            </div>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tenSP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.loaiSP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.moTa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ghiChu)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.khuyenMai)
+                    </td>
+
+                    <td>
+                        <img style="width:50px;height:auto" src="~/Upload/imgSPChung/@item.anhSPChung" />
+                    </td>
+                    <td>
+                        <div class="d-inline mx-3">
+                            <a href="#" class="btn btn-danger btn-circle btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                        <div class="dropdown d-inline">
+                            <button class="btn " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i> <!-- Icon ba chấm của Font Awesome -->
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li>@Html.ActionLink("Thêm chi tiết sản phẩm", "ThemChiTietSP", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
+                                <li>@Html.ActionLink("Xem Các SP", "ChiTietSP", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
+                                <li>@Html.ActionLink("Thêm Thông Số", "DanhSachThongSo", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
+                            </ul>
+                        </div>
 
 
-                        </td>
-                    </tr>
-                }
+                    </td>
+                </tr>
+            }
 
         </table>
 
@@ -93,70 +109,5 @@
     </div>
   </div>
 
-<style>
-    .mauMau {
-        width: 40px; /* Đảm bảo kích thước của ô đủ lớn để hiển thị màu */
-        height: 20px;
-        display: inline-block;
-    }
 
-    .pagination {
-        display: inline-block;
-        padding-left: 0;
-        margin: 20px 0;
-        border-radius: 4px;
-    }
-
-        .pagination > li {
-            display: inline;
-        }
-
-            .pagination > li > a,
-            .pagination > li > span {
-                position: relative;
-                float: left;
-                padding: 6px 12px;
-                margin-left: -1px;
-                line-height: 1.42857143;
-                color: #007bff;
-                text-decoration: none;
-                background-color: #fff;
-                border: 1px solid #ddd;
-            }
-
-        .pagination > .active > a,
-        .pagination > .active > span,
-        .pagination > .active > a:hover,
-        .pagination > .active > span:hover,
-        .pagination > .active > a:focus,
-        .pagination > .active > span:focus {
-            z-index: 2;
-            color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
-            cursor: default;
-        }
-
-        .pagination > li > a:hover,
-        .pagination > li > span:hover,
-        .pagination > li > a:focus,
-        .pagination > li > span:focus {
-            z-index: 2;
-            color: #0056b3;
-            background-color: #e9ecef;
-            border-color: #ddd;
-        }
-
-        .pagination > .disabled > span,
-        .pagination > .disabled > span:hover,
-        .pagination > .disabled > span:focus,
-        .pagination > .disabled > a,
-        .pagination > .disabled > a:hover,
-        .pagination > .disabled > a:focus {
-            color: #999;
-            cursor: not-allowed;
-            background-color: #fff;
-            border-color: #ddd;
-        }
-</style>
 

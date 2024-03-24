@@ -1,4 +1,5 @@
-﻿using DATechShop.Models;
+﻿using DATechShop.Areas.Admin.Content;
+using DATechShop.Models;
 using DATechShop.Others;
 using Newtonsoft.Json;
 using System;
@@ -7,9 +8,11 @@ using System.Configuration;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Policy;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using static DATechShop.Areas.Admin.Content.AuthAttribute;
 
 
 namespace DATechShop.Controllers
@@ -78,7 +81,7 @@ namespace DATechShop.Controllers
             
             return Json(new { phanTramGiam });
         }
-
+		[UserAuth]
 		public ActionResult datHang(float phanTramGiam)
 		{
 			//hiển thị list các tỉnh
@@ -181,7 +184,7 @@ namespace DATechShop.Controllers
 
 
 		[HttpPost]
-		public ActionResult TaoHoaDon(string sdt, int idTinh, int idHuyen, int idXa, string soNha, string note, string paymentMethod, float tongCong, float phamTramGiam)
+		public ActionResult TaoHoaDon(string sdt, int idTinh, int idHuyen, int idXa, string soNha, string note, float tongCong, float phamTramGiam, string selectedPaymentMethod)
 		{
 			
 				var tenNguoiDung = Session["TenNguoiDung"] as string;
@@ -200,7 +203,7 @@ namespace DATechShop.Controllers
 			var tenXaObj = db.wards.FirstOrDefault(w => w.id == idXa);
 			var tenXa = tenXaObj != null ? tenXaObj.name : "";
 
-			var giamGia = tongCong * (phamTramGiam / 100);
+			var giamGia = Math.Round(tongCong * (phamTramGiam / 100)); // Giả sử phamTramGiam là một số nguyên
 			var tongTien = tongCong - giamGia;
 			// Tạo hóa đơn mới
 			var newHoaDon = new HoaDon
@@ -210,12 +213,18 @@ namespace DATechShop.Controllers
 				trangThai = 1,
 				sdt = sdt,
 				diaChi = $"{soNha}, {tenXa}, {tenHuyen}, {tenTinh}",
-				tongTien = giamGia,
-				giamGia = tongTien
+				tongTien = tongTien,
+				giamGia = giamGia
 			};
 
 			    db.HoaDons.Add(newHoaDon);
 				db.SaveChanges();
+			
+
+			if (selectedPaymentMethod == "vnpay")
+			{
+
+			
 
 			string url = ConfigurationManager.AppSettings["Url"];
 			string returnUrl = ConfigurationManager.AppSettings["ReturnUrl"];
@@ -223,13 +232,14 @@ namespace DATechShop.Controllers
 			string hashSecret = ConfigurationManager.AppSettings["HashSecret"];
 
 			PayLib pay = new PayLib();
-			var tongTienS = tongTien.ToString();
+
+			var tongTienS = (tongTien * 100).ToString();
 			var hoaDonId = newHoaDon.id_HoaDon.ToString();
 
 			pay.AddRequestData("vnp_Version", "2.1.0"); //Phiên bản api mà merchant kết nối. Phiên bản hiện tại là 2.1.0
 			pay.AddRequestData("vnp_Command", "pay"); //Mã API sử dụng, mã cho giao dịch thanh toán là 'pay'
 			pay.AddRequestData("vnp_TmnCode", tmnCode); //Mã website của merchant trên hệ thống của VNPAY (khi đăng ký tài khoản sẽ có trong mail VNPAY gửi về)
-			pay.AddRequestData("vnp_Amount", "1000000"); //số tiền cần thanh toán, công thức: số tiền * 100 - ví dụ 10.000 (mười nghìn đồng) --> 1000000
+			pay.AddRequestData("vnp_Amount", tongTienS); //số tiền cần thanh toán, công thức: số tiền * 100 - ví dụ 10.000 (mười nghìn đồng) --> 1000000
 			pay.AddRequestData("vnp_BankCode", ""); //Mã Ngân hàng thanh toán (tham khảo: https://sandbox.vnpayment.vn/apis/danh-sach-ngan-hang/), có thể để trống, người dùng có thể chọn trên cổng thanh toán VNPAY
 			pay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss")); //ngày thanh toán theo định dạng yyyyMMddHHmmss
 			pay.AddRequestData("vnp_CurrCode", "VND"); //Đơn vị tiền tệ sử dụng thanh toán. Hiện tại chỉ hỗ trợ VND
@@ -246,11 +256,11 @@ namespace DATechShop.Controllers
 
 
 	     	return Json(new { success = true, hoaDonId = newHoaDon.id_HoaDon, paymentUrl });
+			}
 
 
 
-			
-
+			return Json(new { success = true, hoaDonId = newHoaDon.id_HoaDon });
 
 
 
@@ -331,6 +341,9 @@ namespace DATechShop.Controllers
 					{
 						//Thanh toán thành công
 						ViewBag.Message = "Thanh toán thành công hóa đơn " + orderId + " | Mã giao dịch: " + vnpayTranId;
+						var hoaDon = db.HoaDons.Find(orderId);
+						hoaDon.trangThai = 2;
+						db.SaveChanges();
 					}
 					else
 					{

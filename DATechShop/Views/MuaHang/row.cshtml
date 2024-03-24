@@ -11,7 +11,9 @@
     </td>
     <td>@Model.TuyChon.tenTuyChon</td>
     <td><img src="~/Upload/imgSP/@Model.anhSP" style="width: 60px; height: auto;" /></td>
-    <td class="gia">@Model.giaSP</td>
+    <td class="gia">
+        @string.Format("{0:#,##0}đ", Convert.ToDecimal(Model.giaSP))
+    </td>
     <td>
         <div class="input-group input-group-sm">
             <div class="input-group-prepend">
@@ -24,7 +26,7 @@
             </div>
         </div>
     </td>
-    <td class="ThanhTien">@Model.giaSP</td>
+    <td class="ThanhTien"></td>
     <td>
         <a class="btn">
             <i class="fas fa-trash"></i> <!-- Sử dụng icon xóa từ Font Awesome -->
@@ -54,7 +56,8 @@
 
     function tinhThanhTien(input) {
         var row = $(input).closest('tr');
-        var gia = parseFloat(row.find('.gia').text());
+        var gia = parseFloat(@Model.giaSP);
+
         var soLuong = parseFloat(input.value);
         var chiTietSPId = row.attr('class').split('_')[1];
 
@@ -78,6 +81,7 @@
                 var tongThanhTien = 0;
                 $('.ThanhTien').each(function () {
                     tongThanhTien += parseFloat($(this).text());
+                   
                 });
                 localStorage.setItem('tongThanhTien', tongThanhTien.toFixed());
 
@@ -95,7 +99,7 @@
 
     $(document).ready(function () {
        
-        // Lấy giỏ hàng từ local storage khi trang được tải lần đầu
+       
         var cart = CartClass.Get();
 
         // Đặt số lượng cho các sản phẩm dựa trên dữ liệu trong giỏ hàng
@@ -104,28 +108,22 @@
             var item = cart.find(item => item.chiTietSPId == chiTietSPId);
             if (item) {
                 $(this).val(item.soLuong);
-                var gia = parseFloat($(this).closest('tr').find('.gia').text());
+                var gia = @Model.giaSP;
                 var thanhTien = gia * item.soLuong;
-                $(this).closest('tr').find('.ThanhTien').text(thanhTien.toFixed());
+                var formattedAmount = thanhTien.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                $(this).closest('tr').find('.ThanhTien').text(formattedAmount);
+
+
+               // var tienGiam = tongPhu * phanTramGiam / 100;
+               // var tienGiams = tienGiam.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+               // $("td#tienGiam").text(tienGiams + 'đ');
             }
         });
 
      
     });
 
-    $(document).ready(function () {
-       
-        var tongThanhTien = 0;
-        $('.ThanhTien').each(function () {
-            tongThanhTien += parseFloat($(this).text());
-        });
-      
-        updateTongThanhTien(tongThanhTien);
-    });
-
-    function updateTongThanhTien(tongThanhTien) {
-        localStorage.setItem('tongThanhTien', tongThanhTien.toFixed());
-    }
+ 
 
     function loadTongThanhTien() {
         var tongThanhTien = localStorage.getItem('tongThanhTien');

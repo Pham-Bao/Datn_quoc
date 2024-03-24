@@ -10,102 +10,80 @@
 
 <div class="card-body ">
     <div class="table-responsive">
-        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th>Tên Khách</th>
+                    
                     <th>Ngày Tạo</th>
-                    <th>Số giao hàng</th>
+                    <th>Khách Hàng</th>
                     <th>Địa Chỉ </th>
                     <th>Tổng tiền</th>
                     <th>Giá Giảm</th>
                     <th>Tình trạng</th>
-                    <th>Chức Năng</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => item.NguoiDung.ten)</td>
+
                         <td>@Html.DisplayFor(modelItem => item.ngayTao)</td>
-                        <td>@Html.DisplayFor(modelItem => item.sdt)</td>
+                        <td>
+                            <div class="mb-2">
+                                <!-- Thêm một div để bao quanh cả hai phần tử -->
+                                <p class="font-weight-bold mb-0">Phạm Bảo</p> <!-- Class mb-0 để loại bỏ margin bottom -->
+                                <p class="mb-0">@item.sdt</p> <!-- Class mb-0 để loại bỏ margin bottom -->
+                            </div>
+                        </td>
                         <td>@Html.DisplayFor(modelItem => item.diaChi)</td>
                         <td>@Html.DisplayFor(modelItem => item.tongTien)</td>
                         <td>@Html.DisplayFor(modelItem => item.giamGia)</td>
-                        <td>@Html.DisplayFor(modelItem => item.trangThai)</td>
-                        <td>
+                        <td >
+                            @if (item.trangThai == 1)
+                            {
+                                <span class="badge bg-primary"><i class="fas fa-clock"></i> Đang đợi duyệt</span>
+                            }
+                            else if (item.trangThai == 2)
+                            {
+                                <span class="badge bg-success"><i class="fas fa-check-circle"></i> Đã duyệt</span>
+                            }
+                            else if (item.trangThai == 3)
+                            {
+                                <span class="badge bg-warning text-dark"><i class="fas fa-truck"></i> Đang Giao</span>
+                            }
+                            else if (item.trangThai == 4)
+                            {
+                                <span class="badge bg-danger"><i class="fas fa-times-circle"></i> Hủy đơn</span>
+                            }
                         </td>
+
+                        <td style="text-align: center; vertical-align: middle;">
+                            <div class="dropdown d-inline">
+                                <button class="btn btn-primary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-bars"></i> <!-- Icon ba dòng ngang của Font Awesome -->
+                                </button>
+
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li class="dropdown-item"><i class="fas fa-check-circle text-success"></i> Chấp nhận</li>
+                                    <li class="dropdown-item"><i class="fas fa-check text-primary"></i> Hoàn thành</li>
+                                    <li class="dropdown-item"><i class="fas fa-times-circle text-danger"></i> Hủy đơn</li>
+                                </ul>
+                            </div>
+                        </td>
+
+
                     </tr>
                 }
             </tbody>
         </table>
         <div class="container center">
             <div class="pagination">
-                @Html.PagedListPager(Model, page => Url.Action("DanhSachKhuyenMai", new { page }), PagedListRenderOptions.Classic)
+                @Html.PagedListPager(Model, page => Url.Action("DanhSachHoaDon", new { page }), PagedListRenderOptions.Classic)
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    .pagination {
-        display: inline-block;
-        padding-left: 0;
-        margin: 20px 0;
-        border-radius: 4px;
-    }
 
-        .pagination > li {
-            display: inline;
-        }
-
-            .pagination > li > a,
-            .pagination > li > span {
-                position: relative;
-                float: left;
-                padding: 6px 12px;
-                margin-left: -1px;
-                line-height: 1.42857143;
-                color: #007bff;
-                text-decoration: none;
-                background-color: #fff;
-                border: 1px solid #ddd;
-            }
-
-        .pagination > .active > a,
-        .pagination > .active > span,
-        .pagination > .active > a:hover,
-        .pagination > .active > span:hover,
-        .pagination > .active > a:focus,
-        .pagination > .active > span:focus {
-            z-index: 2;
-            color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
-            cursor: default;
-        }
-
-        .pagination > li > a:hover,
-        .pagination > li > span:hover,
-        .pagination > li > a:focus,
-        .pagination > li > span:focus {
-            z-index: 2;
-            color: #0056b3;
-            background-color: #e9ecef;
-            border-color: #ddd;
-        }
-
-        .pagination > .disabled > span,
-        .pagination > .disabled > span:hover,
-        .pagination > .disabled > span:focus,
-        .pagination > .disabled > a,
-        .pagination > .disabled > a:hover,
-        .pagination > .disabled > a:focus {
-            color: #999;
-            cursor: not-allowed;
-            background-color: #fff;
-            border-color: #ddd;
-        }
-</style>
 

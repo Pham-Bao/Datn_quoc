@@ -4,22 +4,45 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace DATechShop.Areas.Admin.Content
 {
 	public class AuthAttribute : ActionFilterAttribute
 	{
-		public override void OnActionExecuting(ActionExecutingContext filterContext)
+		public class AdminAuthAttribute : ActionFilterAttribute
 		{
-			var userId = filterContext.HttpContext.Session["tk"];
-			if (userId == null)
+			public override void OnActionExecuting(ActionExecutingContext filterContext)
 			{
-				filterContext.Result = new RedirectToRouteResult(
-					new System.Web.Routing.RouteValueDictionary {
-					{ "controller", "NguoiDung" },
-					{ "action", "DangNhap" }
-					});
+				var userAdmin = filterContext.HttpContext.Session["tk"];
+				if (userAdmin == null)
+				{
+					filterContext.Result = new RedirectToRouteResult(
+						new System.Web.Routing.RouteValueDictionary {
+						{ "area", "Admin" },
+						{ "controller", "NguoiDung" },
+						{ "action", "DangNhap" }
+						});
+				}
+				base.OnActionExecuting(filterContext);
 			}
-			base.OnActionExecuting(filterContext);
+		}
+
+		public class UserAuthAttribute : ActionFilterAttribute
+		{
+			public override void OnActionExecuting(ActionExecutingContext filterContext)
+			{
+				var user = filterContext.HttpContext.Session["id_NguoiDung"];
+				if (user == null)
+				{
+					filterContext.Result = new RedirectToRouteResult(
+						new System.Web.Routing.RouteValueDictionary {
+						{ "area", "Admin" },
+						{ "controller", "NguoiDung" },
+						{ "action", "DangNhap" }
+						});
+				}
+				base.OnActionExecuting(filterContext);
+			}
 		}
 	}
 }

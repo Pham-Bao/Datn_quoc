@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static DATechShop.Areas.Admin.Content.AuthAttribute;
 
 namespace DATechShop.Areas.Admin.Controllers
 {
     public class HoaDonController : Controller
     {
-		[Auth]
+		[AdminAuth]
 		public ActionResult DanhSachHoaDon(int? page)
 		{
 			mapHoaDon map = new mapHoaDon();

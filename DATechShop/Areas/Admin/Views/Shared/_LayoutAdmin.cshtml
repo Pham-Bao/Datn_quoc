@@ -28,6 +28,9 @@
     <link href="/Areas/Content/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="icon" href="~/Areas/imgAdmin/icons8-circuit-50.png" type="image/x-icon">
 
+   
+    <link href="~/Css/Css.css" rel="stylesheet" />
+
 
 </head>
 
@@ -94,7 +97,7 @@
                         <a class="collapse-item" href="~/Admin/SanPham/ThemSanPham">Thêm sản phẩm</a>
                         <a class="collapse-item" href="~/Admin/SanPham/DanhSachMau">Màu sắc</a>
                         <a class="collapse-item" href="~/Admin/SanPham/DanhSachTuyChon">Tùy chọn(Phiên Bản) </a>
-                        <a class="collapse-item" href="#">Loại sản phẩm </a>
+                      
                     </div>
                 </div>
             </li>
@@ -110,7 +113,7 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="utilities-color.html">Tất cả đơn</a>
+                        <a class="collapse-item" href="@Url.Action("DanhSachHoaDon", "HoaDon")">Tất cả đơn</a>
                         <a class="collapse-item" href="utilities-border.html">Chờ chấp nhận</a>
                         <a class="collapse-item" href="utilities-animation.html"> Chờ nhận</a>
                         <a class="collapse-item" href="utilities-other.html">Đơn thành công</a>
@@ -168,7 +171,7 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="https://dashboard.tawk.to/#/chat">
                     <i class="fas fa-comments fa-2x"></i>
                     <span>Tin nhắn</span>
                 </a>
@@ -346,7 +349,8 @@
     <!-- Page level custom scripts -->
     <script src="/Areas/Content/js/demo/chart-area-demo.js"></script>
     <script src="/Areas/Content/js/demo/chart-pie-demo.js"></script>
-
+    <style href="~/Css/Css.css" rel="stylesheet" ></style>
+   
 </body>
 
 </html>

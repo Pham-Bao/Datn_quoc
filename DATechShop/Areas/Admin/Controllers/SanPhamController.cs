@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static DATechShop.Areas.Admin.Content.AuthAttribute;
 
 namespace DATechShop.Areas.Admin.Controllers
 {
@@ -19,13 +20,13 @@ namespace DATechShop.Areas.Admin.Controllers
 		}
 
 		// GET: Admin/SanPham
-		[Auth]
+		[AdminAuth]
 		public ActionResult ThemMauSac()
 		{
 
 			return View();
 		}
-		[Auth]
+		[AdminAuth]
 		[HttpPost]
 		public ActionResult ThemMauSac(MauSac mode)
 		{
@@ -35,7 +36,7 @@ namespace DATechShop.Areas.Admin.Controllers
 		}
 
 
-		[Auth]
+		[AdminAuth]
 		public ActionResult DanhSachMau(int? page)
 		{
 			mapSP map = new mapSP();
@@ -49,7 +50,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View(pagedList);
 		}
 
-		[Auth]
+		[AdminAuth]
 		public ActionResult TuyChon()
 		{
 
@@ -63,7 +64,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View();
 		}
 
-		[Auth]
+		[AdminAuth]
 		public ActionResult DanhSachTuyChon(int? page)
 		{
 			mapSP map = new mapSP();
@@ -76,7 +77,7 @@ namespace DATechShop.Areas.Admin.Controllers
 
 			return View(pagedList);
 		}
-		[Auth]
+		[AdminAuth]
 		public ActionResult ThemSanPham()
 		{
 
@@ -121,7 +122,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View();
 		}
 
-		[Auth]
+		[AdminAuth]
 		public ActionResult DanhSachSP(int? page)
 		{
 			mapSP map = new mapSP();
@@ -135,7 +136,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View(pagedList);
 		}
 
-		[Auth]
+		[AdminAuth]
 		public ActionResult ThemChiTietSP(int id)
 		{
 			// Lấy thông tin chi tiết của sản phẩm từ id được chọn
@@ -205,7 +206,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			// Nếu ModelState không hợp lệ, quay lại view để hiển thị thông báo lỗi
 			return View(viewModel);
 		}
-		[Auth]
+		[AdminAuth]
 		public ActionResult ChiTietSP(int id, int? page)
 		{
 			mapSP map = new mapSP();
@@ -219,7 +220,7 @@ namespace DATechShop.Areas.Admin.Controllers
 
 			return View(pagedList);
 		}
-		[Auth]
+		[AdminAuth]
 		public ActionResult DanhSachThongSo(int id, int? page)
 		{
 			mapSP map = new mapSP();

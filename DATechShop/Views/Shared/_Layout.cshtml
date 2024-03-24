@@ -30,6 +30,19 @@
     <!-- Custom styles for this template-->
     <link href="/Areas/Content/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="icon" href="~/Areas/imgAdmin/icons8-circuit-50.png" type="image/x-icon">
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/65fc86e21ec1082f04d9ea15/1hph6tpsp';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 
 </head>
 <body>
@@ -46,31 +59,29 @@
                     </a>
 
 
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+
                     <div class="collapse navbar-collapse">
                         <ul class="navbar-nav me-auto mx-3 mx-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new { loaiSP = "DienThoai" })">Điện thoại</a>
+                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "DienThoai" })">Điện thoại</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new { loaiSP = "LapTop" })">LapTop</a>
+                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "LapTop" })">LapTop</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new { loaiSP = "AmThanh" })">Âm thanh</a>
+                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "AmThanh" })">Âm thanh</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new { loaiSP = "PhuKien" })">Phụ Kiện</a>
+                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "PhuKien" })">Phụ Kiện</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new { loaiSP = "DoChoi" })">Đồ chơi</a>
+                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new { area = (string)null, loaiSP = "DoChoi" })">Đồ chơi</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="~/KhuyenMaiUser/DanhSachKM">Khuyến mãi </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="~/trangchu/doan">Sửa chữa</a>
+                                <a class="nav-link" href="#">Sửa chữa</a>
                             </li>
 
                         </ul>
@@ -81,34 +92,63 @@
 
                         </form>
 
-                        <a class="btn" type="button" href="@Url.Action("GioHang", "MuaHang")" id="cart-icon">
+                        <a class="btn" type="button" href="@Url.Action("GioHang", "MuaHang", new { area = (string)null })" id="cart-icon">
                             <div class="cart-icon-wrapper">
                                 <img src="~/img/icons8-cart-48.png" alt="Logo" style="width: 45px;" class="rounded-pill">
                                 <span id="cart-count">0</span>
                             </div>
 
                         </a>
-                       
+
                         <div class="dropdown">
+                            @{
+                                // Lấy giá trị của Session
+                                var tenNguoiDung = Session["TenNguoiDung"] as string;
+                                var soDienThoai = Session["SoDienThoai"] as string;
+                                var diaChi = Session["DiaChi"] as string;
+                                var id = Session["id_NguoiDung"];
+                            }
                             <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
                                 <img src="~/img/icons8-user-32 (1).png" alt="Logo" style="width:45px;">
                                 <span class="text-light">@ViewBag.err</span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="~/Admin/nguoidung/DangKyTaiKhoan"><i class="fas fa-user-plus text-muted me-2"></i> Đăng Ký Ngay</a></li>
-                                <li><a class="dropdown-item" href="~/Admin/nguoiDung/dangnhap"><i class="fas fa-sign-in-alt text-muted me-2"></i> Đăng Nhập</a></li>
-                                <li><a class="dropdown-item text-danger" href="@Url.Action("DangXuat", "NguoiDung")"><i class="fas fa-sign-out-alt me-2"></i> Đăng Xuất</a></li>
+                                @if (tenNguoiDung == null)
+                                {
+                                    <!-- Hiển thị menu khi chưa đăng nhập -->
+                                    <li><a class="dropdown-item" href="~/Admin/nguoidung/DangKyTaiKhoan"><i class="fas fa-user-plus text-muted me-2"></i> <strong>Đăng Ký Ngay</strong></a></li>
+                                    <li><a class="dropdown-item" href="~/Admin/nguoiDung/dangnhap "><i class="fas fa-sign-in-alt text-muted me-2 text-primary"></i> <strong>Đăng Nhập</strong></a></li>
+                                }
+                                else
+                                {
+                                    <!-- Hiển thị menu khi đã đăng nhập -->
+                                    <li><span class="dropdown-item"><i class="fas fa-user text-secondary me-2"></i><strong>@tenNguoiDung</strong></span></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog text-secondary  me-2"></i>Sửa Thông Tin</a></li>
+                                    <li><a class="dropdown-item text-danger" href="@Url.Action("DangXuat", "NguoiDung", new { area = "Admin" })"><i class="fas fa-sign-out-alt me-2"></i><strong> Đăng Xuất</strong></a></li>
+
+                                }
                             </ul>
+
+
+
                         </div>
 
 
 
 
+
                     </div>
+
+
                 </div>
+
+
             </nav>
+
+            <div id="notification" class="notification"></div>
         </div>
-        <br />
+      
+
         @RenderBody()
 
         <hr />
@@ -194,17 +234,11 @@
             </footer>
 
         </div>
-       
+
         @RenderSection("scritps", false);
 
 
-        <a class="btn">
-            <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-            <df-messenger intent="WELCOME"
-                          chat-title="Chat_AI"
-                          agent-id="5ce6fd26-8729-4f56-a042-8f2527e66f5e"
-                          language-code="vi"></df-messenger>
-        </a>
+
     </div>
 </body>
 </html>
@@ -230,16 +264,20 @@
         padding: 4px 8px; /* Kích thước và độ lệch cho số lượng */
         font-size: 10px; /* Kích thước chữ của số lượng */
     }
+
+   
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #28a745;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: none;
+        z-index: 9999;
+    }
+
 </style>
-<script>
-    // Lấy giỏ hàng từ local storage
-    var cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // Đếm số lượng mục trong giỏ hàng
-    var cartCount = cart.length;
-
-    // Cập nhật số lượng hiển thị trên biểu tượng giỏ hàng
-    $('#cart-count').text(cartCount);
-
-</script>
 

@@ -8,6 +8,7 @@
 </head>
 
 <div class="container">
+    <h3>.</h3>
     <div class="row g-0">
         <p class="h2 text-center mt-5">Giỏ hàng của bạn</p>
         <div class="col-sm-6 col-md-8">
@@ -76,6 +77,7 @@
                     </div>
                     <a class=" mx-auto btn btn-success btn-lg  mx-auto" href="@Url.Action("datHang", "MuaHang")?phanTramGiam= 0">Tiến hành đặt hàng</a>
                     <p class="text-danger mt-2">(*)Phí phụ thu sẽ được tính khi bạn tiến hành thanh toán.</p>
+
                 </div>
             </div>
         </div>
@@ -86,6 +88,11 @@
 
 
     $(document).ready(function () {
+        var totalAmount = localStorage.getItem('tongThanhTien');
+
+        var totalAmountFloat = parseFloat(totalAmount);
+        var totalAmounts = totalAmountFloat.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        $('#tongCong').text(totalAmounts + 'đ');
 
         var arrSanPham = CartClass.Get();
         for (var i = 0; i < arrSanPham.length; i++) {
@@ -105,51 +112,48 @@
     });
     function updateTotalAmount() {
         var totalAmount = localStorage.getItem('tongThanhTien');
+
+        var totalAmounts = totalAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         if (totalAmount) {
-            $('#tongThanhTien').text(totalAmount + 'đ');
+            $('#tongThanhTien').text(totalAmounts + 'đ');
         }
     }
 
-
-    $(document).ready(function () {
-        updateTotalAmount();
-
-
-        $(window).on('storage', function (event) {
-            if (event.originalEvent.key === 'tongThanhTien') {
-                updateTotalAmount();
-            }
-        });
-    });
 
 
 
 $("button#applyButton").click(function () {
     var maGiamGia = $("input#maGiamGiaInput").val();
-    var phanTramGiamValue = parseFloat($("#phanTramGiam").text().trim().replace('%', '')) || 0; // Mặc định là 0 nếu không có giá trị
+    var phanTramGiamValue = parseFloat($("#phanTramGiam").text().trim().replace('%', '')) || 0; 
     $.ajax({
         url: '/MuaHang/KiemTraMaGiamGia',
         type: 'POST',
         data: { maGiamGia: maGiamGia },
         success: function (response) {
             if (response.phanTramGiam !== "Không có") {
+              
                 $("td#phanTramGiam").text(response.phanTramGiam);
                 var tongPhu = parseFloat($("#tongThanhTien").text().replace('đ', '').replace(',', ''));
                 var phanTramGiam = parseFloat(response.phanTramGiam.replace('%', ''));
+
                 var tienGiam = tongPhu * phanTramGiam / 100;
-                $("td#tienGiam").text(tienGiam.toFixed(0).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'đ');
+                var tienGiams = tienGiam.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                $("td#tienGiam").text(tienGiams + 'đ');
+
+
                 var tongCong = tongPhu - tienGiam;
-                $("td#tongCong").text(tongCong.toFixed(0).replace(/\d(?=(\d{3})+\.)/g, '$&,') + 'đ');
-                // Lấy giá trị phần trăm giảm từ cột có id là "phanTramGiam" và loại bỏ ký tự '%'
+                var tongCongs = tongCong.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                $("td#tongCong").text(tongCongs + 'đ');
                 phanTramGiamValue = parseFloat(response.phanTramGiam.replace('%', ''));
             }
-            // Kiểm tra nếu không có giá trị mã giảm giá, không cập nhật href của thẻ <a>
+            
             if (!maGiamGia) {
                  var datHangUrl = "@Url.Action("datHang", "MuaHang")" + "?phanTramGiam=" + 0
             }
-            // Thêm giá trị phần trăm giảm vào href của thẻ <a>
+            
             var datHangUrl = "@Url.Action("datHang", "MuaHang")" + "?phanTramGiam=" + encodeURIComponent(phanTramGiamValue);
-            // Cập nhật href của thẻ <a> với giá trị mới
+            
             $("a.btn-success").attr("href", datHangUrl);
         },
         error: function (xhr, status, error) {
