@@ -27,6 +27,7 @@ namespace DATechShop.Models
         public Nullable<System.DateTime> ngayHet { get; set; }
         public string trangThai { get; set; }
         public string hinhAnh { get; set; }
+        public Nullable<bool> TrangThaiXoa { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HoaDon> HoaDons { get; set; }

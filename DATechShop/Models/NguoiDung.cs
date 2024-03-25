@@ -27,6 +27,7 @@ namespace DATechShop.Models
         public string email { get; set; }
         public string diaChi { get; set; }
         public string matKhau { get; set; }
+        public Nullable<bool> TrangThaiXoa { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DanhGia> DanhGias { get; set; }

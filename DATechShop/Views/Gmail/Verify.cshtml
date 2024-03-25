@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Verify OTP";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Verify OTP</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">@ViewBag.Success</div>
+}
+
+@using (Html.BeginForm("Verify", "Gmail", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="otpEntered">Enter OTP:</label>
+        <input type="text" id="otpEntered" name="otpEntered" class="form-control" required />
+        <input type="hidden" id="emailAddress" name="emailAddress" value="@ViewBag.EmailAddress" />
+        <input type="hidden" id="otp" name="otp" value="@ViewBag.OTP" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Verify OTP</button>
+}

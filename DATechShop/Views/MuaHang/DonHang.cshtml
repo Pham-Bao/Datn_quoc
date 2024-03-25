@@ -1,28 +1,31 @@
-﻿@model PagedList.IPagedList<DATechShop.Models.HoaDon>
+﻿<@model PagedList.IPagedList<DATechShop.Models.HoaDon>
 @using PagedList.Mvc;
-
 @{
-    ViewBag.Title = "DanhSachHoaDon";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "DonHang";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
 <h2 class="text-center">Tất cả đơn hàng</h2>
-<div class="dropdown">
-    <button type="button" class="btn bnt-primary dropdown-toggle" data-bs-toggle="dropdown">
-        <i class="fas fa-filter"></i> Trạng thái đơn
-    </button>
-    <ul class="dropdown-menu">
-
-        <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= ""})"> <strong>Tất cả</strong></a></li>
-        <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "1"})"> <strong>Chờ duyệt</strong></a></li>
-        <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "3"})"> <strong>Đang giao</strong></a></li>
-        <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "4"})"> <strong>Đã hủy</strong></a></li>
-        <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "5"})"> <strong>Hoàn thành</strong></a></li>
-
-    </ul>
-</div>
+    <h2 class="text-center mt-5"> Tất cả đơn hàng</h2>
 <div class="card-body ">
-    <div class="table-responsive">
+    <div class="dropdown">
+        <button type="button" class="btn bnt-primary dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-filter"></i> Lọc dữ liệu
+        </button>
+        <ul class="dropdown-menu">
+            <!-- Các tùy chọn lọc -->
+            <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Tất cả</strong></a></li>
+            <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "1" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Chờ duyệt</strong></a></li>
+            <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "3" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Đang giao</strong></a></li>
+            <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "5" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Đã xong</strong></a></li>
+            <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "4" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Đã hủy</strong></a></li>
+
+        </ul>
+    </div>
+    </div>
+    <div class="table-responsive mt-2">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
@@ -44,8 +47,8 @@
                         <td>@Html.DisplayFor(modelItem => item.ngayTao)</td>
                         <td>
                             <div class="mb-2">
-                               
-                                <p class="font-weight-bold mb-0">@item.NguoiDung.ten</p> 
+                                <!-- Thêm một div để bao quanh cả hai phần tử -->
+                                <p class="font-weight-bold mb-0">Phạm Bảo</p> <!-- Class mb-0 để loại bỏ margin bottom -->
                                 <p class="mb-0">@item.sdt</p> <!-- Class mb-0 để loại bỏ margin bottom -->
                             </div>
                         </td>
@@ -86,9 +89,8 @@
                                 </button>
 
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="@Url.Action("doiTrangThai", "HoaDon", new { value = 3, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-check-circle text-success"></i> Chấp nhận</a>
-                                    <a class="dropdown-item" href="@Url.Action("doiTrangThai", "HoaDon", new { value = 5, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-check text-primary"></i> Hoàn thành</a>
-                                    <a class="dropdown-item" href="@Url.Action("doiTrangThai", "HoaDon", new { value = 4, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-times-circle text-danger"></i> Hủy đơn</a>
+                                    <a class="dropdown-item" href="@Url.Action("doiTrangThai", "muaHang", new { value = 10, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-check-circle text-success"></i>Thanh Toán</a>
+                                    <a class="dropdown-item" href="@Url.Action("doiTrangThai", "muaHang", new { value = 6, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-times-circle text-danger"></i> Hủy đơn</a>
                                 </ul>
                             </div>
                         </td>
@@ -100,7 +102,7 @@
         </table>
         <div class="container center">
             <div class="pagination">
-                @Html.PagedListPager(Model, page => Url.Action("DanhSachHoaDon", new { page, trangThaiDon = ViewBag.trangThaiDon }), PagedListRenderOptions.Classic)
+                @Html.PagedListPager(Model, page => Url.Action("DonHang", new { page, id_nguoiDung = ViewBag.id_nguoiDung, trangThaiDon = ViewBag.trangThaiDon }), PagedListRenderOptions.Classic)
             </div>
         </div>
     </div>

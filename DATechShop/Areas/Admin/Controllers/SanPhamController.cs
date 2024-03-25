@@ -16,6 +16,23 @@ namespace DATechShop.Areas.Admin.Controllers
 		DATotNghiepEntities db = new DATotNghiepEntities();
 		public ActionResult ThongKe()
 		{
+			float totalUsers = db.NguoiDungs.Count();
+			float totalOders = db.HoaDons.Count();
+			float totalConment = db.DanhGias.Count();
+			var currentDate = DateTime.Now;
+
+			var totalRevenueByMonth = db.HoaDons
+				.Where(dh => dh.ngayTao != null && dh.ngayTao.Value.Year == currentDate.Year && dh.ngayTao.Value.Month == currentDate.Month)
+				.Sum(dh => (double?)dh.tongTien) ?? 0;
+
+
+			// Gửi các giá trị tính toán qua ViewBag
+			ViewBag.TotalUsers = totalUsers;
+			ViewBag.TotalOrders = totalOders;
+			ViewBag.TotalRevenueByMonth = totalRevenueByMonth;
+			ViewBag.totalConment = totalConment; 
+
+			
 			return View();
 		}
 
@@ -123,15 +140,17 @@ namespace DATechShop.Areas.Admin.Controllers
 		}
 
 		[AdminAuth]
-		public ActionResult DanhSachSP(int? page)
+		public ActionResult DanhSachSP(int? page, string loaiSP)
 		{
 			mapSP map = new mapSP();
-			var data = map.DanhSachSP().OrderByDescending(x => x.id_sanPham); // Sắp xếp theo ID hoặc trường khác nếu cần
-			int pageSize = 5; // Số mục trên mỗi trang
-			int pageNumber = (page ?? 1); // Số trang hiện tại, mặc định là trang 1 nếu không có giá trị page
+			var data = map.DanhSachSP(loaiSP).OrderByDescending(x => x.id_sanPham); 
+			int pageSize = 6;
+			int pageNumber = (page ?? 1); 
 
 			// Sử dụng PagedList để phân trang dữ liệu
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
+
+			ViewBag.loaiSP = loaiSP;
 
 			return View(pagedList);
 		}
@@ -142,9 +161,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			// Lấy thông tin chi tiết của sản phẩm từ id được chọn
 			var sanPham = db.SanPhams.FirstOrDefault(sp => sp.id_sanPham == id);
 
-			// Nếu sản phẩm không tồn tại, có thể xử lý lỗi ở đây
-
-			// Truy vấn danh sách các màu sắc và phiên bản để hiển thị trên giao diện
+			
 			var danhSachMau = db.MauSacs.ToList();
 			var danhSachTuyChon = db.TuyChons.ToList();
 

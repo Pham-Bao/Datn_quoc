@@ -19,6 +19,7 @@ namespace DATechShop.Models
         public Nullable<int> id_chiTietSP { get; set; }
         public Nullable<int> soLuong { get; set; }
         public Nullable<double> gia { get; set; }
+        public Nullable<bool> TrangThaiXoa { get; set; }
     
         public virtual ChitietSP ChitietSP { get; set; }
         public virtual HoaDon HoaDon { get; set; }

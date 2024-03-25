@@ -11,11 +11,19 @@
 <div class="card-body">
     <div class="table-responsive">
 
-        <div class="alert alert-success d-flex align-items-center" role="alert">
-            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
-            <div>
-             
-            </div>
+        <div class="dropdown">
+            <button type="button" class="btn bnt-primary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fas fa-filter"></i> Lọc dữ liệu
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="@Url.Action("DanhSachSP", "SanPham", new { loaiSP= ""})"> <strong>Tất cả</strong></a></li>
+                <li><a class="dropdown-item" href="@Url.Action("DanhSachSP", "SanPham", new { loaiSP= "DienThoai"})"> <strong>Điện thoại</strong></a></li>
+                <li><a class="dropdown-item" href="@Url.Action("DanhSachSP", "SanPham", new { loaiSP= "LapTop"})"> <strong>LapTop</strong></a></li>
+                <li><a class="dropdown-item" href="@Url.Action("DanhSachSP", "SanPham", new { loaiSP= "AmThanh"})"> <strong>Âm Thanh</strong></a></li>
+                <li><a class="dropdown-item" href="@Url.Action("DanhSachSP", "SanPham", new { loaiSP= "PhuKien"})"> <strong>Phụ Kiện</strong></a></li>
+                <li><a class="dropdown-item" href="@Url.Action("DanhSachSP", "SanPham", new { loaiSP= "DoChoi"})"> <strong>Đồ chơi</strong></a></li>
+
+            </ul>
         </div>
         <table class="table table-bordered" id="dataTable" width="90%" cellspacing="0">
             <thead>
@@ -103,7 +111,7 @@
 
         <div class="container center">
             <ul class="pagination">
-                @Html.PagedListPager(Model, page => Url.Action("DanhSachSP", new { page }), PagedListRenderOptions.Classic)
+                @Html.PagedListPager(Model, page => Url.Action("DanhSachSP", new { page, loaiSP= ViewBag.loaiSP }), PagedListRenderOptions.Classic)
             </ul>
         </div>
     </div>

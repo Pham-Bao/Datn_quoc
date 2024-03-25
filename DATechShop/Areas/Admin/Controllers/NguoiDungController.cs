@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DATechShop.Areas.Admin.Content;
@@ -43,25 +46,80 @@ namespace DATechShop.Areas.Admin.Controllers
 				ViewBag.phone = "(*)Số điện thoại đã được sử dụng!";
 				return View();
 			}
+			var existingEmail = db.NguoiDungs.FirstOrDefault(u => u.email == model.email);
+			if (existingEmail != null)
+			{
+				ViewBag.phone = "(*)Email đã được sử dụng!";
+				return View();
+			}
 
 			if (matKhau != mk)
 			{
 				ViewBag.error = "Mật Khẩu không khớp";
 				return View();
 			}
+            var email = model.email;
+			try
+			{
+				// Kiểm tra địa chỉ email có hợp lệ không
+				if (!IsValidEmail(email))
+				{
+					ViewBag.Error = "Địa chỉ email không hợp lệ.";
+					return View("Index");
+				}
 
-			
-			string hashedPassword = HashingHelper.HashPassword(matKhau);
-			model.matKhau = hashedPassword; 
+				// Tạo mã OTP ngẫu nhiên
+				string otp = GenerateOTP();
 
-			db.NguoiDungs.Add(model);
-			db.SaveChanges();
+				// Gửi mã OTP đến địa chỉ email của người dùng
+				SendEmail(email, "Mã OTP", $"Mã OTP của bạn là: {otp}");
+				string hashedPassword = HashingHelper.HashPassword(matKhau);
+				model.matKhau = hashedPassword;
+
+				db.NguoiDungs.Add(model);
+				db.SaveChanges();
+				// Chuyển hướng đến trang nhập mã OTP để người dùng nhập
+				return RedirectToAction("Verify", new { emailAddress = email, otp = otp });
+			}
+			catch (Exception ex)
+			{
+				// Xử lý lỗi nếu có
+				ViewBag.Error = "Đã xảy ra lỗi khi gửi mã OTP. Vui lòng thử lại sau.";
+				return View("Index");
+			}
+		
 
 			ViewBag.success = "Chúc mừng. Bạn đã đăng ký thành công";
 			return View();
 		}
+		// GET: OTP/Verify
+		public ActionResult Verify(string emailAddress, string otp)
+		{
+			ViewBag.EmailAddress = emailAddress;
+			ViewBag.OTP = otp;
+			return View();
+		}
+		[HttpPost]
+		public ActionResult Verify(string emailAddress, string otpEntered, string otp)
+		{
+			var existingUser = db.NguoiDungs.FirstOrDefault(u => u.email == emailAddress);
+			if (otpEntered == otp)
+			{
+			
+				existingUser.TrangThaiXoa = true; 
+				db.SaveChanges();
+				ViewBag.Success = "Xác thực thành công!";
+			}
+			else
+			{
+				// Mã OTP nhập không đúng
+				ViewBag.Error = "Mã OTP không đúng. Vui lòng thử lại.";
+			}
 
-
+			ViewBag.EmailAddress = emailAddress;
+			ViewBag.OTP = otp;
+			return View();
+		}
 
 
 		public ActionResult DangNhap()
@@ -118,6 +176,60 @@ namespace DATechShop.Areas.Admin.Controllers
 			return RedirectToAction("DangNhap", "NguoiDung");
 		}
 
+
+		private string GenerateOTP()
+		{
+			Random rand = new Random();
+			return rand.Next(100000, 999999).ToString(); // Mã OTP là một số có 6 chữ số
+		}
+		private DateTime GetExpiryTime()
+		{
+			return DateTime.Now.AddMinutes(1); // Mã OTP chỉ có hiệu lực trong 1 phút
+		}
+
+		// Phương thức để gửi email chứa mã OTP đến địa chỉ email của người dùng
+		private void SendEmail(string toAddress, string subject, string body)
+		{
+			var fromAddress = new MailAddress(ConfigurationManager.AppSettings["FromEmailAddress"]);
+			var toAddr = new MailAddress(toAddress);
+			string smtpServer = ConfigurationManager.AppSettings["SMTPServer"];
+			int smtpPort = int.Parse(ConfigurationManager.AppSettings["SMTPPort"]);
+			string username = ConfigurationManager.AppSettings["SMTPUsername"];
+			string password = ConfigurationManager.AppSettings["SMTPPassword"];
+
+			var smtp = new SmtpClient
+			{
+				Host = smtpServer,
+				Port = smtpPort,
+				EnableSsl = true,
+				DeliveryMethod = SmtpDeliveryMethod.Network,
+				UseDefaultCredentials = false,
+				Credentials = new NetworkCredential(username, password)
+			};
+
+			using (var message = new MailMessage(fromAddress, toAddr)
+			{
+				Subject = subject,
+				Body = body
+			})
+			{
+				smtp.Send(message);
+			}
+		}
+
+		// Phương thức để kiểm tra địa chỉ email có hợp lệ không
+		private bool IsValidEmail(string email)
+		{
+			try
+			{
+				var addr = new MailAddress(email);
+				return addr.Address == email;
+			}
+			catch
+			{
+				return false;
+			}
+		}
 
 	}
 }

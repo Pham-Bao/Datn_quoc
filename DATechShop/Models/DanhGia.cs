@@ -20,6 +20,7 @@ namespace DATechShop.Models
         public Nullable<int> diemDanhGia { get; set; }
         public string binhLuan { get; set; }
         public Nullable<System.DateTime> ngayDanhGia { get; set; }
+        public Nullable<bool> TrangThaiXoa { get; set; }
     
         public virtual NguoiDung NguoiDung { get; set; }
         public virtual SanPham SanPham { get; set; }

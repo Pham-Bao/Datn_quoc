@@ -22,12 +22,24 @@ namespace DATechShop.Models
 			return data;
 		}
 
-		public List<SanPham> DanhSachSP()
+		public List<SanPham> DanhSachSP(string loaiSP)
 		{
 			var db = new DATotNghiepEntities();
-			var data = db.SanPhams.ToList();
-			return data;
+
+			if (!string.IsNullOrEmpty(loaiSP))
+			{
+				var lowerLoaiSP = loaiSP.ToLower();
+				var data = db.SanPhams.Where(m => m.loaiSP.ToLower().Contains(lowerLoaiSP)).ToList();
+				return data;
+			}
+			else
+			{
+				var data = db.SanPhams.ToList();
+				return data;
+			}
 		}
+
+
 
 
 		public SanPham sanPham(float id)
@@ -97,6 +109,13 @@ namespace DATechShop.Models
 			};
 
 			return chitietSPDTO;
+		}
+
+		public List<SanPham> timSP(string key)
+		{
+			var db = new DATotNghiepEntities();
+			var data = db.SanPhams.Where(m => m.tenSP.ToLower().Contains(key.ToLower()) || string.IsNullOrEmpty(key)).ToList();
+			return data;
 		}
 
 	}

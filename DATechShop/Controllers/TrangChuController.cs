@@ -55,9 +55,43 @@ namespace DATechShop.Controllers
 			return Json(data);
 		}
 
+		[HttpPost]
+		public JsonResult SubmitReview(int id_sanPham, int id_NguoiDung, int rating, string review)
+		{
+			try
+			{
+				// Thêm dữ liệu đánh giá vào cơ sở dữ liệu
+				using (var db = new DATotNghiepEntities())
+				{
+					var danhGia = new DanhGia
+					{
+						id_sanPham = id_sanPham,
+						id_NguoiDung = id_NguoiDung,
+						diemDanhGia = rating,
+						binhLuan = review,
+						ngayDanhGia = DateTime.Now.Date // Lấy ngày hiện tại
+					};
 
-		
+					db.DanhGias.Add(danhGia);
+					db.SaveChanges();
+				}
 
+				// Trả về kết quả thành công
+				return Json(new { success = true });
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
+				return Json(new { success = false, error = ex.Message });
+			}
+		}
+
+
+		public ActionResult timSP(string key)
+		{
+			var sanPhams = new DATechShop.Models.mapSP().timSP(key);
+			return View(sanPhams);
+		}
 
 
 	}

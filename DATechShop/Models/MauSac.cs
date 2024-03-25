@@ -23,6 +23,7 @@ namespace DATechShop.Models
         public int id_Mau { get; set; }
         public string tenMau { get; set; }
         public string maMau { get; set; }
+        public Nullable<bool> TrangThaiXoa { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChitietSP> ChitietSPs { get; set; }

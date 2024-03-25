@@ -14,6 +14,7 @@
           <Property Name="id_chiTietSP" Type="int" />
           <Property Name="soLuong" Type="int" />
           <Property Name="gia" Type="float" />
+          <Property Name="TrangThaiXoa" Type="bit" />
         </EntityType>
         <EntityType Name="ChitietSP">
           <Key>
@@ -25,6 +26,7 @@
           <Property Name="id_Mau" Type="int" />
           <Property Name="giaSP" Type="float" />
           <Property Name="anhSP" Type="nvarchar(max)" />
+          <Property Name="TrangThaiXoa" Type="bit" />
         </EntityType>
         <EntityType Name="DanhGia">
           <Key>
@@ -36,6 +38,7 @@
           <Property Name="diemDanhGia" Type="int" />
           <Property Name="binhLuan" Type="nvarchar(max)" />
           <Property Name="ngayDanhGia" Type="date" />
+          <Property Name="TrangThaiXoa" Type="bit" />
         </EntityType>
         <EntityType Name="DanhMuc">
           <Key>
@@ -66,6 +69,7 @@
           <Property Name="diaChi" Type="nvarchar" MaxLength="255" />
           <Property Name="tongTien" Type="float" />
           <Property Name="giamGia" Type="float" />
+          <Property Name="TrangThaiXoa" Type="bit" />
         </EntityType>
         <EntityType Name="KhuyenMai">
           <Key>
@@ -78,6 +82,7 @@
           <Property Name="ngayHet" Type="date" />
           <Property Name="trangThai" Type="nvarchar" MaxLength="50" />
           <Property Name="hinhAnh" Type="nvarchar(max)" />
+          <Property Name="TrangThaiXoa" Type="bit" />
         </EntityType>
         <EntityType Name="MauSac">
           <Key>
@@ -86,6 +91,7 @@
           <Property Name="id_Mau" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="tenMau" Type="nvarchar" MaxLength="50" />
           <Property Name="maMau" Type="nvarchar" MaxLength="50" />
+          <Property Name="TrangThaiXoa" Type="bit" />
         </EntityType>
         <EntityType Name="NguoiDung">
           <Key>
@@ -97,6 +103,7 @@
           <Property Name="email" Type="nvarchar" MaxLength="100" />
           <Property Name="diaChi" Type="nvarchar" MaxLength="255" />
           <Property Name="matKhau" Type="nvarchar" MaxLength="255" />
+          <Property Name="TrangThaiXoa" Type="bit" />
         </EntityType>
         <EntityType Name="provinces">
           <Key>
@@ -117,6 +124,7 @@
           <Property Name="ghiChu" Type="nvarchar(max)" />
           <Property Name="anhSPChung" Type="varchar(max)" />
           <Property Name="khuyenMai" Type="varchar(max)" />
+          <Property Name="TrangThaiXoa" Type="bit" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -128,6 +136,15 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="TuyChon">
+          <Key>
+            <PropertyRef Name="id_tuyChon" />
+          </Key>
+          <Property Name="id_tuyChon" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tenTuyChon" Type="nvarchar" MaxLength="50" />
+          <Property Name="tuyChon" Type="nvarchar" MaxLength="50" />
+          <Property Name="TrangThaiXoa" Type="bit" />
+        </EntityType>
         <EntityType Name="ThongSoKyThuat">
           <Key>
             <PropertyRef Name="id_ThongSo" />
@@ -136,14 +153,7 @@
           <Property Name="id_sanPham" Type="int" />
           <Property Name="tenThongSo" Type="nvarchar" MaxLength="100" />
           <Property Name="giaTri" Type="nvarchar(max)" />
-        </EntityType>
-        <EntityType Name="TuyChon">
-          <Key>
-            <PropertyRef Name="id_tuyChon" />
-          </Key>
-          <Property Name="id_tuyChon" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="tenTuyChon" Type="nvarchar" MaxLength="50" />
-          <Property Name="tuyChon" Type="nvarchar" MaxLength="50" />
+          <Property Name="TrangThaiXoa" Type="bit" />
         </EntityType>
         <EntityType Name="wards">
           <Key>
@@ -312,8 +322,8 @@
           <EntitySet Name="provinces" EntityType="Self.provinces" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SanPham" EntityType="Self.SanPham" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ThongSoKyThuat" EntityType="Self.ThongSoKyThuat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TuyChon" EntityType="Self.TuyChon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThongSoKyThuat" EntityType="Self.ThongSoKyThuat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="wards" EntityType="Self.wards" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__ChiTietHo__id_ch__625A9A57" Association="Self.FK__ChiTietHo__id_ch__625A9A57">
             <End Role="ChitietSP" EntitySet="ChitietSP" />
@@ -379,6 +389,7 @@
           <Property Name="gia" Type="Double" />
           <NavigationProperty Name="ChitietSP" Relationship="Self.FK__ChiTietHo__id_ch__625A9A57" FromRole="ChiTietHoaDon" ToRole="ChitietSP" />
           <NavigationProperty Name="HoaDon" Relationship="Self.FK__ChiTietHo__id_Ho__6166761E" FromRole="ChiTietHoaDon" ToRole="HoaDon" />
+          <Property Name="TrangThaiXoa" Type="Boolean" />
         </EntityType>
         <EntityType Name="ChitietSP">
           <Key>
@@ -394,6 +405,7 @@
           <NavigationProperty Name="MauSac" Relationship="Self.FK__ChitietSP__id_Ma__4C6B5938" FromRole="ChitietSP" ToRole="MauSac" />
           <NavigationProperty Name="SanPham" Relationship="Self.FK__ChitietSP__id_sa__4B7734FF" FromRole="ChitietSP" ToRole="SanPham" />
           <NavigationProperty Name="TuyChon" Relationship="Self.FK__ChitietSP__id_tu__4D5F7D71" FromRole="ChitietSP" ToRole="TuyChon" />
+          <Property Name="TrangThaiXoa" Type="Boolean" />
         </EntityType>
         <EntityType Name="DanhGia">
           <Key>
@@ -407,6 +419,7 @@
           <Property Name="ngayDanhGia" Type="DateTime" Precision="0" />
           <NavigationProperty Name="NguoiDung" Relationship="Self.FK__DanhGia__id_Nguo__57DD0BE4" FromRole="DanhGia" ToRole="NguoiDung" />
           <NavigationProperty Name="SanPham" Relationship="Self.FK__DanhGia__id_sanP__56E8E7AB" FromRole="DanhGia" ToRole="SanPham" />
+          <Property Name="TrangThaiXoa" Type="Boolean" />
         </EntityType>
         <EntityType Name="DanhMuc">
           <Key>
@@ -431,6 +444,7 @@
           <NavigationProperty Name="ChiTietHoaDons" Relationship="Self.FK__ChiTietHo__id_Ho__6166761E" FromRole="HoaDon" ToRole="ChiTietHoaDon" />
           <NavigationProperty Name="KhuyenMai" Relationship="Self.FK__HoaDon__id_Khuye__5E8A0973" FromRole="HoaDon" ToRole="KhuyenMai" />
           <NavigationProperty Name="NguoiDung" Relationship="Self.FK__HoaDon__id_Nguoi__5D95E53A" FromRole="HoaDon" ToRole="NguoiDung" />
+          <Property Name="TrangThaiXoa" Type="Boolean" />
         </EntityType>
         <EntityType Name="KhuyenMai">
           <Key>
@@ -444,6 +458,7 @@
           <Property Name="trangThai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="hinhAnh" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="HoaDons" Relationship="Self.FK__HoaDon__id_Khuye__5E8A0973" FromRole="KhuyenMai" ToRole="HoaDon" />
+          <Property Name="TrangThaiXoa" Type="Boolean" />
         </EntityType>
         <EntityType Name="MauSac">
           <Key>
@@ -453,6 +468,7 @@
           <Property Name="tenMau" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="maMau" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ChitietSPs" Relationship="Self.FK__ChitietSP__id_Ma__4C6B5938" FromRole="MauSac" ToRole="ChitietSP" />
+          <Property Name="TrangThaiXoa" Type="Boolean" />
         </EntityType>
         <EntityType Name="NguoiDung">
           <Key>
@@ -466,6 +482,7 @@
           <Property Name="matKhau" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="DanhGias" Relationship="Self.FK__DanhGia__id_Nguo__57DD0BE4" FromRole="NguoiDung" ToRole="DanhGia" />
           <NavigationProperty Name="HoaDons" Relationship="Self.FK__HoaDon__id_Nguoi__5D95E53A" FromRole="NguoiDung" ToRole="HoaDon" />
+          <Property Name="TrangThaiXoa" Type="Boolean" />
         </EntityType>
         <EntityType Name="SanPham">
           <Key>
@@ -481,6 +498,7 @@
           <NavigationProperty Name="ThongSoKyThuats" Relationship="Self.FK__ThongSoKy__id_sa__531856C7" FromRole="SanPham" ToRole="ThongSoKyThuat" />
           <Property Name="anhSPChung" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="khuyenMai" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TrangThaiXoa" Type="Boolean" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -501,6 +519,7 @@
           <Property Name="tenThongSo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="giaTri" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SanPham" Relationship="Self.FK__ThongSoKy__id_sa__531856C7" FromRole="ThongSoKyThuat" ToRole="SanPham" />
+          <Property Name="TrangThaiXoa" Type="Boolean" />
         </EntityType>
         <EntityType Name="TuyChon">
           <Key>
@@ -510,6 +529,7 @@
           <Property Name="tenTuyChon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="tuyChon1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ChitietSPs" Relationship="Self.FK__ChitietSP__id_tu__4D5F7D71" FromRole="TuyChon" ToRole="ChitietSP" />
+          <Property Name="TrangThaiXoa" Type="Boolean" />
         </EntityType>
         <Association Name="FK__ChiTietHo__id_ch__625A9A57">
           <End Role="ChitietSP" Type="Self.ChitietSP" Multiplicity="0..1" />
@@ -760,6 +780,7 @@
           <EntitySetMapping Name="ChiTietHoaDons">
             <EntityTypeMapping TypeName="DATotNghiepModel.ChiTietHoaDon">
               <MappingFragment StoreEntitySet="ChiTietHoaDon">
+                <ScalarProperty Name="TrangThaiXoa" ColumnName="TrangThaiXoa" />
                 <ScalarProperty Name="id_chiTietHD" ColumnName="id_chiTietHD" />
                 <ScalarProperty Name="id_HoaDon" ColumnName="id_HoaDon" />
                 <ScalarProperty Name="id_chiTietSP" ColumnName="id_chiTietSP" />
@@ -771,6 +792,7 @@
           <EntitySetMapping Name="ChitietSPs">
             <EntityTypeMapping TypeName="DATotNghiepModel.ChitietSP">
               <MappingFragment StoreEntitySet="ChitietSP">
+                <ScalarProperty Name="TrangThaiXoa" ColumnName="TrangThaiXoa" />
                 <ScalarProperty Name="id_chiTietSP" ColumnName="id_chiTietSP" />
                 <ScalarProperty Name="id_sanPham" ColumnName="id_sanPham" />
                 <ScalarProperty Name="id_tuyChon" ColumnName="id_tuyChon" />
@@ -783,6 +805,7 @@
           <EntitySetMapping Name="DanhGias">
             <EntityTypeMapping TypeName="DATotNghiepModel.DanhGia">
               <MappingFragment StoreEntitySet="DanhGia">
+                <ScalarProperty Name="TrangThaiXoa" ColumnName="TrangThaiXoa" />
                 <ScalarProperty Name="id_DanhGia" ColumnName="id_DanhGia" />
                 <ScalarProperty Name="id_sanPham" ColumnName="id_sanPham" />
                 <ScalarProperty Name="id_NguoiDung" ColumnName="id_NguoiDung" />
@@ -803,6 +826,7 @@
           <EntitySetMapping Name="HoaDons">
             <EntityTypeMapping TypeName="DATotNghiepModel.HoaDon">
               <MappingFragment StoreEntitySet="HoaDon">
+                <ScalarProperty Name="TrangThaiXoa" ColumnName="TrangThaiXoa" />
                 <ScalarProperty Name="id_HoaDon" ColumnName="id_HoaDon" />
                 <ScalarProperty Name="id_NguoiDung" ColumnName="id_NguoiDung" />
                 <ScalarProperty Name="id_KhuyenMai" ColumnName="id_KhuyenMai" />
@@ -818,6 +842,7 @@
           <EntitySetMapping Name="KhuyenMais">
             <EntityTypeMapping TypeName="DATotNghiepModel.KhuyenMai">
               <MappingFragment StoreEntitySet="KhuyenMai">
+                <ScalarProperty Name="TrangThaiXoa" ColumnName="TrangThaiXoa" />
                 <ScalarProperty Name="id_KhuyenMai" ColumnName="id_KhuyenMai" />
                 <ScalarProperty Name="tenMa" ColumnName="tenMa" />
                 <ScalarProperty Name="phanTramGiam" ColumnName="phanTramGiam" />
@@ -831,6 +856,7 @@
           <EntitySetMapping Name="MauSacs">
             <EntityTypeMapping TypeName="DATotNghiepModel.MauSac">
               <MappingFragment StoreEntitySet="MauSac">
+                <ScalarProperty Name="TrangThaiXoa" ColumnName="TrangThaiXoa" />
                 <ScalarProperty Name="id_Mau" ColumnName="id_Mau" />
                 <ScalarProperty Name="tenMau" ColumnName="tenMau" />
                 <ScalarProperty Name="maMau" ColumnName="maMau" />
@@ -840,6 +866,7 @@
           <EntitySetMapping Name="NguoiDungs">
             <EntityTypeMapping TypeName="DATotNghiepModel.NguoiDung">
               <MappingFragment StoreEntitySet="NguoiDung">
+                <ScalarProperty Name="TrangThaiXoa" ColumnName="TrangThaiXoa" />
                 <ScalarProperty Name="id_NguoiDung" ColumnName="id_NguoiDung" />
                 <ScalarProperty Name="ten" ColumnName="ten" />
                 <ScalarProperty Name="sdt" ColumnName="sdt" />
@@ -852,6 +879,7 @@
           <EntitySetMapping Name="SanPhams">
             <EntityTypeMapping TypeName="DATotNghiepModel.SanPham">
               <MappingFragment StoreEntitySet="SanPham">
+                <ScalarProperty Name="TrangThaiXoa" ColumnName="TrangThaiXoa" />
                 <ScalarProperty Name="khuyenMai" ColumnName="khuyenMai" />
                 <ScalarProperty Name="anhSPChung" ColumnName="anhSPChung" />
                 <ScalarProperty Name="id_sanPham" ColumnName="id_sanPham" />
@@ -876,6 +904,7 @@
           <EntitySetMapping Name="ThongSoKyThuats">
             <EntityTypeMapping TypeName="DATotNghiepModel.ThongSoKyThuat">
               <MappingFragment StoreEntitySet="ThongSoKyThuat">
+                <ScalarProperty Name="TrangThaiXoa" ColumnName="TrangThaiXoa" />
                 <ScalarProperty Name="id_ThongSo" ColumnName="id_ThongSo" />
                 <ScalarProperty Name="id_sanPham" ColumnName="id_sanPham" />
                 <ScalarProperty Name="tenThongSo" ColumnName="tenThongSo" />
@@ -886,6 +915,7 @@
           <EntitySetMapping Name="TuyChons">
             <EntityTypeMapping TypeName="DATotNghiepModel.TuyChon">
               <MappingFragment StoreEntitySet="TuyChon">
+                <ScalarProperty Name="TrangThaiXoa" ColumnName="TrangThaiXoa" />
                 <ScalarProperty Name="id_tuyChon" ColumnName="id_tuyChon" />
                 <ScalarProperty Name="tenTuyChon" ColumnName="tenTuyChon" />
                 <ScalarProperty Name="tuyChon1" ColumnName="tuyChon" />

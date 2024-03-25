@@ -76,14 +76,7 @@
                 <div class="p-3">
                     <p class="h2 text-black">@Model.SanPham.tenSP</p>
 
-                    <div class="rating">
-                        <span class="star">&#9733;</span>
-                        <span class="star">&#9733;</span>
-                        <span class="star">&#9733;</span>
-                        <span class="star">&#9733;</span>
-                        <span class="star">&#9733;</span>
-                        <i class="mx-2">Đánh giá</i>
-                    </div>
+                 
 
                     <p class="">Sản Phẩm được 275 lượt đặt.</p>
                     <div class="row g-2 border-top">
@@ -138,52 +131,147 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="container bg-light mt-5">
+            <div class="row">
+                @{
+                    var id_NguoiDung = Session["id_NguoiDung"] != null ? Convert.ToInt32(Session["id_NguoiDung"]) : 0;
+                    var id_sanPham = Model.id_sanPham;
+
+
+                }
+
+                @if (id_NguoiDung != 0)
+                {
+
+
+                    <div class="col">
+                        <form id="ratingForm">
+                            <div>
+                                <label for="username">Tên người dùng:</label>
+                                <p class="font-weight-bold">Phạm Bảo</p>
+                            </div>
+                            <div>
+                                <label for="rating">Đánh giá sao:</label>
+                                <div class="rating">
+                                    <input type="radio" id="star5" name="rating" value="5">
+                                    <label for="star5"></label>
+                                    <input type="radio" id="star4" name="rating" value="4">
+                                    <label for="star4"></label>
+                                    <input type="radio" id="star3" name="rating" value="3">
+                                    <label for="star3"></label>
+                                    <input type="radio" id="star2" name="rating" value="2">
+                                    <label for="star2"></label>
+                                    <input type="radio" id="star1" name="rating" value="1">
+                                    <label for="star1"></label>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="review">Nội dung đánh giá:</label><br>
+                                <textarea id="review" name="review" rows="4" cols="50" required></textarea>
+                            </div>
+
+                            <p>Mua mới có thể đánh giá</p>
+                            <button type="submit" class="submit-btn">Gửi đánh giá</button>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <div class="col ">
+                        <p class="h2">Phải đăng nhập mới có thể bình luận</p>
+                    </div>
+
+                }
+                <div class="col">
+                    @{
+                        var DanhGia = new DATechShop.Models.mapDanhGia().DanhSachDanhGia(id_sanPham);
+                    }
+                    <p class="h4">Xem tất cả bình luận</p>
+                    @if (DanhGia != null && DanhGia.Any())
+                    {
+                        foreach (var danhGia in DanhGia)
+                        {
+                            <div class="col">
+
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-secondary text-light d-flex justify-content-center align-items-center mr-2" style="width: 30px; height: 30px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    @if (danhGia.NguoiDung != null)
+                                    {
+                                        <p class="font-weight-bold">@danhGia.NguoiDung.ten</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="font-weight-bold">Người dùng không tồn tại</p>
+                                    }
+                                    <br />
+                                    <p>@danhGia.binhLuan</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Không có đánh giá nào.</p>
+                    }
+                </div>
+
+
+                <div>
+
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 <script src="~/Script/Cart.js"></script>
 
 <script>
-    var productId = '@Model.id_sanPham'; 
+    var productId = '@Model.id_sanPham';
     $('.btn-tuychon').click(function () {
         var gia = $(this).data('gia');
-        console.log('Giá: ', gia); 
+        console.log('Giá: ', gia);
         $('#selected-price').text(gia + 'đ');
 
-      
+
         var option = $(this).text();
-        
+
         $('#selected-option').text(option);
-        console.log('Tùy chọn: ', option); 
+        console.log('Tùy chọn: ', option);
     });
 
     $('.btn-mausac').click(function () {
-       
-        var color = $(this).data('color');
-        
-        var imageUrl = $(this).data('hinhanh');
-       
-        $('#selected-color').text(color);
-        console.log('Màu sắc: ', color); 
 
-        
+        var color = $(this).data('color');
+
+        var imageUrl = $(this).data('hinhanh');
+
+        $('#selected-color').text(color);
+        console.log('Màu sắc: ', color);
+
+
         $('#productImage').attr('src', imageUrl);
         console.log('Ảnh sản phẩm: ', imageUrl);
     });
 
     $('.btn-add-to-cart').click(function () {
-      
+
         var productId = $(this).data('product-id');
 
-        
+
         var color = $('.btn-mausac.selected').data('color');
 
-        
+
         var option = $('.btn-tuychon.selected').text();
 
         console.log('Color:', color);
         console.log('Option:', option);
 
-       
+
         CartClass.addToCart(productId, color, option);
     });
 
@@ -200,19 +288,19 @@
 
     function changeStyle(button, tab) {
         if (selectedButton !== null) {
-           
+
             selectedButton.classList.remove('btn-secondary');
             selectedButton.classList.add('btn-outline-secondary');
         }
 
-       
+
         button.classList.remove('btn-outline-secondary');
         button.classList.add('btn-secondary');
 
-        
+
         selectedButton = button;
 
-        
+
         var thongSoKT = document.getElementById('thongSoKT');
         var moTa = document.getElementById('moTa');
 
@@ -229,33 +317,117 @@
         $('.btn-mausac').click(function () {
             var color = $(this).data('color');
 
-          
+
             $('#selected-color').text(color).show();
 
-            
+
             $('.btn-mausac').removeClass('selected');
 
-          
+
             $(this).addClass('selected');
         });
 
         $('.btn-tuychon').click(function () {
             var option = $(this).text();
 
-         
+
             $('#selected-option').text(option).show();
 
-          
+
             $('.btn-tuychon').removeClass('selected');
 
             $(this).addClass('selected');
         });
     });
 
+
+    document.getElementById("ratingForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        var username = document.getElementById("username").value;
+        var rating = document.querySelector('input[name="rating"]:checked').value;
+        var review = document.getElementById("review").value;
+        alert("Bạn (" + username + ") đã đánh giá " + rating + " sao với nội dung: " + review);
+
+    });
+
+    $(document).ready(function () {
+    $('#ratingForm').submit(function (e) {
+        e.preventDefault(); // Ngăn chặn việc gửi form một cách thông thường
+
+        // Lấy dữ liệu từ form
+        var rating = $('input[name=rating]:checked').val();
+        var review = $('#review').val();
+
+        // Tạo đối tượng chứa dữ liệu đánh giá
+        var data = {
+            id_NguoiDung: @id_NguoiDung, // Sử dụng id_NguoiDung từ Razor syntax
+            id_sanPham: @id_sanPham, // Sử dụng id_sanPham từ Razor syntax
+            rating: rating,
+            review: review
+        };
+
+        // Gửi dữ liệu đánh giá lên server
+        $.ajax({
+            url: '/TrangChu/SubmitReview',
+            type: 'POST',
+            dataType: 'json',
+            data: data,
+            success: function (response) {
+                // Xử lý kết quả trả về từ server (nếu cần)
+                console.log(response);
+            },
+            error: function (error) {
+                // Xử lý lỗi (nếu có)
+                console.log(error);
+            }
+        });
+    });
+});
+
+
 </script>
 
 <style>
     .selected {
         border: 2px solid #CBD4F1; /* Thay đổi màu viền của nút được chọn */
+    }
+
+    .rating {
+        unicode-bidi: bidi-override;
+        direction: rtl;
+        text-align: center;
+    }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            cursor: pointer;
+            display: inline-block;
+            padding: 5px;
+            font-size: 30px;
+        }
+
+            .rating label:before {
+                content: "\2605";
+                margin-right: 5px;
+                color: #ccc;
+            }
+
+            .rating input:checked ~ label:before,
+            .rating label:hover:before {
+                content: "\2605";
+                color: #ffcc00;
+            }
+
+    .submit-btn {
+        display: block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
     }
 </style>

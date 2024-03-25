@@ -39,7 +39,7 @@
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                Người dùng
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">132 User</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalUsers User</div>
                                         </div>
                                         <div class="col-auto">
                                            
@@ -59,7 +59,10 @@
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Doanh Thu
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                @String.Format("{0:#,##0}", ViewBag.TotalRevenueByMonth)đ
+                                            </div>
+
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -80,7 +83,7 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">@ViewBag.TotalOrders</div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
@@ -108,7 +111,7 @@
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                               Phản Hồi
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.totalConment</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>

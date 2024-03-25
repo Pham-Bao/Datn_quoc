@@ -1,0 +1,70 @@
+﻿@model IEnumerable<DATechShop.Models.SanPham>
+
+@{
+    ViewBag.Title = "timSP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>timSP</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.tenSP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.loaiSP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.moTa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ghiChu)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.anhSPChung)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.khuyenMai)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrangThaiXoa)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.tenSP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.loaiSP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.moTa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ghiChu)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.anhSPChung)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.khuyenMai)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrangThaiXoa)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id_sanPham }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id_sanPham }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id_sanPham })
+        </td>
+    </tr>
+}
+
+</table>

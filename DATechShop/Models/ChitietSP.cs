@@ -19,13 +19,14 @@ namespace DATechShop.Models
         {
             this.ChiTietHoaDons = new HashSet<ChiTietHoaDon>();
         }
-        
+    
         public int id_chiTietSP { get; set; }
         public Nullable<int> id_sanPham { get; set; }
         public Nullable<int> id_tuyChon { get; set; }
         public Nullable<int> id_Mau { get; set; }
         public Nullable<double> giaSP { get; set; }
         public string anhSP { get; set; }
+        public Nullable<bool> TrangThaiXoa { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChiTietHoaDon> ChiTietHoaDons { get; set; }

@@ -25,7 +25,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
-
+    <link href="~/Css/Css.css" rel="stylesheet" />
 
     <!-- Custom styles for this template-->
     <link href="/Areas/Content/css/sb-admin-2.min.css" rel="stylesheet">
@@ -86,13 +86,26 @@
 
                         </ul>
 
-                        <form class="d-flex mx-3 " action="~/TrangChu/timkiem">
-                            <input class="form-control me-2" type="text" placeholder="Tìm Kiếm" name="sanpham" value="@ViewBag.ten">
+                        <form class="d-flex mx-3 " action="~/TrangChu/timSP">
+                            <input class="form-control me-2" type="text" placeholder="Tìm Kiếm" name="key" value="@ViewBag.ten">
                             <button class="btn btn-secondary" type="submit">Tìm</button>
 
                         </form>
-
+                        @{
+                            // Lấy giá trị của Session
+                            var tenNguoiDung = Session["TenNguoiDung"] as string;
+                            var soDienThoai = Session["SoDienThoai"] as string;
+                            var diaChi = Session["DiaChi"] as string;
+                            var id = Session["id_NguoiDung"];
+                        }
                         <a class="btn" type="button" href="@Url.Action("GioHang", "MuaHang", new { area = (string)null })" id="cart-icon">
+                            <div class="cart-icon-wrapper">
+                                <img src="~/img/icons8-cart-48.png" alt="Logo" style="width: 45px;" class="rounded-pill">
+                                <span id="cart-count">0</span>
+                            </div>
+
+                        </a>
+                        <a class="btn" type="button" href="@Url.Action("DonHang", "MuaHang", new { id_nguoiDung = id,  area = (string)null })" id="cart-icon">
                             <div class="cart-icon-wrapper">
                                 <img src="~/img/icons8-cart-48.png" alt="Logo" style="width: 45px;" class="rounded-pill">
                                 <span id="cart-count">0</span>
@@ -101,13 +114,7 @@
                         </a>
 
                         <div class="dropdown">
-                            @{
-                                // Lấy giá trị của Session
-                                var tenNguoiDung = Session["TenNguoiDung"] as string;
-                                var soDienThoai = Session["SoDienThoai"] as string;
-                                var diaChi = Session["DiaChi"] as string;
-                                var id = Session["id_NguoiDung"];
-                            }
+
                             <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
                                 <img src="~/img/icons8-user-32 (1).png" alt="Logo" style="width:45px;">
                                 <span class="text-light">@ViewBag.err</span>
