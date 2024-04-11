@@ -20,45 +20,46 @@
             <div class="row">
                 <div class="col">
                     <div class="form-group mt-4">
-                        <p class="label">Chọn Hình Ảnh</p>
+                        <span class="label h4">Chọn Hình Ảnh</span><sapn class="text-danger">(*)</sapn><br />
                         <input type="file" id="uploadhinh" name="uploadhinh" accept="image/*" onchange="ImagerFileAsURL()" />
+                        
                     </div>
                     <div class="mx-3 mt-3 rounded-pill" id="displayImg" style="max-width:200px"></div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <p>Tên sản Phẩm</p>
-                        <div class="col-md-10">
-                            @Html.DisplayFor(model => model.SanPham.tenSP, new { @class = "form-control" })
+                        <p class="h4 mt-3"><b>Sản Phẩm</b></p>
+                        <div class="col-md-10 ">
+                            <p class="">ID: @Model.SanPham.id_sanPham</p>
+
+                            <p class="h4 ">@Model.SanPham.tenSP</p>
+                            <p>Loại: @Model.SanPham.loaiSP</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.SanPham.loaiSP, "Loại Sản Phẩm", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DisplayFor(model => model.SanPham.loaiSP, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.SelectedMau, "Chọn Màu Sắc", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownListFor(model => model.SelectedMau, new SelectList(Model.DanhSachMau, "id_Mau", "tenMau"), "Chọn màu...", new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.SelectedMau, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.SelectedTuyChon, "Chọn Phiên Bản", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <span>Chọn Tùy chọn</span><span class="text-danger">(*)</span>
                         <div class="col-md-10">
                             @Html.DropDownListFor(model => model.SelectedTuyChon, new SelectList(Model.DanhSachTuyChon, "id_tuyChon", "tuyChon1"), "Chọn phiên bản...", new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.SelectedTuyChon, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                    <div class="form-group mt-5">
-                        <p class="label mx-3">Giá</p>
+                    <div class="form-group mt-3">
+                        <span class="label mx-3">Giá</span><span class="text-danger">(*)</span>
                         <div class="col-md-10">
-                            @Html.EditorFor(model => model.ChitietSP.giaSP, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.TextBoxFor(model => model.ChitietSP.giaSP, new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.ChitietSP.giaSP, "", new { @class = "text-danger" })
                         </div>
                     </div>
+
+
+                    <div class="form-group">
+                        <span>Chọn Màu:</span><span class="text-danger">(*)</span>
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.SelectedMau, new SelectList(Model.DanhSachMau, "id_Mau", "tenMau"), "Chọn màu...", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.SelectedMau, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <input type="submit" value="Thêm" class="btn btn-primary" />
@@ -69,7 +70,7 @@
         </div>
     }
 
-    <script type="text/javascript">
+<script type="text/javascript">
         function ImagerFileAsURL() {
             var file = document.getElementById('uploadhinh').files;
             if (file.length > 0) {
@@ -85,6 +86,38 @@
                 fileReader.readAsDataURL(fileToLoad);
             }
         }
-    </script>
+
+      $(document).ready(function () {
+    $("#SelectedTuyChon").change(function () {
+        var tuyChonId = $(this).val();
+        var id_sanPham = @Html.Raw(Json.Encode(Model.SanPham.id_sanPham));
+        console.log(id_sanPham);
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("KiemTraTuyChon", "SanPham", new { area = "Admin" })",
+            data: { tuyChonId: tuyChonId, id_sanPham: id_sanPham },
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    // Tùy chọn tồn tại trong cơ sở dữ liệu
+                    var giaSP = response.giaSP;
+                    $("#ChitietSP_giaSP").val(giaSP);
+                    // Kích hoạt ô giá sản phẩm
+                    $("#ChitietSP_giaSP").prop('disabled', false);
+                } else {
+                  
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert("Đã xảy ra lỗi khi kiểm tra tùy chọn.");
+            }
+        });
+    });
+});
+
+
+</script>
 
 

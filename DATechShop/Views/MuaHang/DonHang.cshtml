@@ -1,35 +1,31 @@
-﻿<@model PagedList.IPagedList<DATechShop.Models.HoaDon>
+﻿@model PagedList.IPagedList<DATechShop.Models.HoaDon>
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "DonHang";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container">
+    <div class="card-body ">
+        <div class="">
+            <button type="button" class="btn bnt-primary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fas fa-filter"></i> Lọc dữ liệu
+            </button>
+            <ul class="dropdown-menu">
+                <!-- Các tùy chọn lọc -->
+                <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Tất cả</strong></a></li>
+                <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "1" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Chờ duyệt</strong></a></li>
+                <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "3" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Đang giao</strong></a></li>
+                <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "5" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Đã xong</strong></a></li>
+                <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "4" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Đã hủy</strong></a></li>
 
-
-
-<h2 class="text-center">Tất cả đơn hàng</h2>
-    <h2 class="text-center mt-5"> Tất cả đơn hàng</h2>
-<div class="card-body ">
-    <div class="dropdown">
-        <button type="button" class="btn bnt-primary dropdown-toggle" data-bs-toggle="dropdown">
-            <i class="fas fa-filter"></i> Lọc dữ liệu
-        </button>
-        <ul class="dropdown-menu">
-            <!-- Các tùy chọn lọc -->
-            <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Tất cả</strong></a></li>
-            <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "1" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Chờ duyệt</strong></a></li>
-            <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "3" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Đang giao</strong></a></li>
-            <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "5" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Đã xong</strong></a></li>
-            <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "4" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Đã hủy</strong></a></li>
-
-        </ul>
-    </div>
+            </ul>
+        </div>
     </div>
     <div class="table-responsive mt-2">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    
+
                     <th>Ngày Tạo</th>
                     <th>Khách Hàng</th>
                     <th>Địa Chỉ </th>
@@ -108,5 +104,5 @@
     </div>
 </div>
 
-
+</div>
 

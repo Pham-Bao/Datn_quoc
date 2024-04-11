@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using static DATechShop.Areas.Admin.Content.AuthAttribute;
 
 namespace DATechShop.Areas.Admin.Controllers
@@ -23,12 +24,13 @@ namespace DATechShop.Areas.Admin.Controllers
 			
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 			ViewBag.trangThaiDon = trangThaiDon;
+			ViewBag.DbContext = new DATotNghiepEntities();
 			return View(pagedList);
 
 		
 		}
 
-
+		[AdminAuth]
 		public ActionResult GetChartData()
 		{   DATotNghiepEntities db = new DATotNghiepEntities();
 			var chartData = db.HoaDons
@@ -47,7 +49,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			return Json(chartData, JsonRequestBehavior.AllowGet);
 		}
 
-
+		[AdminAuth]
 		public ActionResult doiTrangThai(int value, int id_hoaDon)
 		{
 			using (var db = new DATotNghiepEntities())
@@ -74,8 +76,36 @@ namespace DATechShop.Areas.Admin.Controllers
 				}
 			}
 		}
+		[AdminAuth]
+		public ActionResult ChiTietHD(int id_hoaDon, int? page)
+		{
+
+			mapHoaDon map = new mapHoaDon();
+			var data = map.ChiTietHoaDon(id_hoaDon).OrderByDescending(x => x.id_HoaDon);
+			int pageSize = 6;
+			int pageNumber = (page ?? 1);
+			var pagedList = data.ToPagedList(pageNumber, pageSize);
+			ViewBag.id_chitietHoaDon = id_hoaDon;
+			return View(pagedList);
+		}
 
 
+
+
+		[AdminAuth]
+		public ActionResult danhSachLoaiThanhToan(int? page)
+		{
+			mapHoaDon map = new mapHoaDon();
+			var data = map.DanhSachLoaiThanhToan().OrderByDescending(x => x.ngayThanhToan); 
+			int pageSize = 5; 
+			int pageNumber = (page ?? 1); 
+
+			
+			var pagedList = data.ToPagedList(pageNumber, pageSize);
+
+			return View(pagedList);
+		}
+	
 
 	}
 }

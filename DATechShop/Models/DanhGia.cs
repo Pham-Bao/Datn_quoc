@@ -14,6 +14,12 @@ namespace DATechShop.Models
     
     public partial class DanhGia
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public DanhGia()
+        {
+            this.ChiTietHoaDons = new HashSet<ChiTietHoaDon>();
+        }
+    
         public int id_DanhGia { get; set; }
         public Nullable<int> id_sanPham { get; set; }
         public Nullable<int> id_NguoiDung { get; set; }
@@ -24,5 +30,7 @@ namespace DATechShop.Models
     
         public virtual NguoiDung NguoiDung { get; set; }
         public virtual SanPham SanPham { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ChiTietHoaDon> ChiTietHoaDons { get; set; }
     }
 }

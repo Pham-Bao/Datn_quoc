@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Shop</title>
+    <link rel="icon" href="~/img/icons8-circuit-50.png" type="image/x-icon">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <base target="_top">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link href="/Areas/Content/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/Content/Teamplate/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/style.css" type="text/css">
+
+
+</head>
+<body>
+    @{
+        // Lấy giá trị của Session
+        var tenNguoiDung = Session["TenNguoiDung"] as string;
+        var soDienThoai = Session["SoDienThoai"] as string;
+        var diaChi = Session["DiaChi"] as string;
+        var id = Session["id_NguoiDung"];
+    }
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__option">
+            <div class="offcanvas__links">
+
+                @if (tenNguoiDung == null)
+                {
+                    <a href="~/Admin/nguoidung/DangNhap">Đăng Nhập</a>
+
+                }
+                else
+                {
+                    <p class="text-white">@tenNguoiDung<i class="fa fa-regular fa-user ml-2"></i></p>
+                }
+            </div>
+
+        </div>
+        <div class="offcanvas__nav__option">
+
+            <a href="@Url.Action("Donhang", "MuaHang", new { area = (string)null, id_nguoiDung = id })"><img src="~/Content/Teamplate/img/icon/cart.png" alt=""></a>
+
+            <a href="@Url.Action("GioHang", "MuaHang", new { area = (string)null })"><img src="~/Content/Teamplate/img/icon/cart.png" alt=""></a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__text">
+            <p>Free shipping, 30-day return or refund guarantee.</p>
+        </div>
+    </div>
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7">
+                        <div class="header__top__left">
+                            <p>Đại học xây dựng Hà Nội</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-5">
+                        <div class="header__top__right">
+                            <div class="header__top__links">
+
+                                @if (tenNguoiDung == null)
+                                {
+                                    <a href="~/Admin/nguoidung/DangNhap">Đăng Nhập</a>
+
+                                }
+                                else
+                                {
+                                    <p class="text-white">@tenNguoiDung<i class="fa fa-regular fa-user ml-2"></i></p>
+                                }
+                            </div>
+                            <div class="header__top__hover">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    @RenderBody()
+</body>
+</html>

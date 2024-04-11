@@ -11,7 +11,7 @@ namespace DATechShop.Models
 
 		{
 			var db = new DATotNghiepEntities();
-			var data = db.NguoiDungs.ToList();
+			var data = db.NguoiDungs.Where(km => km.TrangThaiXoa != false).ToList();
 			return data;
 		}
 

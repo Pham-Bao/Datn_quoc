@@ -1,0 +1,95 @@
+﻿@model PagedList.IPagedList<DATechShop.Models.DanhGia>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "DanhSachDanhGia";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h2 class="text-center">Đánh Giá</h2>
+
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th colspan="7" class="text-end">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="h3 text-dark mb-0">Đánh Giá</p>
+                          
+                        </div>
+                    </th>
+
+                </tr>
+                <tr>
+                    <th>Ngày đánh giá</th>
+                    <th>Tên người dùng</th>
+                    <th>Sản phẩm</th>
+                    <th>Số sao</th>
+                    <th>Nội dung</th>
+                    <th>Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.ngayDanhGia)</td>
+                        <td>@Html.DisplayFor(modelItem => item.NguoiDung.ten)</td>
+                        <td>@Html.DisplayFor(modelItem => item.SanPham.tenSP)</td>
+                        <td>@Html.DisplayFor(modelItem => item.diemDanhGia)</td>
+                        <td>@Html.DisplayFor(modelItem => item.binhLuan)</td>
+                        
+                        <td>
+                            <div class="d-inline mx-3">
+                                <!-- Sử dụng class confirmDeleteBtn thay vì id để tránh trùng lặp -->
+                                <a data-id-danhgia="@item.id_DanhGia" class="btn btn-danger btn-circle btn-sm confirmDeleteBtn">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="container center">
+            <div class="pagination">
+                @Html.PagedListPager(Model, page => Url.Action("DanhSachDanhGia", new { page }), PagedListRenderOptions.Classic)
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.confirmDeleteBtn').click(function () {
+            var id_danhGia = $(this).data('id-danhgia');
+
+            $('#confirmModal').modal('show');
+
+            $('#confirmBtn').click(function () {
+                $.ajax({
+                    url: '/Admin/DanhGia/xoaDanhGia',
+                    type: 'POST',
+                    data: { id_danhGia: id_danhGia },
+                    success: function (result) {
+                        if (result.success) {
+
+
+                            $.get('/Admin/DanhGia/DanhSachDanhGia', function (data) {
+                                $('#dataTable').html($(data).find('#dataTable').html());
+                            });
+                        } else {
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi nếu có
+                        console.log(xhr.responseText);
+                    }
+                });
+                $('#confirmModal').modal('hide');
+            });
+        });
+    });
+</script>

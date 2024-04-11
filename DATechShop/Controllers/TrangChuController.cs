@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.Mvc;
+
 
 namespace DATechShop.Controllers
 {
@@ -13,18 +15,64 @@ namespace DATechShop.Controllers
     {
         DATotNghiepEntities db = new DATotNghiepEntities();
         // GET: TrangChu
-        public ActionResult Home()
+        public ActionResult Home(string filterType)
         {
-            return View();
-        }
+			List<SanPham> products = new List<SanPham>();
+
+			if (filterType == "bestseller")
+			{
+				
+			}
+
+
+			else if (filterType == "newarrival")
+			{
+				products = db.SanPhams.OrderByDescending(x => x.id_sanPham).ToList();
+			}
+			else if (filterType == "onsale")
+			{
+				products = db.SanPhams.OrderByDescending(x => x.khuyenMai).ToList();
+			}
+			ViewBag.FilterType = filterType;
+
+
+			return View(products);
+		}
         public ActionResult chiTietSP()
         {
             return View();
         }
 
-		public ActionResult chiTietSPLoai(String loaiSP)
+		public ActionResult chiTietSPLoai(String loaiSP, int? value)
 		{
-			var chitietSPs = new DATechShop.Models.mapSP().danhSachSPLoai(loaiSP);
+			var chitietSPs = new DATechShop.Models.mapSP().danhSachSPLoai(loaiSP, value);
+			if (loaiSP == "DienThoai")
+			{
+
+				ViewBag.loaiSPView = "Điện thoại";
+				ViewBag.loaiSanPham = "DienThoai";
+				return View(chitietSPs);
+			}
+			if (loaiSP == "LapTop")
+			{
+				ViewBag.loaiSPView = "LapTop";
+				ViewBag.loaiSanPham = "LapTop";
+
+				return View(chitietSPs);
+			}
+			if (loaiSP == "AmThanh")
+			{
+				ViewBag.loaiSPView = "Âm thanh";
+				ViewBag.loaiSanPham = "AmThanh";
+
+				return View(chitietSPs);
+			}
+			if (loaiSP == "PhuKien")
+			{
+				ViewBag.loaiSPView = "Phụ kiện";
+				ViewBag.loaiSanPham = "PhuKien";
+				return View(chitietSPs);
+			}
 			return View(chitietSPs);
 
 		}
@@ -34,10 +82,8 @@ namespace DATechShop.Controllers
 			// Tìm bản ghi trong bảng ChiTietSP theo id_sanPham
 			var chiTietSP = db.ChitietSPs.FirstOrDefault(ct => ct.id_sanPham == id_sanPham);
 
-			// Kiểm tra xem có bản ghi nào hay không
 			if (chiTietSP == null)
 			{
-				// Trả về NotFound nếu không tìm thấy bản ghi
 				return HttpNotFound();
 			}
 
@@ -55,29 +101,39 @@ namespace DATechShop.Controllers
 			return Json(data);
 		}
 
+
+
 		[HttpPost]
 		public JsonResult SubmitReview(int id_sanPham, int id_NguoiDung, int rating, string review)
 		{
 			try
 			{
-				// Thêm dữ liệu đánh giá vào cơ sở dữ liệu
 				using (var db = new DATotNghiepEntities())
 				{
-					var danhGia = new DanhGia
+					// Kiểm tra xem người dùng đã mua sản phẩm hay chưa
+					bool hasPurchased = db.ChiTietHoaDons.Any(cthd => cthd.HoaDon.id_NguoiDung == id_NguoiDung && cthd.ChitietSP.SanPham.id_sanPham == id_sanPham);
+
+					if (hasPurchased)
 					{
-						id_sanPham = id_sanPham,
-						id_NguoiDung = id_NguoiDung,
-						diemDanhGia = rating,
-						binhLuan = review,
-						ngayDanhGia = DateTime.Now.Date // Lấy ngày hiện tại
-					};
+						// Thêm dữ liệu đánh giá vào cơ sở dữ liệu
+						var danhGia = new DanhGia
+						{
+							id_sanPham = id_sanPham,
+							id_NguoiDung = id_NguoiDung,
+							diemDanhGia = rating,
+							binhLuan = review,
+							ngayDanhGia = DateTime.Now.Date
+						};
 
-					db.DanhGias.Add(danhGia);
-					db.SaveChanges();
+						db.DanhGias.Add(danhGia);
+						db.SaveChanges();
+						return Json(new { success = true });
+					}
+					else
+					{
+						return Json(new { success = false, message = "Bạn cần mua sản phẩm trước khi đánh giá." });
+					}
 				}
-
-				// Trả về kết quả thành công
-				return Json(new { success = true });
 			}
 			catch (Exception ex)
 			{
@@ -87,12 +143,6 @@ namespace DATechShop.Controllers
 		}
 
 
-		public ActionResult timSP(string key)
-		{
-			var sanPhams = new DATechShop.Models.mapSP().timSP(key);
-			return View(sanPhams);
-		}
-
-
+		
 	}
 }

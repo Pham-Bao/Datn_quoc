@@ -3,41 +3,60 @@
     ViewBag.Title = "row";
     Layout = "";
 }
-<tr class="row_@Model.id_chiTietSP">
-    <th scope="row"> <input class="form-check-input mx-auto" type="checkbox"></th>
-    <td>
-        <p class="h5 text-dark font-weight-bold">@Model.SanPham.tenSP </p>
-        <p>Màu Sắc: @Model.MauSac.tenMau</p>
-    </td>
-    <td>@Model.TuyChon.tenTuyChon</td>
-    <td><img src="~/Upload/imgSP/@Model.anhSP" style="width: 60px; height: auto;" /></td>
-    <td class="gia">
-        @string.Format("{0:#,##0}đ", Convert.ToDecimal(Model.giaSP))
-    </td>
-    <td>
-        <div class="input-group input-group-sm">
-            <div class="input-group-prepend">
-                <button class="btn btn-outline-secondary btn-sm" type="button" onclick="decrementValue(this)">-</button>
-            </div>
-            <input value="1" class="form-control text-center soLuong" data-product-id="@Model.id_chiTietSP" onchange="tinhThanhTien(this)" style="width:40px;">
 
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary btn-sm" type="button" onclick="incrementValue(this)">+</button>
+
+
+<tr class="row_@Model.id_chiTietSP">
+    <th scope="row">
+        <div class="d-flex align-items-center mb-0 mt-4">
+            <img src="~/Upload/imgSP/@Model.anhSP" class="img-fluid me-5 rounded" style="width: 80px; height: 80px;" alt="">
+
+        </div>
+    </th>
+    <td>
+        <div class="product__cart__item__text">
+            <p class="h5 font-weight-bold">@Model.SanPham.tenSP</p>
+            <h6>@Model.MauSac.tenMau</h6>
+            <h6>@Model.TuyChon.tuyChon1</h6>
+            <p></p>
+        </div>
+    </td>
+    <td>
+        <p class="mb-0 mt-4"> @string.Format("{0:#,##0}đ", Convert.ToDecimal(Model.giaSP))</p>
+    </td>
+    <td>
+        <div class="input-group quantity mt-4" style="width: 100px;">
+            <div class="input-group-btn">
+                <button class="btn btn-sm btn-minus rounded-circle bg-light border" type="button" onclick="decrementValue(this)">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+            <input type="text" class="form-control form-control-sm text-center border-0 soLuong" value="1" data-product-id="@Model.id_chiTietSP" onchange="tinhThanhTien(this)">
+            <div class="input-group-btn">
+                <button class="btn btn-sm btn-plus rounded-circle bg-light border" type="button" onclick="incrementValue(this)">
+                    <i class="fa fa-plus"></i>
+                </button>
             </div>
         </div>
     </td>
-    <td class="ThanhTien"></td>
+    
     <td>
-        <a class="btn">
-            <i class="fas fa-trash"></i> <!-- Sử dụng icon xóa từ Font Awesome -->
-        </a>
+        <p class="mb-0 mt-4 ThanhTien"></p>
     </td>
+    <td>
+        <button class="btn btn-md rounded-circle bg-light border mt-4 deleteCartItemBtn" onclick="showConfirmModal(@Model.id_chiTietSP)">
+            <i class="fa fa-times text-danger"></i>
+        </button>
+
+    </td>
+
 </tr>
 <script src="~/Script/Cart.js"></script>
 
+
 <script>
 
-
+    //trừ
     function decrementValue(input) {
         var inputElement = $(input).closest('.input-group').find('.soLuong');
         var value = parseInt(inputElement.val());
@@ -45,7 +64,7 @@
             inputElement.val(value - 1).trigger('change');
         }
     }
-
+    //cộng
     function incrementValue(input) {
         var inputElement = $(input).closest('.input-group').find('.soLuong');
         var value = parseInt(inputElement.val());
@@ -53,6 +72,7 @@
             inputElement.val(value + 1).trigger('change');
         }
     }
+
 
     function tinhThanhTien(input) {
         var row = $(input).closest('tr');
@@ -71,7 +91,7 @@
 
             var index = cart.findIndex(item => item.chiTietSPId == chiTietSPId);
 
-            // Cập nhật số lượng sản phẩm trong giỏ hàng
+           
             if (index !== -1) {
                 cart[index].soLuong = soLuong;
                 // Lưu giỏ hàng mới vào local storage
@@ -81,11 +101,11 @@
                 var tongThanhTien = 0;
                 $('.ThanhTien').each(function () {
                     tongThanhTien += parseFloat($(this).text());
-                   
+
                 });
                 localStorage.setItem('tongThanhTien', tongThanhTien.toFixed());
 
-                // Load lại trang để cập nhật tổng thành tiền trên giao diện
+               
                 location.reload();
             }
         } else {
@@ -98,11 +118,11 @@
 
 
     $(document).ready(function () {
-       
-       
+
+
         var cart = CartClass.Get();
 
-        // Đặt số lượng cho các sản phẩm dựa trên dữ liệu trong giỏ hàng
+       
         $('.soLuong').each(function () {
             var chiTietSPId = $(this).closest('tr').attr('class').split('_')[1];
             var item = cart.find(item => item.chiTietSPId == chiTietSPId);
@@ -112,18 +132,13 @@
                 var thanhTien = gia * item.soLuong;
                 var formattedAmount = thanhTien.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
                 $(this).closest('tr').find('.ThanhTien').text(formattedAmount);
-
-
-               // var tienGiam = tongPhu * phanTramGiam / 100;
-               // var tienGiams = tienGiam.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-               // $("td#tienGiam").text(tienGiams + 'đ');
             }
         });
 
-     
+
     });
 
- 
+
 
     function loadTongThanhTien() {
         var tongThanhTien = localStorage.getItem('tongThanhTien');
@@ -133,6 +148,34 @@
     $(document).ready(function () {
         loadTongThanhTien();
     });
+
+
+    
+    function showConfirmModal(chiTietSPId) {
+        $('#confirmModal').modal('show');
+        console.log(chiTietSPId)
+        // Lưu chiTietSPId vào thuộc tính data của nút xác nhận
+        $('#confirmBtn').data('chiTietSPId', chiTietSPId);
+    }
+
+    // Gắn sự kiện click vào nút xác nhận trong modal
+    $('#confirmBtn').click(function () {
+        var chiTietSPId = $(this).data('chiTietSPId');
+        removeCartItem(chiTietSPId);
+        $('#confirmModal').modal('hide');
+    });
+
+      function removeCartItem(chiTietSPId) {
+        var cart = CartClass.Get();
+        var index = cart.findIndex(item => item.chiTietSPId == chiTietSPId);
+
+        if (index !== -1) {
+            cart.splice(index, 1);
+            CartClass.Set(cart);
+            location.reload();
+        }
+    }
+
 
 
 </script>

@@ -7,82 +7,137 @@
     <script src="~/Script/Cart.js"></script>
 </head>
 
-<div class="container">
-    <h3>.</h3>
-    <div class="row g-0">
-        <p class="h2 text-center mt-5">Giỏ hàng của bạn</p>
-        <div class="col-sm-6 col-md-8">
-            <div class="">
-                <div class="container-fluid">
-                    <table class="table table-hover rounded" id="tableSanPham">
-                        <thead>
-                            <tr>
-                                <th scope="col">Chọn</th>
-                                <th scope="col" class="col-lg-2">Tên Sản Phẩm</th>
-                                <th scope="col">Tùy Chọn</th>
-                                <th scope="col">Hình Ảnh</th>
-                                <th scope="col">Đơn Giá</th>
-                                <th scope="col">Số Lượng</th>
-                                <th scope="col">Thành Tiền</th>
-                                <th scope="col"> Chức năng</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                    <p class="h4">Gợi ý sản phẩm đi kèm </p>
+
+<div class="bg-light">
+
+
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+               
+                <div class="modal-header border-0">
+                  
+                    <h5 class="modal-title h3 font-weight-bold" id="confirmModalLabel">Xác nhận</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-4">
-            <div class=" border bg-light rounded">
-               <form class="d-flex mx-3 mt-3">
-                    <div class="input-group">
-                        <input class="form-control" type="text" id="maGiamGiaInput" placeholder="Mã giảm giá">
-                         <div class="input-group-append">
-                                <button class="btn btn-secondary" type="button" id="applyButton">Áp Dụng</button>
-                          </div>
-                        
-                    </div>
-                </form>
+                <div class="modal-body">
+                    <i class="fas fa-exclamation-triangle fa-2x mx-2"></i> Bạn có chắc muốn xóa sản phẩm chứ?
 
-
-                <div class="container">
-                    <table class="container-fluid mt-3">
-                        <tbody>
-                            <tr class="mb-3">
-                                <td class="text-start">Tổng phụ:</td>
-                                <td class="text-end" id="tongThanhTien">0đ</td>
-                            </tr >
-                            <tr class="mb-3">
-                                <td class="text-start">Phần trăm Giảm:</td>
-                                <td class="text-end" id="phanTramGiam" >0%</td>
-                            </tr>
-                            <tr >
-                                <td class="text-start" >Tiền Giảm:</td>
-                                <td class="text-end" id="tienGiam">0đ</td>
-                            </tr>
-                            <tr>
-                                <td class="text-start h4 text-dark font-weight-bold">Tổng cộng:</td>
-                                <td class="text-end h4 text-primary font-weight-bold"id="tongCong">0đ</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
-                <div class="container">
-                    <hr class="border-top border-2 border-dark">
-                    <div class="mx-3">
-                        <input class="form-check-input checkbox " type="checkbox">
-                        <p class="text-primary">Tôi đã đọc và đồng ý điều khoản và điều kiện của hệ thống</p>
-                    </div>
-                    <a class=" mx-auto btn btn-success btn-lg  mx-auto" href="@Url.Action("datHang", "MuaHang")?phanTramGiam= 0">Tiến hành đặt hàng</a>
-                    <p class="text-danger mt-2">(*)Phí phụ thu sẽ được tính khi bạn tiến hành thanh toán.</p>
-
+                <div class="modal-footer border-0">
+                   
+                    <button type="button" class="btn font-weight-bold" data-bs-dismiss="modal">Hủy</button>
+                    <button id="confirmBtn" type="button" class="btn btn-dark font-weight-bold">Xác nhận</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+
+
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Giỏ hàng của bạn</h4>
+                        <div class="breadcrumb__links">
+                            <a href="~/trangchu">Trang chủ</a>
+                            <span>Giỏ hàng của bạn</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="shopping-cart mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="shopping__cart__table">
+                        <table id="tableSanPham">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Sản Phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Thành Tiền</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn">
+                                <a href="#">Đi đến trang chủ</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-4">
+                    <div class="cart__discount">
+                        <h6>Mã giảm giá</h6>
+                        <form class="d-flex mx-3 mt-3">
+                            <div class="input-group">
+                                <input class="form-control" type="text" id="maGiamGiaInput" placeholder="Mã giảm giá">
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary" type="button" id="applyButton">Áp Dụng</button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="cart__total">
+                        <h6>Tổng hóa đơn</h6>
+                        <table class="container-fluid mt-3">
+                            <tbody>
+                                <tr class="mb-3">
+                                    <td class="text-start">Tổng phụ:</td>
+                                    <td class="text-end" id="tongThanhTien">0đ</td>
+                                </tr>
+                                <tr class="mb-3">
+                                    <td class="text-start">Phần trăm Giảm:</td>
+                                    <td class="text-end" id="phanTramGiam">0%</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start">Tiền Giảm:</td>
+                                    <td class="text-end" id="tienGiam">0đ</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start h4 text-dark font-weight-bold">Tổng cộng:</td>
+                                    <td class="text-end h4 text-primary font-weight-bold" id="tongCong">0đ</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="container">
+                        <hr class="border-top border-2 border-dark">
+                        <div class="mx-3">
+                            <input class="form-check-input checkbox " type="checkbox">
+                            <p class="text-primary">Tôi đã đọc và đồng ý điều khoản và điều kiện của hệ thống</p>
+                        </div>
+
+                        <a href="@Url.Action("datHang", "MuaHang")?phanTramGiam= 0" class="primary-btn">Tiến hành đặt hàng</a>
+                        <p class="text-danger mt-2">(*)Phí phụ thu sẽ được tính khi bạn tiến hành thanh toán.</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
+  
+
+
 
 <script>
 
@@ -124,14 +179,14 @@
 
 $("button#applyButton").click(function () {
     var maGiamGia = $("input#maGiamGiaInput").val();
-    var phanTramGiamValue = parseFloat($("#phanTramGiam").text().trim().replace('%', '')) || 0; 
+    var phanTramGiamValue = parseFloat($("#phanTramGiam").text().trim().replace('%', '')) || 0;
     $.ajax({
         url: '/MuaHang/KiemTraMaGiamGia',
         type: 'POST',
         data: { maGiamGia: maGiamGia },
         success: function (response) {
             if (response.phanTramGiam !== "Không có") {
-              
+
                 $("td#phanTramGiam").text(response.phanTramGiam);
                 var tongPhu = parseFloat($("#tongThanhTien").text().replace('đ', '').replace(',', ''));
                 var phanTramGiam = parseFloat(response.phanTramGiam.replace('%', ''));
@@ -147,13 +202,13 @@ $("button#applyButton").click(function () {
                 $("td#tongCong").text(tongCongs + 'đ');
                 phanTramGiamValue = parseFloat(response.phanTramGiam.replace('%', ''));
             }
-            
+
             if (!maGiamGia) {
                  var datHangUrl = "@Url.Action("datHang", "MuaHang")" + "?phanTramGiam=" + 0
             }
-            
+
             var datHangUrl = "@Url.Action("datHang", "MuaHang")" + "?phanTramGiam=" + encodeURIComponent(phanTramGiamValue);
-            
+
             $("a.btn-success").attr("href", datHangUrl);
         },
         error: function (xhr, status, error) {

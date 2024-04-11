@@ -69,8 +69,29 @@ namespace DATechShop.Models
 			return Donhang;
 		}
 
-		
+		public List<LoaiThanhToan> loaiThanhToans(int id_hoaDon)
 
+		{
+			var db = new DATotNghiepEntities();
+			var loaiThanhToan = db.LoaiThanhToans.Where(d => d.id_HoaDon == id_hoaDon).ToList();
+			return loaiThanhToan;
+		}
+
+		public List<LoaiThanhToan> DanhSachLoaiThanhToan()
+
+		{
+			var db = new DATotNghiepEntities();
+			var data = db.LoaiThanhToans.ToList();
+			return data;
+		}
+
+		public List<ChiTietHoaDon> ChiTietHoaDon(int id_hoaDon)
+
+		{
+			var db = new DATotNghiepEntities();
+			var data = db.ChiTietHoaDons.Where(d => d.id_HoaDon == id_hoaDon).ToList(); 
+			return data;
+		}
 
 	}
 }

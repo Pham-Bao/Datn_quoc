@@ -17,8 +17,10 @@ namespace DATechShop.Areas.Admin.Controllers
 		[AdminAuth]
 		public ActionResult DanhSachKhuyenMai(int? page)
 		{
+			ViewBag.Success = TempData["Success"];
+			ViewBag.Error = TempData["Error"];
 			mapKhuyenMai map = new mapKhuyenMai();
-			var data = map.DanhSachKhuyenMai().OrderByDescending(x => x.id_KhuyenMai); // Sắp xếp theo ID hoặc trường khác nếu cần
+			var data = map.DanhSachKhuyenMai().OrderByDescending(x => x.id_KhuyenMai);
 			int pageSize = 5; // Số mục trên mỗi trang
 			int pageNumber = (page ?? 1); // Số trang hiện tại, mặc định là trang 1 nếu không có giá trị page
 
@@ -68,6 +70,39 @@ namespace DATechShop.Areas.Admin.Controllers
 
 
 		}
+		[AdminAuth]
+		public ActionResult xoaKM(int id_khuyenMai)
+		{
+			try
+			{
+				// Tìm khuyến mãi theo id
+				using (var db = new DATotNghiepEntities())
+				{
+					var khuyenMai = db.KhuyenMais.FirstOrDefault(km => km.id_KhuyenMai == id_khuyenMai);
+					if (khuyenMai != null)
+					{
+						khuyenMai.TrangThaiXoa = false;
+						db.SaveChanges();
+						TempData["Success"] = "Xóa khuyến mãi thành công!";
+						return Json(new { success = true });
+					}
+					else
+					{
+						TempData["Error"] = "Không tìm thấy khuyến mãi có id " + id_khuyenMai;
+						return Json(new { success = false, message = "Không tìm thấy khuyến mãi có id " + id_khuyenMai });
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["Error"] = "Lỗi: " + ex.Message;
+				return Json(new { success = false, message = "Lỗi: " + ex.Message });
+			}
+		}
+
+
+
+
 
 	}
 }

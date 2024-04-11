@@ -45,24 +45,58 @@ namespace DATechShop.Areas.Admin.Controllers
 		}
 		[AdminAuth]
 		[HttpPost]
-		public ActionResult ThemMauSac(MauSac mode)
+		public ActionResult ThemMauSac(FormCollection form)
 		{
-			db.MauSacs.Add(mode);
-			db.SaveChanges();
-			return View();
+			string tenMau = form["tenMau"];
+			string maMau = form["maMau"];
+
+			var existingColor = db.MauSacs.FirstOrDefault(m => m.tenMau == tenMau);
+
+			if (existingColor == null)
+			{
+				// Màu chưa tồn tại trong cơ sở dữ liệu, thêm màu mới
+				MauSac mauSac = new MauSac
+				{
+					tenMau = tenMau,
+					maMau = maMau
+				};
+
+				db.MauSacs.Add(mauSac);
+				db.SaveChanges();
+				TempData["SuccessMessage"] = "Thêm thành công";
+			}
+			else
+			{
+				TempData["ErrorMessage"] = "Màu đã tồn tại";
+			}
+
+			// Trả về ActionResult (có thể là RedirectToAction hoặc PartialView)
+			return RedirectToAction("DanhSachMau");
 		}
+
 
 
 		[AdminAuth]
 		public ActionResult DanhSachMau(int? page)
 		{
 			mapSP map = new mapSP();
-			var data = map.DanhSachMau().OrderByDescending(x => x.id_Mau); // Sắp xếp theo ID hoặc trường khác nếu cần
-			int pageSize = 5; // Số mục trên mỗi trang
-			int pageNumber = (page ?? 1); // Số trang hiện tại, mặc định là trang 1 nếu không có giá trị page
+			var data = map.DanhSachMau().OrderByDescending(x => x.id_Mau); 
+			int pageSize = 5; 
+			int pageNumber = (page ?? 1); 
 
-			// Sử dụng PagedList để phân trang dữ liệu
+			
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
+
+			// Truyền thông báo từ TempData đến ViewBag
+			if (TempData["SuccessMessage"] != null)
+			{
+				ViewBag.Success = TempData["SuccessMessage"];
+			}
+
+			if (TempData["ErrorMessage"] != null)
+			{
+				ViewBag.Error = TempData["ErrorMessage"];
+			}
 
 			return View(pagedList);
 		}
@@ -74,11 +108,33 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View();
 		}
 		[HttpPost]
-		public ActionResult TuyChon(TuyChon mode)
+		public ActionResult TuyChon(FormCollection form)
 		{
-			db.TuyChons.Add(mode);
-			db.SaveChanges();
-			return View();
+			string tenTuyChon = form["tenTuyChon"];
+			string giaTri = form["giaTri"];
+
+			
+			var existingOption = db.TuyChons.FirstOrDefault(tc => tc.tenTuyChon == tenTuyChon && tc.tuyChon1 == giaTri);
+
+			if (existingOption == null)
+			{
+				
+				TuyChon tuyChon = new TuyChon
+				{
+					tenTuyChon = tenTuyChon,
+					tuyChon1 = giaTri
+				};
+
+				db.TuyChons.Add(tuyChon);
+				db.SaveChanges();
+				TempData["SuccessMessage"] = "Thêm thành công";
+			}
+			else
+			{
+				TempData["ErrorMessage"] = "Tùy chọn đã tồn tại";
+			}
+
+			return RedirectToAction("DanhSachTuyChon");
 		}
 
 		[AdminAuth]
@@ -91,7 +147,15 @@ namespace DATechShop.Areas.Admin.Controllers
 
 			// Sử dụng PagedList để phân trang dữ liệu
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
+			if (TempData["SuccessMessage"] != null)
+			{
+				ViewBag.Success = TempData["SuccessMessage"];
+			}
 
+			if (TempData["ErrorMessage"] != null)
+			{
+				ViewBag.Error = TempData["ErrorMessage"];
+			}
 			return View(pagedList);
 		}
 		[AdminAuth]
@@ -175,30 +239,35 @@ namespace DATechShop.Areas.Admin.Controllers
 
 			return View(viewModel);
 		}
+
+		[AdminAuth]
 		[HttpPost]
 		public ActionResult ThemChiTietSP(ThemChiTietSPViewModel viewModel, HttpPostedFileBase uploadhinh)
 		{
-			// Kiểm tra ModelState.IsValid trước khi thực hiện xử lý
-			if (ModelState.IsValid)
+			if (uploadhinh == null || viewModel.ChitietSP.giaSP == null)
 			{
-				// Lưu thông tin chi tiết sản phẩm vào cơ sở dữ liệu
-				var chiTietSP = new ChitietSP();
+				ViewBag.Error = "Chưa chọn ảnh hoặc nhập giá.";
+			}
+			else if (ModelState.IsValid)
+			{
+				// Kiểm tra xem đã tồn tại bản ghi trong bảng chi tiết sản phẩm với các giá trị đã cho
+				var existingRecord = db.ChitietSPs.FirstOrDefault(c => c.id_sanPham == viewModel.SanPham.id_sanPham &&
+																		c.id_Mau == viewModel.SelectedMau &&
+																		c.id_tuyChon == viewModel.SelectedTuyChon);
 
-				// Kiểm tra viewModel.SanPham không null trước khi sử dụng
-				if (viewModel.SanPham != null)
+				if (existingRecord != null)
 				{
-					chiTietSP.id_sanPham = viewModel.SanPham.id_sanPham;
-				}
-				else
-				{
-					// Xử lý trường hợp khi viewModel.SanPham là null
-					// Có thể quay lại view hoặc xử lý logic khác
+					// Nếu bản ghi đã tồn tại, hiển thị thông báo lỗi và quay lại view
+					ViewBag.Error = "Bản ghi đã tồn tại trong bảng chi tiết sản phẩm.";
 					return View(viewModel);
 				}
 
+				// Nếu không có bản ghi tồn tại, tiến hành thêm bản ghi mới
+				var chiTietSP = new ChitietSP();
+				chiTietSP.id_sanPham = viewModel.SanPham.id_sanPham;
 				chiTietSP.id_Mau = viewModel.SelectedMau;
 				chiTietSP.id_tuyChon = viewModel.SelectedTuyChon;
-				chiTietSP.giaSP = viewModel.ChitietSP.giaSP; // Gán giá sản phẩm từ form vào đối tượng chiTietSP
+				chiTietSP.giaSP = viewModel.ChitietSP.giaSP;
 
 				// Xử lý upload ảnh
 				if (uploadhinh != null && uploadhinh.ContentLength > 0)
@@ -214,15 +283,17 @@ namespace DATechShop.Areas.Admin.Controllers
 					chiTietSP.anhSP = _FileName;
 				}
 
+				// Thêm bản ghi mới vào cơ sở dữ liệu
 				db.ChitietSPs.Add(chiTietSP);
 				db.SaveChanges();
-
-				// Redirect hoặc trả về view tùy theo logic của bạn
+				ViewBag.Success = "Thêm thành công";
 			}
 
-			// Nếu ModelState không hợp lệ, quay lại view để hiển thị thông báo lỗi
+			ViewBag.Error = "Thêm lỗi!";
 			return View(viewModel);
 		}
+
+
 		[AdminAuth]
 		public ActionResult ChiTietSP(int id, int? page)
 		{
@@ -234,7 +305,7 @@ namespace DATechShop.Areas.Admin.Controllers
 
 			// Sử dụng PagedList để phân trang dữ liệu
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
-
+			ViewBag.id_sanPham = id;
 			return View(pagedList);
 		}
 		[AdminAuth]
@@ -290,6 +361,116 @@ namespace DATechShop.Areas.Admin.Controllers
 
 			// Redirect về action hiển thị danh sách thông số
 			return RedirectToAction("DanhSachThongSo", new { id = id_sanPham });
+		}
+
+
+
+		[HttpPost]
+		public ActionResult KiemTraTuyChon(int tuyChonId, int id_sanPham)
+		{
+			var chiTietSP = db.ChitietSPs.FirstOrDefault(c => c.id_tuyChon == tuyChonId && c.id_sanPham == id_sanPham);
+			if (chiTietSP != null)
+			{
+				return Json(new { success = true, giaSP = chiTietSP.giaSP });
+			}
+			else
+			{
+				return Json(new { success = false, message = "Tùy chọn không tồn tại trong cơ sở dữ liệu." });
+			}
+		}
+
+
+		[AdminAuth]
+		public ActionResult xoaMau(int id_mau)
+		{
+			try
+			{
+				// Tìm khuyến mãi theo id
+				using (var db = new DATotNghiepEntities())
+				{
+					var mau = db.MauSacs.FirstOrDefault(km => km.id_Mau == id_mau);
+					if (mau != null)
+					{
+						mau.TrangThaiXoa = false;
+						db.SaveChanges();
+						TempData["Success"] = "Xóa khuyến mãi thành công!";
+						return Json(new { success = true });
+					}
+					else
+					{
+						TempData["Error"] = "Không tìm thấy khuyến mãi có id " + id_mau;
+						return Json(new { success = false, message = "Không tìm thấy khuyến mãi có id " + id_mau });
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["Error"] = "Lỗi: " + ex.Message;
+				return Json(new { success = false, message = "Lỗi: " + ex.Message });
+			}
+		}
+
+
+		[AdminAuth]
+		public ActionResult xoaTuyChon(int id_tuyChon)
+		{
+			try
+			{
+				// Tìm khuyến mãi theo id
+				using (var db = new DATotNghiepEntities())
+				{
+					var tuyChon = db.TuyChons.FirstOrDefault(km => km.id_tuyChon == id_tuyChon);
+					if (tuyChon != null)
+					{
+						tuyChon.TrangThaiXoa = false;
+						db.SaveChanges();
+						TempData["Success"] = "Xóa khuyến mãi thành công!";
+						return Json(new { success = true });
+					}
+					else
+					{
+						TempData["Error"] = "Không tìm thấy khuyến mãi có id " + id_tuyChon;
+						return Json(new { success = false, message = "Không tìm thấy khuyến mãi có id " + id_tuyChon });
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["Error"] = "Lỗi: " + ex.Message;
+				return Json(new { success = false, message = "Lỗi: " + ex.Message });
+			}
+		}
+
+
+
+		[AdminAuth]
+		public ActionResult xoaThongSo(int id_thongSo)
+		{
+			try
+			{
+				// Tìm khuyến mãi theo id
+				using (var db = new DATotNghiepEntities())
+				{
+					var thongSo = db.ThongSoKyThuats.FirstOrDefault(km => km.id_ThongSo  == id_thongSo);
+					if (thongSo != null)
+					{
+						thongSo.TrangThaiXoa = false;
+						db.SaveChanges();
+						TempData["Success"] = "Xóa khuyến mãi thành công!";
+						return Json(new { success = true });
+					}
+					else
+					{
+						TempData["Error"] = "Không tìm thấy khuyến mãi có id " + id_thongSo;
+						return Json(new { success = false, message = "Không tìm thấy khuyến mãi có id " + id_thongSo });
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["Error"] = "Lỗi: " + ex.Message;
+				return Json(new { success = false, message = "Lỗi: " + ex.Message });
+			}
 		}
 
 

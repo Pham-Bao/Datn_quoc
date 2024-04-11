@@ -1,112 +1,137 @@
-﻿
+﻿@model IEnumerable<DATechShop.Models.SanPham>
+@using System.Globalization
+
 @{
     ViewBag.Title = "Home";
 }
 
 
+<section class="hero">
+    <div class="hero__slider owl-carousel">
+        <div class="hero__items set-bg" data-setbg="Content/Teamplate/img/hero/hero-1.jpg">
+            <div class="container">
 
-<!-- Carousel -->
-<div class="container mt-5" style="">
-    <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-7 col-md-8">
+                        <div class="hero__text">
+                            <h6>TechShop xin chào!</h6>
+                            <h2>Công nghệ - Thay đổi thế giới</h2>
+                            <p>
 
-        <!-- Indicators/dots -->
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
-        </div>
-
-        <!-- The slideshow/carousel -->
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-
-                <img style="height:600px;width:100% " src="https://images.pexels.com/photos/890849/pexels-photo-890849.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Los Angeles" class="d-block w-100 rounded">
-                <div class="carousel-caption">
-                    <a> Sản phẩm chính hãng</a>
-                    <br />
-                    <a id="btnDangNhap" href="~/trangchu/timkiem" class="btn btn-secondary">Đặt Ngay</a>
-
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img style="height: 600px; width: 100% " src="https://images.pexels.com/photos/3861458/pexels-photo-3861458.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Chicago" class="d-block w-100 rounded">
-                <div class="carousel-caption">
-                    <a> Công nghệ là tương lai</a>
-                    <br />
-                    <a id="btnDangNhap" href="~/trangchu/timkiem" class="btn btn-secondary">Đặt Ngay</a>
-
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img style="height: 600px; width: 100% " src="https://images.pexels.com/photos/1038916/pexels-photo-1038916.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="New York" class="d-block w-100 rounded">
-                <div class="carousel-caption">
-                    <a>Sản phẩm của thời đại</a>
-                    <br />
-                    <a id="btnDangNhap" href="~/trangchu/timkiem" class="btn btn-secondary">Đặt Ngay</a>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Left and right controls/icons -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-
-
-</div>
-
-<div class="container-fluid ">
-    <div class="container mt-5" style="left:50px">
-        <div class="row">
-            <div class="col">
-                <img style="height:300px" src="https://images.pexels.com/photos/5081399/pexels-photo-5081399.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="New York" class="d-block w-10 rounded">
-
-            </div>
-            <div class="col">
-                <img style="height:300px " src="https://images.pexels.com/photos/8000651/pexels-photo-8000651.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="New York" class="d-block w-10 rounded">
-            </div>
-            <div class="col">
-                <img style="height:300px " src="https://images.pexels.com/photos/5081386/pexels-photo-5081386.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="New York" class="d-block w-10 rounded">
-            </div>
-            <div class="col">
-                <img style="height:300px " src="https://images.pexels.com/photos/5054352/pexels-photo-5054352.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="New York" class="d-block w-10 rounded">
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<div class="container bg-danger">
-    <div class="row bg-light">
-        @{ 
-            var chitietSPs = new DATechShop.Models.mapSP().danhSachCTSPLoai("apple");
-
-        }
-        @if (chitietSPs != null && chitietSPs.Any())
-        {
-            foreach (var item in chitietSPs)
-            {
-                <div class="col-3 bg-danger">
-                    <a href="#" class="card">
-                        <img src="@Url.Content("~/Upload/imgSP/" + item.anhSP)" class="card-img-top mt-2">
-                        <div class="card-body">
-                            <label class="label fs-3 text-center">@item.SanPham.tenSP</label>
-                            <p class="label fs-5 text-primary">@item.giaSP</p>
-                            <p class="text-decoration-line-through">20,000đ</p>
+                            </p>
+                            <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                            <div class="hero__social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                            </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
-            }
-        }
-        else
-        {
-            <p>Danh sách sản phẩm trống</p>
-        }
+            </div>
+        </div>
+        <div class="hero__items set-bg" data-setbg="img/bgr1.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-7 col-md-8">
+                        <div class="hero__text">
+                            <h6>TechShop xin chào!</h6>
+                            <h2>Công nghệ - thay đổi thế giới</h2>
+
+                            <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                            <div class="hero__social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</section>
+
+
+
+<section class="mt-5">
+    <div class="container">
+        
+        <div class="text-center mt-6">
+            <ul class="d-flex mt-6">
+                <li class="text-dark @(ViewBag.FilterType == "onsale" ? "active" : "")">
+                    <a class="btn" href="@Url.Action("Home", "TrangChu", new { filterType ="onsale" })"><span class="text-dark h4 font-weight-bold">Giảm nhiều</span></a>
+                </li>
+                <li class="text-dark @(ViewBag.FilterType == "bestseller" ? "active" : "")">
+                    <a class=" btn" href="@Url.Action("Home", "TrangChu", new { filterType ="bestseller" })"><span class="text-dark h4 font-weight-bold ">Bán chạy</span></a>
+                </li>
+                <li class="text-dark @(ViewBag.FilterType == "newarrival" ? "active" : "")">
+                    <a class="btn" href="@Url.Action("Home", "TrangChu", new { filterType ="newarrival" })"><span class="text-dark h4 font-weight-bold">Mới nhất</span></a>
+                </li>
+            </ul>
+
+
+        </div>
+        
+
+        <div class="row">
+
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6">
+
+                            <div onclick="location.href='@Url.Action("LayChiTietSP", "TrangChu", new { id_sanPham = @item.id_sanPham})'" class="card rounded" style="cursor: pointer;">
+                                <div class="container">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <img src="@Url.Content("~/Upload/imgSPChung/" + item.anhSPChung)" class="card-img-top mt-2" style="width:80%">
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="h4 font-weight-bold text-secondary">@item.tenSP</p>
+
+                                    @{
+                                        var gia = item.ChitietSPs.FirstOrDefault()?.giaSP;
+                                        if (gia != null)
+                                        {
+                                            var giaGocNguyen = (int)gia; // Chuyển giá thành số nguyên
+                                            var giaGocFormatted = giaGocNguyen.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"));
+
+
+                                            var giamphanTram = Convert.ToSingle(item.khuyenMai);
+                                            var giagiam = gia - gia * (giamphanTram / 100);
+                                            var giagiamNguyen = giagiam.HasValue ? (int)Math.Floor((decimal)giagiam.Value) : 0;
+                                            var giaFormatted = giagiamNguyen.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"));
+
+                                            <div class="mt-4">
+                                                <p class="h5 font-weight-bold text-primary ">@giaFormatted</p>
+                                                <span class="text-decoration-line-through d-inline text-secondary">@giaGocFormatted</span>
+                                                <span class="d-inline text-secondary" id="khuyenMai">-@item.khuyenMai%</span>
+                                            </div>
+                                        }
+
+
+
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Danh sách sản phẩm trống</p>
+                }
+            </div>
+
+
+
+
+        </div>
+   
+</section>

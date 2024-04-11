@@ -15,7 +15,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-
     <link href="/Areas/Content/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
@@ -26,253 +25,336 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
     <link href="~/Css/Css.css" rel="stylesheet" />
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <!-- Custom styles for this template-->
     <link href="/Areas/Content/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="icon" href="~/Areas/imgAdmin/icons8-circuit-50.png" type="image/x-icon">
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-        (function () {
-            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/65fc86e21ec1082f04d9ea15/1hph6tpsp';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-        })();
-    </script>
-    <!--End of Tawk.to Script-->
 
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Css Styles -->
+
+    <link rel="stylesheet" href="~/Content/Teamplate/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/Teamplate/css/style.css" type="text/css">
+
+    <script src="~/Content/Teamplate/js/jquery-3.3.1.min.js"></script>
 </head>
 <body>
-    <div class="container-fluid " style="background: #f5f5f7">
-        <div class="">
+    @{
+        // Lấy giá trị của Session
+        var tenNguoiDung = Session["TenNguoiDung"] as string;
+        var soDienThoai = Session["SoDienThoai"] as string;
+        var diaChi = Session["DiaChi"] as string;
+        var id = Session["id_NguoiDung"];
+    }
+    @if (ViewBag.Error != null)
+    {
+        <div id="errorAlert" class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i>
+            @ViewBag.Error <!-- Thông báo lỗi -->
+        </div>
 
-            <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
-                <div class="container-fluid mx-5">
-                    <img width="60" height="60" src="~/img/icons8-circuit-50.png" alt="circuit" />
-                    <a class="navbar-brand mx" href="~/trangChu/home">
 
+    }
 
-                        <abbr class="mx-3 fw-bold lighten-80" style="color:darkgrey">Tech Shop</abbr>
-                    </a>
+    @if (ViewBag.Success != null)
+    {
+        <div id="successAlert" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            @ViewBag.Success
+        </div>
 
+    }
 
+    <div id="errorAlert" class="alert alert-danger" style="display:none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="errorMessage"></span>
+    </div>
 
-                    <div class="collapse navbar-collapse">
-                        <ul class="navbar-nav me-auto mx-3 mx-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "DienThoai" })">Điện thoại</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "LapTop" })">LapTop</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "AmThanh" })">Âm thanh</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "PhuKien" })">Phụ Kiện</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("chiTietSPLoai", "TrangChu", new { area = (string)null, loaiSP = "DoChoi" })">Đồ chơi</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="~/KhuyenMaiUser/DanhSachKM">Khuyến mãi </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Sửa chữa</a>
-                            </li>
+    <div id="successAlert" class="alert alert-success" style="display:none;">
+        <i class="fas fa-check-circle"></i>
+        <span id="successMessage"></span>
+    </div>
 
-                        </ul>
+    <!-- Confirm Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title h3 font-weight-bold" id="confirmModalLabel">Xác nhận</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <i class="fas fa-exclamation-triangle fa-2x mx-2"></i> Bạn có chắc muốn xóa sản phẩm trong giỏ hàng chứ?
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn font-weight-bold" data-bs-dismiss="modal">Hủy</button>
+                    <button id="confirmBtn" type="button" class="btn btn-dark font-weight-bold">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <form class="d-flex mx-3 " action="~/TrangChu/timSP">
-                            <input class="form-control me-2" type="text" placeholder="Tìm Kiếm" name="key" value="@ViewBag.ten">
-                            <button class="btn btn-secondary" type="submit">Tìm</button>
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__option">
+            <div class="offcanvas__links">
+                <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fa fa-regular fa-user ml-2"></i>
+                    <span class="text-dark">@tenNguoiDung </span>
+                </button>
+                <ul class="dropdown-menu">
+                    @if (tenNguoiDung == null)
+                    {
 
-                        </form>
-                        @{
-                            // Lấy giá trị của Session
-                            var tenNguoiDung = Session["TenNguoiDung"] as string;
-                            var soDienThoai = Session["SoDienThoai"] as string;
-                            var diaChi = Session["DiaChi"] as string;
-                            var id = Session["id_NguoiDung"];
-                        }
-                        <a class="btn" type="button" href="@Url.Action("GioHang", "MuaHang", new { area = (string)null })" id="cart-icon">
-                            <div class="cart-icon-wrapper">
-                                <img src="~/img/icons8-cart-48.png" alt="Logo" style="width: 45px;" class="rounded-pill">
-                                <span id="cart-count">0</span>
-                            </div>
+                        <li><a class="dropdown-item text-dark" href="~/Admin/nguoiDung/dangnhap "><i class="fas fa-sign-in-alt text-muted me-2 text-dark"></i> <strong>Đăng Nhập</strong></a></li>
+                        <li><a class="dropdown-item text-dark" href="~/Admin/nguoidung/DangKyTaiKhoan"><i class="fas fa-user-plus text-muted me-2"></i> <strong>Đăng Ký </strong></a></li>
 
-                        </a>
-                        <a class="btn" type="button" href="@Url.Action("DonHang", "MuaHang", new { id_nguoiDung = id,  area = (string)null })" id="cart-icon">
-                            <div class="cart-icon-wrapper">
-                                <img src="~/img/icons8-cart-48.png" alt="Logo" style="width: 45px;" class="rounded-pill">
-                                <span id="cart-count">0</span>
-                            </div>
+                    }
+                    else
+                    {
 
-                        </a>
+                        <li><a class="dropdown-item text-dark" href="#"><i class="fas fa-cog text-secondary  me-2"></i>Sửa Thông Tin</a></li>
+                        <li><a class="dropdown-item text-danger" href="@Url.Action("DangXuat", "NguoiDung", new { area = "Admin" })"><i class="fas fa-sign-out-alt me-2"></i><strong>Đăng Xuất</strong></a></li>
 
-                        <div class="dropdown">
+                    }
+                </ul>
+            </div>
 
-                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
-                                <img src="~/img/icons8-user-32 (1).png" alt="Logo" style="width:45px;">
-                                <span class="text-light">@ViewBag.err</span>
-                            </button>
-                            <ul class="dropdown-menu">
+        </div>
+        <div class="offcanvas__nav__option">
+
+            <a href="@Url.Action("Donhang", "MuaHang", new { area = (string)null, id_nguoiDung = id })"><img src="~/Content/Teamplate/img/icon/cart.png" alt=""></a>
+
+            <a href="@Url.Action("GioHang", "MuaHang", new { area = (string)null })"><img src="~/Content/Teamplate/img/icon/cart.png" alt=""></a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__text">
+
+        </div>
+    </div>
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7">
+                        <div class="header__top__left">
+                            <p>Đại học xây dựng Hà Nội</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-5">
+                        <div class="header__top__right">
+                            <div class="header__top__links">
+
                                 @if (tenNguoiDung == null)
                                 {
-                                    <!-- Hiển thị menu khi chưa đăng nhập -->
-                                    <li><a class="dropdown-item" href="~/Admin/nguoidung/DangKyTaiKhoan"><i class="fas fa-user-plus text-muted me-2"></i> <strong>Đăng Ký Ngay</strong></a></li>
-                                    <li><a class="dropdown-item" href="~/Admin/nguoiDung/dangnhap "><i class="fas fa-sign-in-alt text-muted me-2 text-primary"></i> <strong>Đăng Nhập</strong></a></li>
+                                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                                        <span class="text-white">Đăng Nhập</span>
+                                        <span class="text-light">@tenNguoiDung </span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+
+                                        <li><a class="dropdown-item text-dark" href="~/Admin/nguoiDung/dangnhap "><i class="fas fa-sign-in-alt text-muted me-2 text-dark"></i> <strong>Đăng Nhập</strong></a></li>
+                                        <li><a class="dropdown-item text-dark" href="~/Admin/nguoidung/DangKyTaiKhoan"><i class="fas fa-user-plus text-muted me-2"></i> <strong>Đăng Ký </strong></a></li>
+                                    </ul>
                                 }
                                 else
                                 {
-                                    <!-- Hiển thị menu khi đã đăng nhập -->
-                                    <li><span class="dropdown-item"><i class="fas fa-user text-secondary me-2"></i><strong>@tenNguoiDung</strong></span></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog text-secondary  me-2"></i>Sửa Thông Tin</a></li>
-                                    <li><a class="dropdown-item text-danger" href="@Url.Action("DangXuat", "NguoiDung", new { area = "Admin" })"><i class="fas fa-sign-out-alt me-2"></i><strong> Đăng Xuất</strong></a></li>
+                                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
 
+                                        <span class="text-light">@tenNguoiDung </span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+
+                                        <li><a class="dropdown-item text-dark" href="#"><i class="fas fa-cog text-secondary  me-2"></i>Sửa Thông Tin</a></li>
+                                        <li><a class="dropdown-item text-danger" href="@Url.Action("DangXuat", "NguoiDung", new { area = "Admin" })"><i class="fas fa-sign-out-alt me-2"></i><strong>Đăng Xuất</strong></a></li>
+
+
+                                    </ul>
                                 }
-                            </ul>
+                            </div>
+                            <div class="header__top__hover">
 
-
-
+                            </div>
                         </div>
-
-
-
-
-
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__logo d-flex align-items-center" onclick="location.href='@Url.Action("Home","TrangChu", new { area = (string)null })'">
+                        <img src="~/img/icons8-circuit-50.png" class="mb-0 font-weight-bold h4" alt="" style="width: 50px; height: 50px;">
+                        <p class="mb-0 font-weight-bold h4">TechShop</p>
                     </div>
 
-
                 </div>
+                <div class="col-lg-6 col-md-6">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li><a href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "DienThoai" })">Điện thoại</a></li>
+                            <li><a href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "LapTop" })">LapTop</a></li>
+                            <li><a href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "AmThanh" })">Âm thanh</a></li>
+
+                            <li><a href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "PhuKien" })">Phụ kiện</a></li>
+
+                            <li><a href="~/KhuyenMaiUser/DanhSachKM">Khuyến Mãi</a></li>
+
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__nav__option">
+                        <a href="#" class="search-switch"><img src="~/Content/Teamplate/img/icon/search.png" alt=""></a>
 
 
-            </nav>
-
-            <div id="notification" class="notification"></div>
-        </div>
-      
-
-        @RenderBody()
-
-        <hr />
-        <div class="mt-5 text-center border-top">
-            <p class="h3 mt-3 ">Đăng Ký để nhận thông tin từ Shop Tech </p>
-            <a>Thông tin sản phẩm mới nhất và chương trình khuyến mãi</a><br />
-
-            <a style="text-decoration:none" type="submit" class="btn btn-primary" href="~/khachhang/dangky">Đăng ký</a>
-
-
-
-        </div>
-
-        <div class="container-fluid  mt-3 ">
-            <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top text-dark">
-                <div>
-
-                    <div class="mx-5">
-                        <a class="navbar-brand" href="~/Home/gioithieu">
-                            <img width="60" height="60" src="https://img.icons8.com/ios/50/000000/circuit.png" alt="circuit" />
-                            <abbr class=" text-dark h3"> Tech Shop</abbr>
+                        <a href="@Url.Action("GioHang", "MuaHang", new { area = (string)null })" class="cart-icon">
+                            <span class="cart-counter">3</span>
+                            <img src="~/Content/Teamplate/img/icon/cart.png" alt="">
+                        </a>
+                        <a href="@Url.Action("Donhang", "MuaHang", new { area = (string)null, id_nguoiDung = id })">
+                            <i class="fas fa-user text-dark "></i> <!-- Thêm icon xe giao hàng -->
                         </a>
                     </div>
-                    <div class=" container icons mx-5 mt-3" style="text-decoration: none">
-                        <img width="40" height="40" src="https://img.icons8.com/color/48/facebook.png" alt="facebook" />
-                        <a style="text-decoration: none" class="text-dark fs-5" href="#"><ion-icon name="logo-facebook"></ion-icon>Facebook</a><br />
-
-                        <img width="40" height="40" src="https://img.icons8.com/color/48/zalo.png" alt="zalo" />
-                        <a style="text-decoration: none" class="text-dark fs-5" href="#"><ion-icon name="logo-instagram"></ion-icon>Zalo</a><br />
-
-                        <img width="40" height="40" src="https://img.icons8.com/fluency/48/instagram-new.png" alt="instagram-new" />
-                        <a style="text-decoration: none" class="text-dark fs-5" href="#"><ion-icon name="logo-twitter"></ion-icon>Instagram</a><br />
-
-                        <img width="40" height="40" src="https://img.icons8.com/color/48/google-logo.png" alt="google-logo" />
-                        <a style="text-decoration: none" class="text-dark fs-5" href="#"><ion-icon name="logo-google"></ion-icon>Google</a><br />
-
-                    </div>
                 </div>
-
-                <div class="col mb-2">
-
-                </div>
-
-                <div class="col mb-3 text-dark">
-                    <h4><font class="h4" style="vertical-align: inherit;"><font style="vertical-align: inherit;">Loại Dịch Vụ</font></font></h4>
-                    <ul class="nav flex-column mt-5 text-dark">
-
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Điện thoại</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Phụ Kiện</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">LapTop</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Ipad</font></font></a></li>
-
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Sửa chữa</font></font></a></li>
-                    </ul>
-                </div>
-
-                <div class="col mb-3">
-                    <h4><font class="h4" style="vertical-align: inherit;"><font style="vertical-align: inherit;">Chính Sách</font></font></h4>
-                    <ul class="nav flex-column mt-5">
-                        <li class="nav-item mb-2 text-dark"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Khuyến mãi</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Chi ân khách hàng</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Giảm giá </font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Giải quyết khiếu nại</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tuyển dụng</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Phục vụ khách hàng</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Giao Hàng</font></font></a></li>
-                    </ul>
-                </div>
-
-                <div class="col mb-3">
-                    <h4><font class="h4" style="vertical-align: inherit;"><font style="vertical-align: inherit;">Địa Chỉ & Liên Hệ</font></font></h4>
-                    <ul class="nav flex-column mt-5">
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tài khoản của tôi</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Hệ thống cửa hàng</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SĐT:091234567</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Gmail:Acb@gmail.com</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fabook</font></font></a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Zalo:091234567</font></font></a></li>
-
-
-                    </ul>
-                </div>
-            </footer>
-
+            </div>
+            <div class="canvas__open"><i class="fa fa-bars"></i></div>
         </div>
+    </header>
 
-        @RenderSection("scritps", false);
+    @RenderBody()
+
+    <hr />
+    <div class="mt-5 text-center border-top">
+        <p class="h3 mt-3 ">Đăng Ký để nhận thông tin từ Shop Tech </p>
+        <a>Thông tin sản phẩm mới nhất và chương trình khuyến mãi</a><br />
+
+        <a style="text-decoration:none" type="submit" class="btn btn-dark" href="~/khachhang/dangky">Đăng ký</a>
 
 
 
     </div>
+
+    <div class="container-fluid  mt-3 ">
+        <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top text-dark">
+            <div>
+
+                <div class="mx-5">
+                    <a class="navbar-brand" href="~/Home/gioithieu">
+                        <img width="60" height="60" src="https://img.icons8.com/ios/50/000000/circuit.png" alt="circuit" />
+                        <abbr class=" text-dark h3"> Tech Shop</abbr>
+                    </a>
+                </div>
+                <div class=" container icons mx-5 mt-3" style="text-decoration: none">
+                    <img width="40" height="40" src="https://img.icons8.com/color/48/facebook.png" alt="facebook" />
+                    <a style="text-decoration: none" class="text-dark fs-5" href="#"><ion-icon name="logo-facebook"></ion-icon>Facebook</a><br />
+
+                    <img width="40" height="40" src="https://img.icons8.com/color/48/zalo.png" alt="zalo" />
+                    <a style="text-decoration: none" class="text-dark fs-5" href="#"><ion-icon name="logo-instagram"></ion-icon>Zalo</a><br />
+
+                    <img width="40" height="40" src="https://img.icons8.com/fluency/48/instagram-new.png" alt="instagram-new" />
+                    <a style="text-decoration: none" class="text-dark fs-5" href="#"><ion-icon name="logo-twitter"></ion-icon>Instagram</a><br />
+
+                    <img width="40" height="40" src="https://img.icons8.com/color/48/google-logo.png" alt="google-logo" />
+                    <a style="text-decoration: none" class="text-dark fs-5" href="#"><ion-icon name="logo-google"></ion-icon>Google</a><br />
+
+                </div>
+            </div>
+
+            <div class="col mb-2">
+
+            </div>
+
+            <div class="col mb-3 text-dark">
+                <h4><font class="h4" style="vertical-align: inherit;"><font style="vertical-align: inherit;">Loại Dịch Vụ</font></font></h4>
+                <ul class="nav flex-column mt-5 text-dark">
+
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Điện thoại</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Phụ Kiện</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">LapTop</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Ipad</font></font></a></li>
+
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Sửa chữa</font></font></a></li>
+                </ul>
+            </div>
+
+            <div class="col mb-3">
+                <h4><font class="h4" style="vertical-align: inherit;"><font style="vertical-align: inherit;">Chính Sách</font></font></h4>
+                <ul class="nav flex-column mt-5">
+                    <li class="nav-item mb-2 text-dark"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Khuyến mãi</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Chi ân khách hàng</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Giảm giá </font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Giải quyết khiếu nại</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tuyển dụng</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Phục vụ khách hàng</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Giao Hàng</font></font></a></li>
+                </ul>
+            </div>
+
+            <div class="col mb-3">
+                <h4><font class="h4" style="vertical-align: inherit;"><font style="vertical-align: inherit;">Địa Chỉ & Liên Hệ</font></font></h4>
+                <ul class="nav flex-column mt-5">
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tài khoản của tôi</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Hệ thống cửa hàng</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">SĐT:091234567</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Gmail:Acb@gmail.com</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fabook</font></font></a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Zalo:091234567</font></font></a></li>
+
+
+                </ul>
+            </div>
+        </footer>
+
+    </div>
+
+    @RenderSection("scritps", false);
+
+    <!-- Js Plugins -->
+    <script src="~/Content/Teamplate/js/bootstrap.min.js"></script>
+    <script src="~/Content/Teamplate/js/jquery.nicescroll.min.js"></script>
+    <script src="~/Content/Teamplate/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/Content/Teamplate/js/jquery.countdown.min.js"></script>
+    <script src="~/Content/Teamplate/js/jquery.slicknav.js"></script>
+    <script src="~/Content/Teamplate/js/mixitup.min.js"></script>
+    <script src="~/Content/Teamplate/js/owl.carousel.min.js"></script>
+    <script src="~/Content/Teamplate/js/main.js"></script>
 </body>
 </html>
 
 <style>
-    /* Định dạng biểu tượng giỏ hàng và số lượng */
-    #cart-icon {
-        position: relative;
-    }
-
-    .cart-icon-wrapper {
+    .cart-icon {
         position: relative;
         display: inline-block;
     }
 
-    #cart-count {
+    .cart-counter {
         position: absolute;
-        top: 0;
-        right: 0;
-        background-color: red; /* Màu nền của số lượng */
-        color: white; /* Màu chữ của số lượng */
-        border-radius: 50%; /* Bo tròn cho số lượng */
-        padding: 4px 8px; /* Kích thước và độ lệch cho số lượng */
-        font-size: 10px; /* Kích thước chữ của số lượng */
+        top: -8px;
+        left: -8px;
+        background-color: red;
+        color: white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        text-align: center;
+        font-size: 10px;
+        line-height: 20px;
     }
 
-   
+
     .notification {
         position: fixed;
         top: 20px;
@@ -285,6 +367,38 @@
         z-index: 9999;
     }
 
+    
+   
+
+    .alert {
+        position: fixed; 
+        top: 80px; 
+        right: 50px; 
+        z-index: 1000; 
+        border-radius: 5px;
+    }
+
+
 </style>
 
 
+<script>
+    
+    var cartItems = localStorage.getItem('cart');
+
+  
+    if (cartItems) {
+        // Chuyển chuỗi JSON thành mảng đối tượng
+        var cart = JSON.parse(cartItems);
+        // Đếm số lượng sản phẩm trong giỏ hàng
+        var itemCount = cart.length;
+        // Hiển thị số lượng trong thẻ span
+        document.querySelector('.cart-counter').innerText = itemCount;
+    } else {
+        // Nếu giỏ hàng rỗng, hiển thị số 0
+        document.querySelector('.cart-counter').innerText = '0';
+    }
+   
+
+
+</script>

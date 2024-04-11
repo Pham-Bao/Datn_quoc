@@ -5,6 +5,17 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+
+<div id="errorAlert" class="alert alert-danger" style="display:none;">
+    <i class="fas fa-exclamation-circle"></i>
+    <span id="errorMessage"></span>
+</div>
+
+<div id="successAlert" class="alert alert-success" style="display:none;">
+    <i class="fas fa-check-circle"></i>
+    <span id="successMessage"></span>
+</div>
+
 <h2 class="text-center">Danh sách khuyến mãi</h2>
 
 <div class="card-body">
@@ -43,9 +54,13 @@
                         <td>@Html.DisplayFor(modelItem => item.trangThai)</td>
                         <td><img style="width:50px;height:auto" src="~/Upload/img/@item.hinhAnh" /></td>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.id_KhuyenMai }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.id_KhuyenMai }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.id_KhuyenMai })
+                            <div class="d-inline mx-3">
+                                <!-- Sử dụng class confirmDeleteBtn thay vì id để tránh trùng lặp -->
+                                <a data-id-khuyenmai="@item.id_KhuyenMai" class="btn btn-danger btn-circle btn-sm confirmDeleteBtn">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+
                         </td>
                     </tr>
                 }
@@ -59,4 +74,37 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $('.confirmDeleteBtn').click(function () {
+            var id_KhuyenMai = $(this).data('id-khuyenmai');
+
+            $('#confirmModal').modal('show');
+
+            $('#confirmBtn').click(function () {
+                $.ajax({
+                    url: '/Admin/KhuyenMai/xoaKM',
+                    type: 'POST',
+                    data: { id_khuyenMai: id_KhuyenMai },
+                    success: function (result) {
+                        if (result.success) {
+
+
+                            $.get('/Admin/KhuyenMai/DanhSachKhuyenMai', function (data) {
+                                $('#dataTable').html($(data).find('#dataTable').html());
+                            });
+                        } else {
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi nếu có
+                        console.log(xhr.responseText);
+                    }
+                });
+                $('#confirmModal').modal('hide');
+            });
+        });
+    });
+</script>
 

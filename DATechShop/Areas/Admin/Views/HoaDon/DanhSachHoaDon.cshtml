@@ -5,106 +5,129 @@
     ViewBag.Title = "DanhSachHoaDon";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+<div class="container-fluid">
+    <h2 class="text-center">Tất cả đơn hàng</h2>
+    <div class="dropdown">
+        <button type="button" class="btn bnt-primary dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-filter"></i> Trạng thái đơn
+        </button>
+        <ul class="dropdown-menu">
 
-<h2 class="text-center">Tất cả đơn hàng</h2>
-<div class="dropdown">
-    <button type="button" class="btn bnt-primary dropdown-toggle" data-bs-toggle="dropdown">
-        <i class="fas fa-filter"></i> Trạng thái đơn
-    </button>
-    <ul class="dropdown-menu">
-
-        <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= ""})"> <strong>Tất cả</strong></a></li>
-        <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "1"})"> <strong>Chờ duyệt</strong></a></li>
-        <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "3"})"> <strong>Đang giao</strong></a></li>
-        <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "4"})"> <strong>Đã hủy</strong></a></li>
-        <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "5"})"> <strong>Hoàn thành</strong></a></li>
-
-    </ul>
-</div>
-<div class="card-body ">
-    <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    
-                    <th>Ngày Tạo</th>
-                    <th>Khách Hàng</th>
-                    <th>Địa Chỉ </th>
-                    <th>Tổng tiền</th>
-                    <th>Giá Giảm</th>
-                    <th>Tình trạng</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+            <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= ""})"> <strong>Tất cả</strong></a></li>
+            <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "1"})"> <strong>Chờ duyệt</strong></a></li>
+            <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "3"})"> <strong>Đang giao</strong></a></li>
+            <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "4"})"> <strong>Đã hủy</strong></a></li>
+            <li><a class="dropdown-item" href="@Url.Action("DanhSachHoaDon", "HoaDon", new { trangThaiDon= "5"})"> <strong>Hoàn thành</strong></a></li>
+        </ul>
+    </div>
+    <div class="card-body ">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
                     <tr>
 
-                        <td>@Html.DisplayFor(modelItem => item.ngayTao)</td>
-                        <td>
-                            <div class="mb-2">
-                               
-                                <p class="font-weight-bold mb-0">@item.NguoiDung.ten</p> 
-                                <p class="mb-0">@item.sdt</p> <!-- Class mb-0 để loại bỏ margin bottom -->
-                            </div>
-                        </td>
-                        <td>@Html.DisplayFor(modelItem => item.diaChi)</td>
-                        <td>@Html.DisplayFor(modelItem => item.tongTien)</td>
-                        <td>@Html.DisplayFor(modelItem => item.giamGia)</td>
-                        <td>
-                            @if (item.trangThai == 1)
-                            {
-                                <span class="badge bg-primary"><i class="fas fa-clock"></i> Đang đợi duyệt</span>
-                            }
-                            else if (item.trangThai == 2)
-                            {
-                                <span class="badge bg-success"><i class="fas fa-check-circle"></i> Đã Thanh Toán</span>
-                            }
-                            else if (item.trangThai == 3)
-                            {
-                                <span class="badge bg-warning text-dark"><i class="fas fa-truck"></i> Đang Giao</span>
-                            }
-                            else if (item.trangThai == 4)
-                            {
-                                <span class="badge bg-danger"><i class="fas fa-times-circle"></i> Hủy đơn</span>
-                            }
-                            else if (item.trangThai == 5)
-                            {
-                                <span class="badge bg-primary"><i class="fas fa-check-circle text-white"></i> Đã xong</span>
-                            }
-                            else if (item.trangThai == 6)
-                            {
-                                <span class="badge bg-danger"><i class="fas fa-times-circle"></i> Khách hàng hủy</span>
-                            }
-                        </td>
+                        <th>Ngày Tạo</th>
+                        <th>Khách Hàng</th>
+                        <th>Địa Chỉ </th>
+                        <th>Tổng tiền</th>
+                        <th>Thanh toán</th>
+                        <th>Tình trạng</th>
 
-                        <td style="text-align: center; vertical-align: middle;">
-                            <div class="dropdown d-inline">
-                                <button class="btn btn-primary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-bars"></i> <!-- Icon ba dòng ngang của Font Awesome -->
-                                </button>
-
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="@Url.Action("doiTrangThai", "HoaDon", new { value = 3, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-check-circle text-success"></i> Chấp nhận</a>
-                                    <a class="dropdown-item" href="@Url.Action("doiTrangThai", "HoaDon", new { value = 5, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-check text-primary"></i> Hoàn thành</a>
-                                    <a class="dropdown-item" href="@Url.Action("doiTrangThai", "HoaDon", new { value = 4, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-times-circle text-danger"></i> Hủy đơn</a>
-                                </ul>
-                            </div>
-                        </td>
-
-
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        <div class="container center">
-            <div class="pagination">
-                @Html.PagedListPager(Model, page => Url.Action("DanhSachHoaDon", new { page, trangThaiDon = ViewBag.trangThaiDon }), PagedListRenderOptions.Classic)
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                       <tr>
+
+                           <td  onclick="window.location.href = '@Url.Action("ChiTietHD", "HoaDon", new { id_hoaDon = item.id_HoaDon })'">@Html.DisplayFor(modelItem => item.ngayTao)</td>
+                           <td  onclick="window.location.href = '@Url.Action("ChiTietHD", "HoaDon", new { id_hoaDon = item.id_HoaDon })'">
+                               <div class="mb-2">
+
+                                   <p class="font-weight-bold mb-0">@item.NguoiDung.ten</p>
+                                   <p class="mb-0">@item.sdt</p>
+                               </div>
+                           </td>
+                           <td  onclick="window.location.href = '@Url.Action("ChiTietHD", "HoaDon", new { id_hoaDon = item.id_HoaDon })'">@Html.DisplayFor(modelItem => item.diaChi)</td>
+                           <td  onclick="window.location.href = '@Url.Action("ChiTietHD", "HoaDon", new { id_hoaDon = item.id_HoaDon })'">
+                               <p>@Html.DisplayFor(modelItem => item.tongTien) đ(tổng tiền)</p>
+                               <p>@Html.DisplayFor(modelItem => item.giamGia) đ(giá giảm) </p>
+                           </td>
+                           <td  onclick="window.location.href = '@Url.Action("ChiTietHD", "HoaDon", new { id_hoaDon = item.id_HoaDon })'">
+                               @{
+                                   var dbContext = ViewBag.DbContext as DATechShop.Models.DATotNghiepEntities;
+                                   if (dbContext != null)
+                                   {
+                                       var loaiThanhToan = dbContext.LoaiThanhToans.FirstOrDefault(l => l.id_HoaDon == item.id_HoaDon);
+
+                                       if (loaiThanhToan != null)
+                                       {
+                                           <p>@loaiThanhToan.loaiThanhToan1</p>
+                                           <p>@(loaiThanhToan.trangThai == 1 ? "Đã thanh toán" : "Chưa thanh toán")</p>
+                                       }
+                                       else
+                                       {
+                                           <p>Không có thông tin thanh toán</p>
+                                       }
+                                   }
+                               }
+
+                           </td>
+
+                           <td  onclick="window.location.href = '@Url.Action("ChiTietHD", "HoaDon", new { id_hoaDon = item.id_HoaDon })'">
+                               @if (item.trangThai == 1)
+                               {
+                                   <span class="badge bg-primary"><i class="fas fa-clock"></i> Đang đợi duyệt</span>
+                               }
+                               else if (item.trangThai == 2)
+                               {
+                                   <span class="badge bg-success"><i class="fas fa-check-circle"></i> Đã Thanh Toán</span>
+                               }
+                               else if (item.trangThai == 3)
+                               {
+                                   <span class="badge bg-warning text-dark"><i class="fas fa-truck"></i> Đang Giao</span>
+                               }
+                               else if (item.trangThai == 4)
+                               {
+                                   <span class="badge bg-danger"><i class="fas fa-times-circle"></i> Hủy đơn</span>
+                               }
+                               else if (item.trangThai == 5)
+                               {
+                                   <span class="badge bg-primary"><i class="fas fa-check-circle text-white"></i> Đã xong</span>
+                               }
+                               else if (item.trangThai == 6)
+                               {
+                                   <span class="badge bg-danger"><i class="fas fa-times-circle"></i> Khách hàng hủy</span>
+                               }
+                           </td>
+
+                           <td style="text-align: center; vertical-align: middle;">
+                               <div class="dropdown d-inline">
+                                   <button class="btn btn-primary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                       <i class="fas fa-bars"></i>
+                                   </button>
+
+                                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                       <a class="dropdown-item" href="@Url.Action("doiTrangThai", "HoaDon", new { value = 3, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-check-circle text-success"></i> Chấp nhận</a>
+                                       <a class="dropdown-item" href="@Url.Action("doiTrangThai", "HoaDon", new { value = 5, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-check text-primary"></i> Hoàn thành</a>
+                                       <a class="dropdown-item" href="@Url.Action("doiTrangThai", "HoaDon", new { value = 4, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-times-circle text-danger"></i> Hủy đơn</a>
+                                   </ul>
+                               </div>
+                           </td>
+
+
+                       </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="container center">
+                <div class="pagination">
+                    @Html.PagedListPager(Model, page => Url.Action("DanhSachHoaDon", new { page, trangThaiDon = ViewBag.trangThaiDon }), PagedListRenderOptions.Classic)
+                </div>
             </div>
         </div>
     </div>
+
 </div>
-
-
 

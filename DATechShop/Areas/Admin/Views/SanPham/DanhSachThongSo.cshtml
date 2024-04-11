@@ -27,7 +27,7 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        
+
                         <td>
                             @Html.DisplayFor(modelItem => item.tenThongSo)
                         </td>
@@ -35,11 +35,22 @@
                             @Html.DisplayFor(modelItem => item.giaTri)
                         </td>
                         <td>
-                            @Html.ActionLink("Delete", "Delete", new { id = item.id_ThongSo })
+                            <div class="d-inline mx-3">
+                                <!-- Sử dụng class confirmDeleteBtn thay vì id để tránh trùng lặp -->
+                                <a data-id-thongso="@item.id_ThongSo" class="btn btn-danger btn-circle btn-sm confirmDeleteBtn">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 }
             </table>
+
+            <div class="container center">
+                <div class="pagination">
+                    @Html.PagedListPager(Model, page => Url.Action("DanhSachThongSo", new { page, id = ViewBag.IdSanPham }), PagedListRenderOptions.Classic)
+                </div>
+            </div>
         </div>
         <div class="col-8">
             
@@ -60,3 +71,39 @@
         </div>
     </div>
  </div>
+
+<script>
+    $(document).ready(function () {
+        $('.confirmDeleteBtn').click(function () {
+            var id_thongSo = $(this).data('id-thongso');
+            var id_sanPham = @ViewBag.IdSanPham;
+
+            $('#confirmModal').modal('show');
+
+            $('#confirmBtn').click(function () {
+                $.ajax({
+                    url: '/Admin/SanPham/xoaThongSo',
+                    type: 'POST',
+                    data: { id_thongSo: id_thongSo },
+                    success: function (result) {
+                        if (result.success) {
+
+
+                            $.get('/Admin/SanPham/DanhSachThongSo', { id: id_sanPham }, function (data) {
+                                $('#dataTable').html($(data).find('#dataTable').html());
+                            });
+
+                        } else {
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi nếu có
+                        console.log(xhr.responseText);
+                    }
+                });
+                $('#confirmModal').modal('hide');
+            });
+        });
+    });
+</script>

@@ -1,73 +1,124 @@
 ﻿@model IEnumerable<DATechShop.Models.SanPham>
+@using System.Globalization
 
 @{
     ViewBag.Title = "chiTietSPLoai";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>chiTietSPLoai</h2>
-<div class="container mt-5">
-    <div class="row">
-        @if (Model != null && Model.Any())
-        {
-            foreach (var item in Model)
-            {
-                <div class="col-3">
 
-                    <div onclick="location.href='@Url.Action("LayChiTietSP", "TrangChu", new { id_sanPham = @item.id_sanPham})'" class="card" style="cursor: pointer;">
-                        <div class="container">
-                            <img src="@Url.Content("~/Upload/imgSPChung/" + item.anhSPChung)" class="card-img-top mt-2">
-                        </div>
-                        <div class="card-body mt-5">
-                            <label class="label fs-3 ">@item.tenSP</label>
 
-                            @{
 
-                                var gia = item.ChitietSPs.FirstOrDefault()?.giaSP;
-                            }
-                            <p class="h5 d-inline font-weight-bold text-primary mt-3" id="giaCuoi"></p>
-                            <p class="text-decoration-line-through d-inline text-secondary" id="giaSP">@gia đ</p>
-                            <p class="d-inline text-secondary" id="khuyenMai">-@item.khuyenMai%</p>
-
+<section class="product spad">
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <p class="h4">@ViewBag.loaiSPView</p>
+                        <div class="breadcrumb__links">
+                            <a href="~/trangchu">Trang chủ</a>
+                            <span>@ViewBag.loaiSPView</span>
                         </div>
                     </div>
-
                 </div>
-            }
-        }
-        else
-        {
-            <p>Danh sách sản phẩm trống</p>
-        }
-    </div>
-</div>
+            </div>
+        </div>
+    </section>
 
 
-<script>
-    // Hàm tính toán giá cuối cùng dựa trên giá và tỉ lệ khuyến mãi
-    function tinhGiaCuoiCung() {
-        // Lấy giá sản phẩm từ thẻ HTML
-        var gia = parseFloat(document.getElementById('giaSP').innerText.replace('"', '')); // Loại bỏ dấu ngoặc kép
+    <div class="container">
 
-        // Lấy tỉ lệ khuyến mãi từ thẻ HTML
-        var khuyenMai = parseFloat(document.getElementById('khuyenMai').innerText); // Không cần chia 100 vì giá trị đã được hiển thị dưới dạng phần trăm
+        <div class="shop__product__option">
+            <div class="row mt-3">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="shop__product__option__left">
+                        <p>Xem cách xếp gạch    </p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="shop__product__option__right">
+                       
+                        <div class="">
+                            <button type="button" class="btn bnt-primary dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fas fa-filter"></i> Xếp gạch
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- Các tùy chọn lọc -->
+                                <li><a class="dropdown-item" href="@Url.Action("chiTietSPLoai", "TrangChu", new {  loaiSP = ViewBag.loaiSanPham, value= "" })"> <strong>Ngẫu nhiên</strong></a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("chiTietSPLoai", "TrangChu", new { value= "1" , loaiSP = ViewBag.loaiSanPham})"> <strong>Giá thấp trước</strong></a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("chiTietSPLoai", "TrangChu", new { value= "2" , loaiSP = ViewBag.loaiSanPham})"> <strong>Mua nhiều trước</strong></a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("chiTietSPLoai", "TrangChu", new { value= "3" , loaiSP = ViewBag.loaiSanPham})"> <strong>Giảm nhiều </strong></a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("chiTietSPLoai", "TrangChu", new { value= "4" , loaiSP = ViewBag.loaiSanPham})"> <strong>Mới nhất</strong></a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("chiTietSPLoai", "TrangChu", new { value= "5" , loaiSP = ViewBag.loaiSanPham})"> <strong>Giá cao trước</strong></a></li>
 
-        // Tính toán giá cuối cùng sau khi áp dụng khuyến mãi
-        var giaCuoiCung = gia * (1 - khuyenMai / 100);
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container mt-5">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <div class="col-lg-3">
 
-       
-        document.getElementById('giaCuoi').innerText = giaCuoiCung.toFixed() + '₫'
-    }
+                            <div onclick="location.href='@Url.Action("LayChiTietSP", "TrangChu", new { id_sanPham = @item.id_sanPham})'" class="card rounded" style="cursor: pointer;">
+                                <div class="container">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <img src="@Url.Content("~/Upload/imgSPChung/" + item.anhSPChung)" class="card-img-top mt-2" style="width:80%">
+                                    </div>
+                                </div>
 
-    // Thực thi hàm tính toán giá cuối cùng khi trang web được tải hoàn toàn
-    document.addEventListener('DOMContentLoaded', tinhGiaCuoiCung);
-    /* CSS */
+                                <div class="card-body">
+                                    <p class="h4 font-weight-bold text-secondary">@item.tenSP</p>
+
+                                    @{
+                                        var gia = item.ChitietSPs.FirstOrDefault()?.giaSP;
+                                        if (gia != null)
+                                        {
+                                            var giaGocNguyen = (int)gia; // Chuyển giá thành số nguyên
+                                            var giaGocFormatted = giaGocNguyen.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"));
 
 
-</script>
+                                            var giamphanTram = Convert.ToSingle(item.khuyenMai);
+                                            var giagiam = gia - gia * (giamphanTram / 100);
+                                            var giagiamNguyen = giagiam.HasValue ? (int)Math.Floor((decimal)giagiam.Value) : 0;
+                                            var giaFormatted = giagiamNguyen.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"));
+
+                                            <div class="mt-4">
+                                                <p class="h5 font-weight-bold text-primary ">@giaFormatted</p>
+                                                <span class="text-decoration-line-through d-inline text-secondary">@giaGocFormatted</span>
+                                                <span class="d-inline text-secondary" id="khuyenMai">-@item.khuyenMai%</span>
+                                            </div>
+                                        }
+
+
+
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Danh sách sản phẩm trống</p>
+                }
+            </div>
+        </div>
+
+</section>
+
+
 <style>
     .card:hover {
-        transform: scale(1.05); /* Phóng to thẻ khi hover */
+        transform: scale(1.01); /* Phóng to thẻ khi hover */
         filter: brightness(110 %); /* Tăng độ sáng của thẻ khi hover */
         transition: transform 0.3s ease, filter 0.3s ease; /* Thêm hiệu ứng chuyển động */
     }

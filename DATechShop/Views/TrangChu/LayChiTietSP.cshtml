@@ -1,4 +1,5 @@
 ﻿@model DATechShop.Models.ChitietSP
+@using System.Globalization
 
 @{
     ViewBag.Title = "Chi tiết sản phẩm";
@@ -17,24 +18,39 @@
 </style>
 
 <div>
-    <div class="container mt-5">
-        <p class="h4">Chi Tiết Về: @Model.SanPham.tenSP</p>
-    </div>
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <p class="h4">@Model.SanPham.tenSP</p>
+                        <div class="breadcrumb__links">
+                            <a href="~/trangchu">Trang chủ</a>
+                            <a href="@Url.Action("chiTietSPLoai", "TrangChu", new { area = (string)null, loaiSP = Model.SanPham.loaiSP })">@Model.SanPham.loaiSP</a>
+                            <span>@Model.SanPham.tenSP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <div class="container mt-5">
         <div class="row">
-            <div class="col mx-6">
-                <div class="p-3 border border bg-light" style="width: 400px; border-radius: 10px;">
+            <div class="col-lg-5 container">
+                <div class="p-3 border border bg-light " style="border-radius: 10px;">
                     <img src="@Url.Content("~/Upload/imgSP/" + Model.anhSP)" style="border-radius: 10px;" id="productImage">
                 </div>
 
-                <div class="border-top mt-3">
+                <div class="border-top mt-3 container">
                     <div class="mt-3">
-                        <button id="btn_moTa" type="button" class="btn border-secondary btn-outline-secondary" onclick="changeStyle(this, 'description')">Mô tả sản phẩm</button>
-                        <button id="btn_ThongSoKT" type="button" class="btn border-secondary btn-outline-secondary" onclick="changeStyle(this, 'technical')">Thông số kỹ thuật</button>
-                        <button type="button" class="btn border-secondary btn-outline-secondary" onclick="changeStyle(this, 'details')">Khuyến mãi</button>
-                    </div>
+                        <div class="row">
+                            <button id="btn_moTa" type="button" class="btn border-secondary btn-outline-secondary col-lg-4 mb-3" onclick="changeStyle(this, 'description')">Mô tả sản phẩm</button>
+                            <button id="btn_ThongSoKT" type="button" class="btn border-secondary btn-outline-secondary col-lg-4 mb-3" onclick="changeStyle(this, 'technical')">Thông số kỹ thuật</button>
+                            <button type="button" class="btn border-secondary btn-outline-secondary col-lg-4 mb-3" onclick="changeStyle(this, 'details')">Khuyến mãi</button>
+                        </div>
 
+                    </div>
                     <div class="p-3 border bg-light mt-3" style="width: 100%; border-radius: 10px;" id="ThongTin">
                         <table class="table " id="thongSoKT" style="display: none;">
                             @if (Model.SanPham.id_sanPham != null)
@@ -72,177 +88,303 @@
 
 
             </div>
-            <div class="col">
-                <div class="p-3">
-                    <p class="h2 text-black">@Model.SanPham.tenSP</p>
+            <div class="col-lg-7 ">
+                <div class="mx-5 mt-2">
+                    <p class="h4 text-black">@Model.SanPham.tenSP</p>
 
-                 
+                    @{
 
-                    <p class="">Sản Phẩm được 275 lượt đặt.</p>
-                    <div class="row g-2 border-top">
-                        <div class="col-3">
-                            <p class="h2 text-primary mt-2" style="font-weight: bold;" id="selected-price">@Model.giaSP₫</p>
-                        </div>
-                        <div class="col-4">
-                            <p class="text-decoration-line-through h4 mx-4" style="color: #808080;">0đ</p>
-                        </div>
+                        float khuyenMaiValue;
+                        if (float.TryParse(Model.SanPham.khuyenMai, out khuyenMaiValue))
+                        {
+                            // Calculate discounted price
+                            var giaGoc = Model.giaSP;
+                            var giaGiam = giaGoc - giaGoc * (khuyenMaiValue / 100);
 
-                   
-                    </div>
-                    <p class="h4">Tùy Chọn:</p>
+                            <p class="">Sản Phẩm được 275 lượt đặt.</p>
+                            <div class="row g-2 border-top">
+                                <div class="col-lg-3 mt-2">
+                                    <p class="h4 text-primary " style="font-weight: bold;" id="selected-price-discount">@String.Format("{0:N0}", giaGiam)₫</p>
+                                </div>
+                                <div class="col-lg-9">
+                                    <p class="text-decoration-line-through h5 mx-2" style="color: #808080;" id="selected-price-original">@String.Format("{0:N0}", Model.giaSP)₫</p>
+                                </div>
+                            </div>
+                        }
+                    }
+
+
+                    <p class="h6 mt-3 ">Tùy Chọn:</p>
                     @{
                         var chitietSPs = new DATechShop.Models.mapSP().chiTietSP(Model.SanPham.id_sanPham);
                     }
+                    @{
+                        HashSet<string> tuyChonDaXuatHien = new HashSet<string>();
+                    }
                     @foreach (var item in chitietSPs)
                     {
-                        <button class="btn btn-tuychon" data-gia="@item.giaSP">@item.TuyChon.tuyChon1</button>
+                        if (item.TuyChon != null && item.TuyChon.tuyChon1 != null)
+                        {
+                            if (!tuyChonDaXuatHien.Contains(item.TuyChon.tuyChon1))
+                            {
+                                <button class="btn btn-tuychon mx-1" data-gia="@item.giaSP">@item.TuyChon.tuyChon1</button>
+                                tuyChonDaXuatHien.Add(item.TuyChon.tuyChon1);
+                            }
+                        }
+                        else
+                        {
+
+                        }
+
                     }
+
+
+
                     @{
                         HashSet<string> maMauDaXuatHien = new HashSet<string>();
                     }
-                    <p class="h4">Màu sắc:</p>
+                    <p class="h6 mt-3">Màu sắc:</p>
                     @foreach (var item in chitietSPs)
                     {
-                       
-                        if (!maMauDaXuatHien.Contains(item.MauSac.maMau))
+                        if (item.MauSac != null && item.MauSac.maMau != null)
                         {
-                            <button class="btn btn-mausac" data-color="@item.MauSac.maMau" data-hinhanh="@Url.Content("~/Upload/imgSP/" + item.anhSP)" style="background-color: @item.MauSac.maMau; border: 1px solid #CBD4F1;">
-                                @item.MauSac.maMau
-                            </button>
 
-                            
-                            maMauDaXuatHien.Add(item.MauSac.maMau);
+                            if (!maMauDaXuatHien.Contains(item.MauSac.maMau))
+                            {
+                                <button class="btn btn-mausac mx-1" data-color="@item.MauSac.maMau" data-hinhanh="@Url.Content("~/Upload/imgSP/" + item.anhSP)" style="background-color: @item.MauSac.maMau; border: 1px solid #CBD4F1; border-radius: 50%; width: 30px; height: 30px;  ">
+                                </button>
+
+
+                                maMauDaXuatHien.Add(item.MauSac.maMau);
+                            }
+                            else
+                            {
+
+                            }
                         }
                     }
 
 
-                    <div class="border-top mt-3">
+
+                    <div class="border-top mt-3 mx-5">
                         <p id="selected-price" class="h4"></p>
-                        <button type="button" class="mx-5 btn btn-primary btn-lg mt-3 btn-add-to-cart" data-product-id="@Model.id_sanPham" style="width: 600px;" id="">Thêm vào giỏ hàng</button>
-                        <div class="row g-2 mx-5">
-                            <div class="col-6">
-                                <button type="button" class="mx-5 btn btn-secondary btn-lg mt-3" style="width: 250px">Mua Ngay</button>
+                        <button type="button" class="btn btn-dark btn-lg mt-3 btn-add-to-cart" data-product-id="@Model.id_sanPham" style="width: 100%" id="">Thêm vào giỏ hàng</button>
+                        <div class="row g-2 mt-3">
+                            <div class="col-lg-6">
+                                <button type="button" class="btn btn-secondary btn-lg btn-block">Mua Ngay</button>
                             </div>
-                            <div class="col-6">
-                                <a href="~/trangchu/timkiem" class="mx-5 btn btn-secondary btn-lg mt-3" style="width: 250px">Xem sản phẩm khác</a>
+                            <div class="col-lg-6">
+                                <a href="~/trangchu" class="btn btn-secondary btn-lg btn-block">Xem sản phẩm khác</a>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-        </div>
-
-
-        <div class="container bg-light mt-5">
-            <div class="row">
-                @{
-                    var id_NguoiDung = Session["id_NguoiDung"] != null ? Convert.ToInt32(Session["id_NguoiDung"]) : 0;
-                    var id_sanPham = Model.id_sanPham;
-
-
-                }
-
-                @if (id_NguoiDung != 0)
-                {
-
-
-                    <div class="col">
-                        <form id="ratingForm">
-                            <div>
-                                <label for="username">Tên người dùng:</label>
-                                <p class="font-weight-bold">Phạm Bảo</p>
-                            </div>
-                            <div>
-                                <label for="rating">Đánh giá sao:</label>
-                                <div class="rating">
-                                    <input type="radio" id="star5" name="rating" value="5">
-                                    <label for="star5"></label>
-                                    <input type="radio" id="star4" name="rating" value="4">
-                                    <label for="star4"></label>
-                                    <input type="radio" id="star3" name="rating" value="3">
-                                    <label for="star3"></label>
-                                    <input type="radio" id="star2" name="rating" value="2">
-                                    <label for="star2"></label>
-                                    <input type="radio" id="star1" name="rating" value="1">
-                                    <label for="star1"></label>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="review">Nội dung đánh giá:</label><br>
-                                <textarea id="review" name="review" rows="4" cols="50" required></textarea>
-                            </div>
-
-                            <p>Mua mới có thể đánh giá</p>
-                            <button type="submit" class="submit-btn">Gửi đánh giá</button>
-                        </form>
-                    </div>
-                }
-                else
-                {
-                    <div class="col ">
-                        <p class="h2">Phải đăng nhập mới có thể bình luận</p>
-                    </div>
-
-                }
-                <div class="col">
-                    @{
-                        var DanhGia = new DATechShop.Models.mapDanhGia().DanhSachDanhGia(id_sanPham);
-                    }
-                    <p class="h4">Xem tất cả bình luận</p>
-                    @if (DanhGia != null && DanhGia.Any())
-                    {
-                        foreach (var danhGia in DanhGia)
-                        {
-                            <div class="col">
-
-                                <div class="d-flex align-items-center">
-                                    <div class="rounded-circle bg-secondary text-light d-flex justify-content-center align-items-center mr-2" style="width: 30px; height: 30px;">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    @if (danhGia.NguoiDung != null)
-                                    {
-                                        <p class="font-weight-bold">@danhGia.NguoiDung.ten</p>
-                                    }
-                                    else
-                                    {
-                                        <p class="font-weight-bold">Người dùng không tồn tại</p>
-                                    }
-                                    <br />
-                                    <p>@danhGia.binhLuan</p>
-                                </div>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <p>Không có đánh giá nào.</p>
-                    }
-                </div>
-
-
-                <div>
-
-                </div>
-            </div>
-
         </div>
     </div>
+    <div>
+        <div class="container mt-5">
+            <p class="h2"> gợi ý đi kèm</p>
+            <div>
+                @{
+                    var goiYSP = new DATechShop.Models.mapSP().goiYSanPham(Model.SanPham.tenSP);
+                                <div class="row">
+
+                                    @foreach (var item in goiYSP)
+                                    {
+                                        <div class="col-lg-2">
+
+                                            <div onclick="location.href='@Url.Action("LayChiTietSP", "TrangChu", new { id_sanPham = @item.id_sanPham})'" class="card rounded" style="cursor: pointer;">
+                                                <div class="container">
+                                                    <div class="d-flex justify-content-center align-items-center">
+                                                        <img src="@Url.Content("~/Upload/imgSPChung/" + item.anhSPChung)" class="card-img-top mt-2" style="width:80%">
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-body">
+                                                    <p class="h4 font-weight-bold text-secondary">@item.tenSP</p>
+
+                                                    @{
+                                                        var gia = item.ChitietSPs.FirstOrDefault()?.giaSP;
+                                                        if (gia != null)
+                                                        {
+                                                            var giaGocNguyen = (int)gia; // Chuyển giá thành số nguyên
+                                                            var giaGocFormatted = giaGocNguyen.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"));
+
+
+                                                            var giamphanTram = Convert.ToSingle(item.khuyenMai);
+                                                            var giagiam = gia - gia * (giamphanTram / 100);
+                                                            var giagiamNguyen = giagiam.HasValue ? (int)Math.Floor((decimal)giagiam.Value) : 0;
+                                                            var giaFormatted = giagiamNguyen.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"));
+
+                                                            <div class="mt-4">
+                                                                <p class="h5 font-weight-bold text-primary ">@giaFormatted</p>
+                                                                <span class="text-decoration-line-through d-inline text-secondary">@giaGocFormatted</span>
+                                                                <span class="d-inline text-secondary" id="khuyenMai">-@item.khuyenMai%</span>
+                                                            </div>
+                                                        }
+
+
+
+                                                    }
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+                                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="container bg-light mt-5">
+        <div class="row">
+            <p class="h3 font-weight-bold mt-lg-3">Đánh giá sản phẩm: @Model.SanPham.tenSP</p>
+            <hr class="my-2">
+
+            @{
+                var id_NguoiDung = Session["id_NguoiDung"] != null ? Convert.ToInt32(Session["id_NguoiDung"]) : 0;
+                var id_sanPham = Model.id_sanPham;
+                var tenNguoiDung = Session["TenNguoiDung"] as string;
+
+            }
+
+            @if (id_NguoiDung != 0)
+            {
+
+
+                <div class="col-lg-6">
+                    <form id="ratingForm">
+                        <div>
+                            <label for="username"></label>
+                            <p class="font-weight-bold">@tenNguoiDung</p>
+                        </div>
+                        <div>
+                            <label for="rating">Đánh giá sao:</label>
+                            <div class="rating">
+                                <input type="radio" id="star5" name="rating" value="5">
+                                <label for="star5"></label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4"></label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3"></label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2"></label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1"></label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="review">Nội dung đánh giá:</label><br>
+                            <textarea id="review" name="review" rows="4" cols="50" required></textarea>
+                        </div>
+
+                        <p>Mua mới có thể đánh giá</p>
+                        <button type="submit" class="btn btn-dark">Gửi đánh giá</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="col ">
+                    <p class="h2">Phải đăng nhập mới có thể bình luận</p>
+                </div>
+
+            }
+        <div class="col">
+            @{
+                var DanhGia = new DATechShop.Models.mapDanhGia().DanhSachDanhGia(id_sanPham);
+            }
+            <p class="h4"> Bình luận</p>
+            @if (DanhGia != null && DanhGia.Any())
+            {
+                foreach (var danhGia in DanhGia)
+                {
+                    <div class="col-lg-12">
+                        <!-- Thay đổi số cột tùy thuộc vào màn hình dọc -->
+                        <div class="d-flex ">
+                            <div class="rounded-circle bg-secondary text-light d-flex justify-content-center align-items-center mt-2" style="width: 30px; height: 30px;">
+                                <i class="fas fa-user "></i>
+                            </div>
+                            @if (danhGia.NguoiDung != null)
+                            {
+                                <div class="mx-2">
+                                    <div class="font-weight-bold">@danhGia.NguoiDung.ten:</div>
+                                    <div>@((danhGia.ngayDanhGia != null ? danhGia.ngayDanhGia.Value.ToString("dd/MM/yyyy") : ""))</div>
+                                    <div class="">
+                                        <div class="rating">
+                                            @for (int i = 0; i < danhGia.diemDanhGia; i++)
+                                            {
+                                                <span><i class="fas fa-star text-warning" style="font-size: 15px;"></i></span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <p>@danhGia.binhLuan</p>
+                                    </div>
+                                </div>
+                                <hr class="my-2">
+
+
+
+
+                            }
+                            else
+                            {
+                                <div class="font-weight-bold">Người dùng không tồn tại</div>
+                            }
+                        </div>
+                    </div>
+                }
+
+            }
+            else
+            {
+                <p>Không có đánh giá nào.</p>
+            }
+        </div>
+
+
+            <div>
+
+            </div>
+        </div>
+
+    </div>
 </div>
+
 <script src="~/Script/Cart.js"></script>
 
 <script>
-    var productId = '@Model.id_sanPham';
-    $('.btn-tuychon').click(function () {
+
+var productId = '@Model.id_sanPham';
+ $('.btn-tuychon').click(function () {
         var gia = $(this).data('gia');
-        console.log('Giá: ', gia);
-        $('#selected-price').text(gia + 'đ');
 
+        // Calculate the discounted price
+        var khuyenMaiValue = parseFloat('@Model.SanPham.khuyenMai');
+        var giaGoc = parseFloat(gia);
+        var giaGiam = giaGoc - giaGoc * (khuyenMaiValue / 100);
 
-        var option = $(this).text();
+        // Format the prices with commas for thousands separators
+        var formattedOriginalPrice = giaGoc.toLocaleString('vi-VN');
+        var formattedDiscountedPrice = giaGiam.toLocaleString('vi-VN');
 
-        $('#selected-option').text(option);
-        console.log('Tùy chọn: ', option);
+        // Update the selected-price-discount and selected-price-original elements
+        $('#selected-price-discount').text(formattedDiscountedPrice + 'đ');
+        $('#selected-price-original').text(formattedOriginalPrice + 'đ');
+
+        
+        $('.btn-tuychon').removeClass('selected');
+
+        // Add the "selected" class to the clicked button
+        $(this).addClass('selected');
     });
+
+
 
     $('.btn-mausac').click(function () {
 
@@ -272,7 +414,7 @@
         console.log('Option:', option);
 
 
-        CartClass.addToCart(productId, color, option);
+       CartClass.addToCart(productId, color, option);
     });
 
 
@@ -327,17 +469,7 @@
             $(this).addClass('selected');
         });
 
-        $('.btn-tuychon').click(function () {
-            var option = $(this).text();
 
-
-            $('#selected-option').text(option).show();
-
-
-            $('.btn-tuychon').removeClass('selected');
-
-            $(this).addClass('selected');
-        });
     });
 
 
@@ -360,25 +492,31 @@
 
         // Tạo đối tượng chứa dữ liệu đánh giá
         var data = {
-            id_NguoiDung: @id_NguoiDung, // Sử dụng id_NguoiDung từ Razor syntax
-            id_sanPham: @id_sanPham, // Sử dụng id_sanPham từ Razor syntax
+            id_NguoiDung: @id_NguoiDung, 
+            id_sanPham: @id_sanPham, 
             rating: rating,
             review: review
         };
 
-        // Gửi dữ liệu đánh giá lên server
+       
         $.ajax({
             url: '/TrangChu/SubmitReview',
             type: 'POST',
             dataType: 'json',
             data: data,
             success: function (response) {
-                // Xử lý kết quả trả về từ server (nếu cần)
-                console.log(response);
+                if (response.success) {
+                    $('#successMessage').text('Bạn đã đánh giá sản phẩm');
+                    $('#successAlert').fadeIn('slow').delay(2000).fadeOut('slow');
+                    console.log("Đã đánh giá sản phẩm thành công");
+                } else {
+                    $('#errorMessage').text('Bạn cần mua hàng!');
+                    $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
+                }
             },
             error: function (error) {
-                // Xử lý lỗi (nếu có)
-                console.log(error);
+                $('#successMessage').text('Lỗi');
+                $('#successAlert').fadeIn('slow').delay(2000).fadeOut('slow');
             }
         });
     });
@@ -388,14 +526,26 @@
 </script>
 
 <style>
-    .selected {
-        border: 2px solid #CBD4F1; /* Thay đổi màu viền của nút được chọn */
+    .btn-tuychon {
+        border-color: #ccc; /* Màu viền của nút */
+        border-radius: 5px; /* Độ cong góc của nút */
+        background-color: #fff; /* Màu nền của nút */
     }
+
+        .btn-tuychon.selected {
+            border-color: #007bff; /* Màu viền của nút khi được chọn */
+            color: #007bff; /* Màu chữ của nút khi được chọn */
+        }
+
+    .selected {
+        border-color: #007bff; /* Màu viền khi nút được chọn */
+        color: #007bff; /* Màu chữ khi nút được chọn */
+    }
+
 
     .rating {
         unicode-bidi: bidi-override;
         direction: rtl;
-        text-align: center;
     }
 
         .rating input {
@@ -405,20 +555,23 @@
         .rating label {
             cursor: pointer;
             display: inline-block;
-            padding: 5px;
+            padding: 1px;
             font-size: 30px;
+            border-radius: 50%; /* Bo tròn các cạnh */
+            margin-right: 1px; /* Khoảng cách giữa các ngôi sao */
+            -webkit-text-stroke-width: 1px; /* Độ dày của đường viền xung quanh các ngôi sao */
+            -webkit-text-stroke-color: #ccc; /* Màu của đường viền xung quanh các ngôi sao */
         }
 
             .rating label:before {
                 content: "\2605";
-                margin-right: 5px;
-                color: #ccc;
+                color: transparent; /* Làm cho màu của ngôi sao trở thành trong suốt */
             }
 
             .rating input:checked ~ label:before,
             .rating label:hover:before {
-                content: "\2605";
                 color: #ffcc00;
+                text-shadow: 0 0 5px #ffcc00; /* Tạo hiệu ứng glow cho ngôi sao được chọn hoặc di chuột qua */
             }
 
     .submit-btn {
@@ -430,4 +583,5 @@
         border: none;
         cursor: pointer;
     }
+
 </style>

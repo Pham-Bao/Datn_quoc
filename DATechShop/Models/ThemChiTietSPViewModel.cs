@@ -16,8 +16,8 @@ namespace DATechShop.Models
 		public List<TuyChon> DanhSachTuyChon { get; set; } // Thêm DanhSachTuyChon
 
 		// Thêm các thuộc tính khác nếu cần
-		public int SelectedMau { get; set; }
-		public int SelectedTuyChon { get; set; }
+		public int? SelectedMau { get; set; }
+		public int? SelectedTuyChon { get; set; }
 
 
 		public ThemChiTietSPViewModel()

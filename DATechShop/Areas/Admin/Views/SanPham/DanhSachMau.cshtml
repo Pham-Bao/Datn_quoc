@@ -5,67 +5,188 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2 class="text-center">Danh sách màu</h2>
+<h2 class="text-center">Màu sản phẩm</h2>
 
-<div class="card-body">
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover" id="dataTable" width="90%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th colspan="7" class="text-end">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="h3 text-dark mb-0">Màu sắc</p>
-                            <a class="btn btn-primary" href="@Url.Action("Themmausac")">
-                                <i class="fas fa-plus"></i> Thêm màu
-                            </a>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-lg-7">
+
+
+            @using (Html.BeginForm("ThemMauSac", "SanPham", FormMethod.Post))
+            {
+
+
+
+                <div class="form-horizontal container-fluid ">
+                    <form action="" method="post" enctype="multipart/form-data">
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group mt-5">
+                                    <label> Bảng màu</label>
+                                    <div class="col-md-10">
+                                        <input type="color" id="inputColor" oninput="setColor()" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mt-5">
+
+                                    <div class="col-md-10">
+                                        <label for="tenThongSo">Tên màu:</label>
+                                        <input type="text" name="tenMau" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    <div class="col-md-10">
+                                        <label for="tenThongSo">Mã màu:</label>
+                                        <input type="text" name="maMau" class="form-control" id="maMauInput" />
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Thêm</button>
+                            </div>
+
                         </div>
-                    </th>
+                    </form>
+                </div>
 
-                </tr>
-                <tr>
-                    <th>ID</th>
-                    <th>Tên Màu</th>
-                    <th>Mã Màu</th>
-                    <th>Mẫu Màu</th>
-                    <th>Chức năng</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.id_Mau)</td>
-                        <td>@Html.DisplayFor(modelItem => item.tenMau)</td>
-                        <td>@Html.DisplayFor(modelItem => item.maMau)</td>
-                        <td><div class="mauMau`" style="background-color: @item.maMau"></div></td>
-                        <td>
-                            <div class="d-inline mx-3">
-                                <a href="#" class="btn btn-danger btn-circle btn-sm">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </div>
-                            <div class="dropdown d-inline">
-                                <button class="btn " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i> <!-- Icon ba chấm của Font Awesome -->
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <li>@Html.ActionLink("Thêm chi tiết sản phẩm", "ThemChiTietSP", new { @class = "dropdown-item" })</li>
-                                    <li>@Html.ActionLink("Xem Các SP", "ChiTietSP",  new { @class = "dropdown-item" })</li>
-                                    <li>@Html.ActionLink("Thêm Thông Số", "DanhSachThongSo", new { @class = "dropdown-item" })</li>
-                                </ul>
-                            </div>
-
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div class="container center">
-            <ul class="pagination">
-                @Html.PagedListPager(Model, page => Url.Action("DanhSachMau", new { page }), PagedListRenderOptions.Classic)
-            </ul>
+            }
         </div>
+        <div class="col-lg-5">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="dataTable" width="90%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th colspan="7" class="text-end">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <p class="h3 text-dark mb-0">Màu sắc</p>
+
+                                    </div>
+                                </th>
+
+                            </tr>
+                            <tr>
+
+                                <th>Tên Màu</th>
+                                <th>Mẫu Màu</th>
+                                <th>Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@Html.DisplayFor(modelItem => item.tenMau)</td>
+
+                                    <td>
+                                        <div class="color-icon" style="background-color: @item.maMau"></div>
+                                        <span>@item.tenMau</span>
+                                    </td>
+
+
+                                    <td>
+                                        <div class="d-inline mx-3">
+                                            <!-- Sử dụng class confirmDeleteBtn thay vì id để tránh trùng lặp -->
+                                            <a data-id-mau="@item.id_Mau" class="btn btn-danger btn-circle btn-sm confirmDeleteBtn">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="container center">
+                        <ul class="pagination">
+                            @Html.PagedListPager(Model, page => Url.Action("DanhSachMau", new { page }), PagedListRenderOptions.Classic)
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 
 
+<script>
+    function setColor() {
+
+        var colorValue = document.getElementById("inputColor").value;
+
+        // Gán giá trị mã màu vào ô maMau
+        document.getElementById("maMauInput").value = colorValue;
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        // Tự động loại bỏ lớp 'fade-out' sau 5 giây
+        setTimeout(function () {
+            var errorAlert = document.getElementById('errorAlert');
+            var successAlert = document.getElementById('successAlert');
+            if (errorAlert) errorAlert.classList.add('fade-out');
+            if (successAlert) successAlert.classList.add('fade-out');
+        }, 2000); // 5 giây
+    });
+
+    $(document).ready(function () {
+        $('.confirmDeleteBtn').click(function () {
+            var id_mau = $(this).data('id-mau');
+
+            $('#confirmModal').modal('show');
+
+            $('#confirmBtn').click(function () {
+                $.ajax({
+                    url: '/Admin/SanPham/xoaMau',
+                    type: 'POST',
+                    data: { id_mau: id_mau },
+                    success: function (result) {
+                        if (result.success) {
+
+
+                            $.get('/Admin/SanPham/DanhSachMau', function (data) {
+                                $('#dataTable').html($(data).find('#dataTable').html());
+                            });
+                        } else {
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi nếu có
+                        console.log(xhr.responseText);
+                    }
+                });
+                $('#confirmModal').modal('hide');
+            });
+        });
+    });
+</script>
+
+<style>
+    .fade-out {
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+    }
+
+    .alert {
+        position: fixed; /* Định vị cố định */
+        top: 80px; /* Cách lề trên 20px */
+        right: 50px; /* Cách lề phải 20px */
+        z-index: 1000; /* Sắp xếp z-index để đảm bảo nó hiển thị trên các phần tử khác */
+        border-radius: 5px; /* Bo tròn góc */
+    }
+    .color-icon {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+</style>

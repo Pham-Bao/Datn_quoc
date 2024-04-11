@@ -18,13 +18,13 @@
         });
         this.Set(updatedCart);
     },
+    // Hàm addToCart để thêm sản phẩm vào giỏ hàng
     addToCart: function (productId, color, option) {
         console.log('Thêm giỏ');
         console.log(productId, color, option);
 
         var cart = this.Get();
 
-    
         $.ajax({
             url: '/MuaHang/LayIdChiTietSP',
             type: 'POST',
@@ -32,34 +32,36 @@
             success: function (response) {
                 // Xử lý phản hồi từ server
                 if (response.success) {
-                    var chiTietSPId = response.id_chiTietSP; 
+                    var chiTietSPId = response.id_chiTietSP;
                     var existingItem = cart.find(item => item.chiTietSPId == chiTietSPId);
-                    console.log(existingItem)
                     if (existingItem) {
-                        console.log('Sản phẩm đã có trong giỏ hàng okok');
-                        return; // Không thêm sản phẩm nếu đã tồn tại trong giỏ hàng
+                        $('#errorMessage').text('Sản phẩm đã có trong giỏ hàng.');
+                        $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
+                        return;
                     }
 
-                    // Lưu thông tin sản phẩm vào localStorage
                     var cartItem = {
                         chiTietSPId: chiTietSPId,
-                        soLuong: 1, // Số lượng sản phẩm mặc định là 1 khi thêm vào giỏ hàng
+                        soLuong: 1,
                     };
                     cart.push(cartItem);
-                    // Lưu giỏ hàng mới vào localStorage
+
                     CartClass.Set(cart);
-                    console.log('Sản phẩm đã được thêm vào giỏ hàng ok ok ');
+                    $('#successMessage').text('Sản phẩm đã được thêm vào giỏ hàng.');
+                    $('#successAlert').fadeIn('slow').delay(2000).fadeOut('slow');
                 } else {
-                    // Xử lý khi không nhận được id_chiTietSP từ máy chủ
-                    console.error('Không thể lấy được id_chiTietSP.');
+                    $('#errorMessage').text('Không thể lấy được id_chiTietSP.');
+                    $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
                 }
             },
             error: function (xhr, status, error) {
                 // Xử lý lỗi khi gửi yêu cầu AJAX để lấy id_chiTietSP
-                console.error('Đã xảy ra lỗi khi lấy id_chiTietSP:', error);
+                $('#errorMessage').text('Đã xảy ra lỗi khi lấy id_chiTietSP: ' + error);
+                $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
             }
         });
-    },
+    }
+
 
 
 };

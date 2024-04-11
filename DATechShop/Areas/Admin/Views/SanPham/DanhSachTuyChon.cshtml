@@ -5,51 +5,109 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2 class="text-center">Danh sách tùy chọn</h2>
+<h2 class="text-center">Tùy Chọn(Phiên Bản)</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<div class="card-body">
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-            <tr>
-                <th>
-                    Tên tùy chọn
-                </th>
-                <th>
-                    Tùy Chọn
-                </th>
-                <th></th>
-            </tr>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="container">
+                @using (Html.BeginForm("TuyChon", "SanPham", FormMethod.Post))
+                {
 
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.tenTuyChon)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.tuyChon1)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.id_tuyChon }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.id_tuyChon }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.id_tuyChon })
-                    </td>
-                </tr>
-            }
-
-        </table>
-
-        <div class="container center">
-            <div class="pagination">
-                @Html.PagedListPager(Model, page => Url.Action("DanhSachTuyChon", new { page }), PagedListRenderOptions.Classic)
+                    <div class="form-group">
+                        <label for="tenThongSo">Tên tùy chọn:</label>
+                        <input type="text" name="tenTuyChon" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="giaTri">Giá Trị:</label>
+                        <input type="text" name="giaTri" class="form-control" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                }
+                </div>
             </div>
+        <div class="col-lg-6">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                        <tr>
+                            <th>
+                                Tên tùy chọn
+                            </th>
+                            <th>
+                                Tùy Chọn
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tenTuyChon)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tuyChon1)
+                                </td>
+                                <td>
+
+                                    <div class="d-inline mx-3">
+                                        <!-- Sử dụng class confirmDeleteBtn thay vì id để tránh trùng lặp -->
+                                        <a data-id-tuychon="@item.id_tuyChon" class="btn btn-danger btn-circle btn-sm confirmDeleteBtn">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+
+                    <div class="container center">
+                        <div class="pagination">
+                            @Html.PagedListPager(Model, page => Url.Action("DanhSachTuyChon", new { page }), PagedListRenderOptions.Classic)
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
 
     </div>
-    </div>
+</div>
 
 
- 
+<script>
+    $(document).ready(function () {
+        $('.confirmDeleteBtn').click(function () {
+            var id_tuyChon = $(this).data('id-tuychon');
+
+            $('#confirmModal').modal('show');
+
+            $('#confirmBtn').click(function () {
+                $.ajax({
+                    url: '/Admin/SanPham/xoaTuyChon',
+                    type: 'POST',
+                    data: { id_tuyChon: id_tuyChon },
+                    success: function (result) {
+                        if (result.success) {
+
+
+                            $.get('/Admin/SanPham/DanhSachTuyChon', function (data) {
+                                $('#dataTable').html($(data).find('#dataTable').html());
+                            });
+                        } else {
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi nếu có
+                        console.log(xhr.responseText);
+                    }
+                });
+                $('#confirmModal').modal('hide');
+            });
+        });
+    });
+</script>

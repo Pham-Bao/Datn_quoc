@@ -1,0 +1,56 @@
+﻿@model PagedList.IPagedList<DATechShop.Models.ChiTietHoaDon>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="text-center">Chi Tiết hóa đơn</h2>
+
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th colspan="7" class="text-end">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="h3 text-dark mb-0">Khuyến mãi</p>
+                           
+                        </div>
+                    </th>
+
+                </tr>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Ảnh Sản phẩm</th>
+                   
+                    <th>Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.ChitietSP.SanPham.tenSP)</td>
+
+                        <td>@Html.DisplayFor(modelItem => item.soLuong)</td>
+                        <td>@Html.DisplayFor(modelItem => item.gia)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ChitietSP.anhSP)</td>
+                        <td><img style="width:50px;height:auto" src="~/Upload/imgSP/@item.ChitietSP.anhSP" /></td>
+                        <td>
+
+                            @Html.ActionLink("Delete", "Delete", new { id = item.id_chiTietSP })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="container center">
+            <div class="pagination">
+                @Html.PagedListPager(Model, page => Url.Action("CHiTietHD", new { page, id_hoaDon = ViewBag.id_chitietHoaDon }), PagedListRenderOptions.Classic)
+            </div>
+        </div>
+    </div>
+</div>

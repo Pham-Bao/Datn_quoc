@@ -19,5 +19,13 @@ namespace DATechShop.Models
 			var data = db.DanhGias.Where(hd => hd.TrangThaiXoa != false && hd.id_sanPham == id).ToList();
 			return data;
 		}
+
+		public List<DanhGia> DanhSachDanhGia()
+
+		{
+			var db = new DATotNghiepEntities();
+			var data = db.DanhGias.Where(km => km.TrangThaiXoa != false).ToList();
+			return data;
+		}
 	}
 }

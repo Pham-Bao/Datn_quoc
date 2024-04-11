@@ -40,5 +40,6 @@ namespace DATechShop.Models
         public virtual DbSet<district> districts { get; set; }
         public virtual DbSet<province> provinces { get; set; }
         public virtual DbSet<ward> wards { get; set; }
+        public virtual DbSet<LoaiThanhToan> LoaiThanhToans { get; set; }
     }
 }

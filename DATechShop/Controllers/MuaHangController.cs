@@ -28,8 +28,18 @@ namespace DATechShop.Controllers
         public ActionResult LayIdChiTietSP(int id_sanPham, string mauSac, string tuyChon)
         {
             Console.WriteLine($"id_sanPham: {id_sanPham}, mauSac: {mauSac}, tuyChon: {tuyChon}");
-            
-            var chiTietSP = db.ChitietSPs.FirstOrDefault(ct => ct.id_sanPham == id_sanPham && ct.MauSac.maMau == mauSac && ct.TuyChon.tuyChon1 == tuyChon);
+
+			if (mauSac == null && tuyChon == null)
+			{
+				var chiTietSp = db.ChitietSPs.FirstOrDefault(ct => ct.id_sanPham == id_sanPham);
+				if (chiTietSp != null)
+				{
+
+					return Json(new { success = true, id_chiTietSP = chiTietSp.id_chiTietSP });
+				}
+			}
+
+			var chiTietSP = db.ChitietSPs.FirstOrDefault(ct => ct.id_sanPham == id_sanPham && ct.MauSac.maMau == mauSac && ct.TuyChon.tuyChon1 == tuyChon);
 
             if (chiTietSP != null)
             {
@@ -44,7 +54,8 @@ namespace DATechShop.Controllers
         }
         public ActionResult GioHang(List<ChitietSP> chitietSPs)
         {
-            return View(chitietSPs);
+			ViewBag.CartItems = chitietSPs;
+			return View(chitietSPs);
         }
 
 
@@ -263,13 +274,23 @@ namespace DATechShop.Controllers
 
 
 			string paymentUrl = pay.CreateRequestUrl(url, hashSecret);
-			//return Redirect(paymentUrl);
+			
 
 
 	     	return Json(new { success = true, hoaDonId = newHoaDon.id_HoaDon, paymentUrl });
 			}
+			var id_hoaDon = newHoaDon.id_HoaDon;
+			var newLoaiThanhToan = new LoaiThanhToan
+			{
+			
+				id_HoaDon = id_hoaDon,
+				ngayThanhToan = DateTime.Now,
+				loaiThanhToan1 = "Tiền Mặt",
+				trangThai = 0,
+			};
 
-
+			db.LoaiThanhToans.Add(newLoaiThanhToan);
+			db.SaveChanges();
 
 			return Json(new { success = true, hoaDonId = newHoaDon.id_HoaDon });
 
@@ -355,16 +376,32 @@ namespace DATechShop.Controllers
 						var hoaDon = db.HoaDons.Find(orderId);
 						hoaDon.trangThai = 2;
 						db.SaveChanges();
+
+
+						int orderIdInt = Convert.ToInt32(orderId);
+						var newLoaiThanhToan = new LoaiThanhToan
+						{
+							
+					     	id_HoaDon = orderIdInt,
+							ngayThanhToan = DateTime.Now,
+							loaiThanhToan1 = "VNPay",
+							trangThai = 1,
+						};
+
+						db.LoaiThanhToans.Add(newLoaiThanhToan);
+						db.SaveChanges();
 					}
 					else
 					{
-						//Thanh toán không thành công. Mã lỗi: vnp_ResponseCode
+						var loaiThanhToan = db.LoaiThanhToans.Find(orderId);
+						loaiThanhToan.trangThai = 0;
+						db.SaveChanges();
 						ViewBag.Message = "Có lỗi xảy ra trong quá trình xử lý hóa đơn " + orderId + " | Mã giao dịch: " + vnpayTranId + " | Mã lỗi: " + vnp_ResponseCode;
 					}
 				}
 				else
 				{
-					ViewBag.Message = "Có lỗi xảy ra trong quá trình xử lý";
+					ViewBag.Error = "Có lỗi xảy ra trong quá trình xử lý";
 				}
 			}
 

@@ -18,6 +18,7 @@ namespace DATechShop.Models
         public HoaDon()
         {
             this.ChiTietHoaDons = new HashSet<ChiTietHoaDon>();
+            this.LoaiThanhToans = new HashSet<LoaiThanhToan>();
         }
     
         public int id_HoaDon { get; set; }
@@ -30,10 +31,13 @@ namespace DATechShop.Models
         public Nullable<double> tongTien { get; set; }
         public Nullable<double> giamGia { get; set; }
         public Nullable<bool> TrangThaiXoa { get; set; }
+        public Nullable<int> id_LoaiThanhToan { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChiTietHoaDon> ChiTietHoaDons { get; set; }
         public virtual KhuyenMai KhuyenMai { get; set; }
         public virtual NguoiDung NguoiDung { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LoaiThanhToan> LoaiThanhToans { get; set; }
     }
 }

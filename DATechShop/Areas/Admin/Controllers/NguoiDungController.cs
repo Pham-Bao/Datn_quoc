@@ -130,13 +130,13 @@ namespace DATechShop.Areas.Admin.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult DangNhap(string sdt, string mk)
+		public ActionResult DangNhap(string email, string mk)
 		{
 			
-			var user = db.NguoiDungs.FirstOrDefault(u => u.sdt == sdt);
+			var user = db.NguoiDungs.FirstOrDefault(u => u.email == email);
 
 
-			if (sdt.ToLower() == "admin" & mk.ToLower() == "1")
+			if (email != null && mk != null && email.ToLower() == "admin@gmail.com" && mk.ToLower() == "1")
 			{
 				Session["tk"] = "AdminTechShop";
 				return RedirectToAction("ThongKe", "SanPham");
@@ -154,12 +154,13 @@ namespace DATechShop.Areas.Admin.Controllers
 
 				// Gọi hàm JavaScript để hiển thị thông báo
 				ViewBag.NotificationMessage = TempData["SuccessMessage"];
-				return View();
+				return RedirectToAction("Home", "TrangChu", new { area = "" });
+
 			}
 			else
 			{
 				// Đăng nhập không thành công
-				ViewBag.Error = "Số điện thoại hoặc mật khẩu không đúng.";
+				ViewBag.Error = "(*)Số điện thoại hoặc mật khẩu không đúng.";
 				return View();
 			}
 		}
@@ -172,8 +173,9 @@ namespace DATechShop.Areas.Admin.Controllers
 			Session.Remove("SoDienThoai");
 			Session.Remove("DiaChi");
 			Session.Remove("tk");
+			
+			return RedirectToAction("Home", "TrangChu", new { area = "" });
 
-			return RedirectToAction("DangNhap", "NguoiDung");
 		}
 
 
@@ -228,6 +230,36 @@ namespace DATechShop.Areas.Admin.Controllers
 			catch
 			{
 				return false;
+			}
+		}
+
+		[AdminAuth]
+		public ActionResult xoaNguoiDung(int id_nguoiDung)
+		{
+			try
+			{
+				// Tìm khuyến mãi theo id
+				using (var db = new DATotNghiepEntities())
+				{
+					var nguoiDung = db.NguoiDungs.FirstOrDefault(km => km.id_NguoiDung == id_nguoiDung);
+					if (nguoiDung != null)
+					{
+						nguoiDung.TrangThaiXoa = false;
+						db.SaveChanges();
+						TempData["Success"] = "Xóa  thành công!";
+						return Json(new { success = true });
+					}
+					else
+					{
+						TempData["Error"] = "Không tìm thấy " + id_nguoiDung;
+						return Json(new { success = false, message = "Không tìm thấy " + id_nguoiDung });
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["Error"] = "Lỗi: " + ex.Message;
+				return Json(new { success = false, message = "Lỗi: " + ex.Message });
 			}
 		}
 

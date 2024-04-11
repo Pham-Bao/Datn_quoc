@@ -46,11 +46,9 @@
                         Email
                     </th>
                     <th>
-                        Dịa chỉ
+                        Địa chỉ
                     </th>
-                    <th>
-                        Mật khẩu
-                    </th>
+
                     <th></th>
                 </tr>
             </thead>
@@ -70,13 +68,14 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.diaChi)
                     </td>
+
                     <td>
-                        @Html.DisplayFor(modelItem => item.matKhau)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.id_NguoiDung }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.id_NguoiDung }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.id_NguoiDung })
+                        <div class="d-inline mx-3">
+                            <!-- Sử dụng class confirmDeleteBtn thay vì id để tránh trùng lặp -->
+                            <a data-id-nguoidung="@item.id_NguoiDung" class="btn btn-danger btn-circle btn-sm confirmDeleteBtn">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
             }
@@ -91,6 +90,37 @@
 </div>
 
 
-<style>
-   
-</style>
+<script>
+    $(document).ready(function () {
+        $('.confirmDeleteBtn').click(function () {
+            var id_nguoiDung = $(this).data('id-nguoidung');
+
+            $('#confirmModal').modal('show');
+
+            $('#confirmBtn').click(function () {
+                $.ajax({
+                    url: '/Admin/NguoiDung/xoaNguoiDung',
+                    type: 'POST',
+                    data: { id_nguoiDung: id_nguoiDung },
+                    success: function (result) {
+                        if (result.success) {
+
+
+                            $.get('/Admin/NguoiDung/DanhSachNguoiDung', function (data) {
+                                $('#dataTable').html($(data).find('#dataTable').html());
+                            });
+                        } else {
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi nếu có
+                        console.log(xhr.responseText);
+                    }
+                });
+                $('#confirmModal').modal('hide');
+            });
+        });
+    });
+</script>
+

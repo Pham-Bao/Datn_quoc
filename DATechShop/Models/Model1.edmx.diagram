@@ -32,6 +32,9 @@
         <EntityTypeShape EntityType="DATotNghiepModel.ward" Width="1.5" PointX="11.875" PointY="0.875" />
         <AssociationConnector Association="DATotNghiepModel.fk82doq1t64jhly7a546lpvnu2c" />
         <AssociationConnector Association="DATotNghiepModel.fkfjqt744bo800mb5uax74lav8k" />
+        <EntityTypeShape EntityType="DATotNghiepModel.LoaiThanhToan" Width="1.5" PointX="8.25" PointY="17" />
+        <AssociationConnector Association="DATotNghiepModel.FK__LoaiThanh__id_Ho__2EA5EC27" />
+        <AssociationConnector Association="DATotNghiepModel.FK_ChiTietHoaDon_DanhGia" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

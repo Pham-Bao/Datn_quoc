@@ -40,10 +40,10 @@
                 </tr>
                 <tr>
                     <th class="text-dark">
-                        Tên Sản Phẩm
+                       Ảnh
                     </th>
                     <th class="text-dark">
-                        Loại Sản Phẩm
+                       Tên sản phẩm
                     </th>
                     <th class="text-dark">
                         Mô Tả
@@ -54,9 +54,7 @@
                     <th class="text-dark">
                         Khuyến mãi
                     </th>
-                    <th class="text-dark">
-                        ẢNh
-                    </th>
+                   
                     <th class="text-dark">
                         Chức Năng
                     </th>
@@ -67,10 +65,11 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.tenSP)
+                        <img style="width:50px;height:auto" src="~/Upload/imgSPChung/@item.anhSPChung" />
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.loaiSP)
+                        <p class="h5 text-dark font-weight-bold">@item.tenSP</p>
+                        <p>@item.loaiSP</p>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.moTa)
@@ -79,12 +78,9 @@
                         @Html.DisplayFor(modelItem => item.ghiChu)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.khuyenMai)
+                       <p>@item.khuyenMai %</p>
                     </td>
 
-                    <td>
-                        <img style="width:50px;height:auto" src="~/Upload/imgSPChung/@item.anhSPChung" />
-                    </td>
                     <td>
                         <div class="d-inline mx-3">
                             <a href="#" class="btn btn-danger btn-circle btn-sm">

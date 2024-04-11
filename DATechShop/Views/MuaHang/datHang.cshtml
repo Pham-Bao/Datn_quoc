@@ -4,9 +4,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>chiTietSPLoai</h2>
+
 <div class="container px-4 mt-5">
-    <form method="post">
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Đặt hàng</h4>
+                        <div class="breadcrumb__links">
+                            <a href="~/trangchu">Trang chủ</a>
+                            <a href="~/muahang/giohang">Giỏ hàng</a>
+                            <span>Đặt Hàng</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <form method="post" class="mt-3">
         <div class="row gx-5">
 
             <div class="col-7">
@@ -87,7 +103,7 @@
                             <textarea class="form-control" rows="3"></textarea>
                         </div>
 
-                       
+
                     </div>
 
 
@@ -216,8 +232,7 @@
                             <label class="form-check-label text-primary" for="agreeCheckbox">Tôi đã đọc và đồng ý điều khoản và điều kiện của hệ thống</label>
                         </div>
                         <p id="selectAgreeMessage" class="text-danger" style="display: none;">(*)Vui lòng chọn đồng ý</p>
-                        <button class="mx-auto btn btn-success btn-lg" type="button" id="taoHoaDonBtn">Tiến hành đặt hàng</button>
-
+                        <button class="mx-auto btn primary-btn btn-lg mt-2" type="button" id="taoHoaDonBtn">Tiến hành đặt hàng</button>
                         <p class="text-danger mt-2">(*)Phí phụ thu sẽ được tính khi bạn tiến hành thanh toán.</p>
                     </div>
                 </div>
@@ -227,7 +242,7 @@
             </div>
 
         </div>
-     </form>
+    </form>
 </div>
 
 <script src="~/Script/Cart.js"></script>
@@ -261,7 +276,7 @@
                 data: { provinceId: provinceId },
                 success: function (response) {
                     console.log('AJAX request for districts sent successfully:', response);
-                    // Cập nhật dropdown quận/huyện dựa trên response
+                    
                     $('#districtSelect').empty();
                     $('#districtSelect').append($('<option>', {
                         value: '',
@@ -284,7 +299,7 @@
             var districtId = $(this).val();
             console.log('District ID selected:', districtId);
 
-            // Gửi AJAX request để lấy danh sách xã/phường
+          
             $.ajax({
                 url: '/MuaHang/LayXaPhuong',
                 type: 'GET',
@@ -370,22 +385,22 @@
             });
         });
    });
-   
-   
+
+
 $(document).ready(function () {
     $('#taoHoaDonBtn').on('click', function () {
         // Kiểm tra trạng thái của checkbox
-       
+
         var agreeCheckbox = $('#agreeCheckbox');
         if (!agreeCheckbox.prop('checked')) {
-            $('#selectAgreeMessage').show(); 
+            $('#selectAgreeMessage').show();
             return;
         } else {
-            $('#selectAgreeMessage').hide(); 
+            $('#selectAgreeMessage').hide();
         }
 
         if (!selectedPaymentMethod) {
-           
+
             alert('Vui lòng chọn phương thức thanh toán.');
             return;
         }
@@ -439,29 +454,32 @@ $(document).ready(function () {
                             if (paymentUrl != null) {
                                 window.location.href = paymentUrl;
                             } else {
-                                console.log('ok rồi ')
+                                $('#successMessage').text('Đã đặt hàng thành công');
+                                $('#successAlert').fadeIn('slow').delay(2000).fadeOut('slow');
                             }
-
                         },
                         error: function (xhr, status, error) {
                             console.error('Đã xảy ra lỗi khi tạo chi tiết hóa đơn:', error);
-                            alert('Đã xảy ra lỗi khi tạo chi tiết hóa đơn. Vui lòng thử lại.');
+                            $('#errorMessage').text('Đã có lỗi khi tạo hóa đơn');
+                            $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
                         }
                     });
                 } else {
                     // Không có sản phẩm trong giỏ hàng
                     console.error('Không có sản phẩm trong giỏ hàng để tạo chi tiết hóa đơn.');
-                    alert('Không có sản phẩm trong giỏ hàng để tạo chi tiết hóa đơn.');
+                    $('#errorMessage').text('Đã có lỗi khi tạo hóa đơn');
+                    $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
                 }
             },
             error: function (xhr, status, error) {
                 console.error('Đã xảy ra lỗi khi tạo hóa đơn:', error);
-                alert('Đã xảy ra lỗi khi tạo hóa đơn. Vui lòng thử lại.');
+                $('#errorMessage').text('Đã có lỗi khi tạo hóa đơn');
+                $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
             }
         });
     });
 });
-    var selectedPaymentMethod = ''; // lấy phương thức thanh toán  
+    var selectedPaymentMethod = ''; // lấy phương thức thanh toán
     document.addEventListener("DOMContentLoaded", function () {
         var paymentOptions = document.querySelectorAll(".payment-option");
 
