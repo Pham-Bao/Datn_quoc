@@ -40,14 +40,14 @@
                         <td>@Html.DisplayFor(modelItem => item.id_HoaDon)</td>
                         <td>@Html.DisplayFor(modelItem => item.HoaDon.NguoiDung.ten)</td>
                         <td>@Html.DisplayFor(modelItem => item.loaiThanhToan1)</td>
-                        <td>@Html.DisplayFor(modelItem => item.HoaDon.tongTien)</td>
+                        <td> <p>@String.Format("{0:#,##0}", item.HoaDon.tongTien) đ</p></td>
                         <td>
                             @(item.trangThai == 0 ? "Chưa thanh toán" : "Đã thanh toán")
                         </td>
                         <td>@Html.DisplayFor(modelItem => item.ngayThanhToan)</td>
 
 
-                        
+
                     </tr>
                 }
             </tbody>

@@ -10,6 +10,9 @@ using DATechShop.Areas.Admin.Content;
 using DATechShop.Models;
 using PagedList;
 using static DATechShop.Areas.Admin.Content.AuthAttribute;
+using System.Web.Helpers;
+using System.Security;
+using System.Data.Entity;
 
 namespace DATechShop.Areas.Admin.Controllers
 {
@@ -262,6 +265,129 @@ namespace DATechShop.Areas.Admin.Controllers
 				return Json(new { success = false, message = "Lỗi: " + ex.Message });
 			}
 		}
+
+
+		public ActionResult forgotPass()
+		{ 
+			return View();
+		}
+
+
+		[HttpPost]
+		public ActionResult forgotPass(string otpEntered)
+		{
+			var email = otpEntered;
+			try
+			{
+				// Kiểm tra địa chỉ email có hợp lệ không
+				if (!IsValidEmail(email))
+				{
+					ViewBag.Error = "Địa chỉ email không hợp lệ.";
+					return View("Index");
+				}
+
+				// Tạo mã OTP ngẫu nhiên
+				string otp = GenerateOTP();
+
+				// Gửi mã OTP đến địa chỉ email của người dùng
+				SendEmail(email, "Mã OTP", $"Mã OTP của bạn là: {otp}");
+			
+				// Chuyển hướng đến trang nhập mã OTP để người dùng nhập
+				return RedirectToAction("otp", new { emailAddress = email, otp = otp });
+			}
+			catch (Exception ex)
+			{
+				// Xử lý lỗi nếu có
+				ViewBag.Error = "Đã xảy ra lỗi khi gửi mã OTP. Vui lòng thử lại sau.";
+				return View("Index");
+			}
+		}
+
+
+
+
+		public ActionResult otp(string emailAddress, string otp)
+		{
+			ViewBag.EmailAddress = emailAddress;
+			ViewBag.OTP = otp;
+			return View();
+		}
+		[HttpPost]
+		public ActionResult otp(string emailAddress, string otpEntered, string otp)
+		{
+			var existingUser = db.NguoiDungs.FirstOrDefault(u => u.email == emailAddress);
+			if (otpEntered == otp)
+			{
+				ViewBag.EmailAddress = emailAddress;
+				//existingUser.TrangThaiXoa = true;
+				db.SaveChanges();
+				ViewBag.Success = "Xác thực thành công!";
+				return RedirectToAction("resetPass", new { emailAddress = emailAddress });
+
+			}
+			else
+			{
+				// Mã OTP nhập không đúng
+				ViewBag.Error = "Mã OTP không đúng. Vui lòng thử lại.";
+			}
+
+			ViewBag.EmailAddress = emailAddress;
+			ViewBag.OTP = otp;
+			return View();
+		}
+
+		public ActionResult resetPass(string emailAddress)
+		{
+			var email = emailAddress;
+			ViewBag.EmailAddress = email;
+			return View();
+		}
+
+		[HttpPost]
+		public ActionResult resetPass(string mk1, string mk2, string emailAddress)
+		{
+			if (mk1 != mk2)
+			{
+				ViewBag.Error = "Mật khẩu không khớp";
+				return View();
+			}
+			if(emailAddress == null)
+			{
+				ViewBag.Error = "Email bằng O";
+
+			}
+			// Kiểm tra xem email có tồn tại trong cơ sở dữ liệu hay không
+			var user = db.NguoiDungs.FirstOrDefault(u => u.email == emailAddress);
+			if (user == null)
+			{
+				ViewBag.Error = "Email không tồn tại trong hệ thống."+ emailAddress;
+				return View();
+			}
+
+			try
+			{
+				string hashedPassword = HashingHelper.HashPassword(mk1);
+				user.matKhau = hashedPassword;
+				db.SaveChanges();
+
+				ViewBag.Success = "Đổi mật khẩu thành công!";
+				Session["id_NguoiDung"] = user.id_NguoiDung;
+				Session["TenNguoiDung"] = user.ten;
+				Session["SoDienThoai"] = user.sdt;
+				Session["DiaChi"] = user.diaChi;
+			}
+			catch (Exception ex)
+			{
+				ViewBag.Message = "Đã xảy ra lỗi khi thực hiện đổi mật khẩu: " + ex.Message;
+			}
+
+
+			return RedirectToAction("Home", "TrangChu", new { area = "" });
+
+
+		}
+
+
 
 	}
 }

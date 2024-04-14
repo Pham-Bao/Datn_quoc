@@ -1,0 +1,109 @@
+﻿@model PagedList.IPagedList<DATechShop.Models.ChiTietHoaDon>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "ChiTietHDNguoiDung";
+    Layout = "~/Views/ThongTin/Layout_info.cshtml";
+}
+
+
+@{
+    var HoaDon = new DATechShop.Models.mapHoaDon().hoaDonID(ViewBag.id_chiTietHoaDon);
+
+}
+
+
+
+<div class="row">
+    <div class="col-lg-4 container-fluid mt-3">
+        <div class="card border-left-success">
+            @if (HoaDon != null)
+            {
+                <p>ID: <span class="font-weight-bold"> @HoaDon.id_HoaDon</span></p>
+                <p>Date: <span class="font-weight-bold"> @HoaDon.ngayTao</span></p>
+                <p>Họ Tên: <span class="font-weight-bold"> @HoaDon.NguoiDung.ten</span></p>
+                <p>SDT: <span class="font-weight-bold"> @HoaDon.NguoiDung.sdt</span></p>
+                <p>Email: <span class="font-weight-bold"> @HoaDon.NguoiDung.email</span></p>
+                <p>Địa Chỉ: <span class="font-weight-bold"> @HoaDon.diaChi</span></p>
+
+                <p class="text-end mx-3 mb-1">Tổng Cộng: <span class="font-weight-bold text-primary" style="color: #007bff;"> @String.Format("{0:#,##0}", HoaDon.tongTien)đ</span></p>
+                <p class="text-end mx-3 mt-1">Được giảm: <span class="font-weight-bold text-primary" style="color: #007bff;"> @String.Format("{0:#,##0}", HoaDon.giamGia)đ</span></p>
+            }
+        </div>
+
+
+    </div>
+    <div class="col-lg-8">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th colspan="7" class="text-end">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="h3 text-dark mb-0">Chi tiết hóa đơn</p>
+
+                                </div>
+                            </th>
+
+                        </tr>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th> Màu</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Ảnh Sản phẩm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <p class="mb-1 font-weight-bold">@item.ChitietSP.SanPham.tenSP</p>
+                                    <p class="mt-1">@item.ChitietSP.TuyChon.tuyChon1</p>
+                                </td>
+                                <td>
+                                    <div class="color-icon mt-2" style="background-color: @item.ChitietSP.MauSac.maMau"></div>
+                                    <span>@item.ChitietSP.MauSac.tenMau</span>
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.soLuong)</td>
+                                <td>@String.Format("{0:#,##0}đ", item.gia)</td>
+                                <td><img style="width:50px;height:auto" src="~/Upload/imgSP/@item.ChitietSP.anhSP" /></td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="container center">
+                    <div class="pagination">
+                        @Html.PagedListPager(Model, page => Url.Action("CHiTietHD", new { page, id_hoaDon = ViewBag.id_chitietHoaDon }), PagedListRenderOptions.Classic)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .fade-out {
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+    }
+
+    .alert {
+        position: fixed; /* Định vị cố định */
+        top: 80px; /* Cách lề trên 20px */
+        right: 50px; /* Cách lề phải 20px */
+        z-index: 1000; /* Sắp xếp z-index để đảm bảo nó hiển thị trên các phần tử khác */
+        border-radius: 5px; /* Bo tròn góc */
+    }
+
+    .color-icon {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+</style>    

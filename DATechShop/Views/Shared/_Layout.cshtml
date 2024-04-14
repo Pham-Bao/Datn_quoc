@@ -93,7 +93,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <i class="fas fa-exclamation-triangle fa-2x mx-2"></i> Bạn có chắc muốn xóa sản phẩm trong giỏ hàng chứ?
+                    <i class="fas fa-exclamation-triangle fa-2x mx-2"></i> Bạn có chắc muốn xóa đối tượng ra khỏi kệ thống chứ?
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn font-weight-bold" data-bs-dismiss="modal">Hủy</button>
@@ -204,7 +204,7 @@
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li><a href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "DienThoai" })">Điện thoại</a></li>
+                            <li><a  href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "DienThoai" })">Điện thoại</a></li>
                             <li><a href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "LapTop" })">LapTop</a></li>
                             <li><a href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "AmThanh" })">Âm thanh</a></li>
 
@@ -224,8 +224,8 @@
                             <span class="cart-counter">3</span>
                             <img src="~/Content/Teamplate/img/icon/cart.png" alt="">
                         </a>
-                        <a href="@Url.Action("Donhang", "MuaHang", new { area = (string)null, id_nguoiDung = id })">
-                            <i class="fas fa-user text-dark "></i> <!-- Thêm icon xe giao hàng -->
+                        <a href="@Url.Action("ThongTinTaiKhoan", "ThongTin", new { area = (string)null, id_nguoiDung = id })">
+                            <i class="fas fa-user text-dark "></i> 
                         </a>
                     </div>
                 </div>

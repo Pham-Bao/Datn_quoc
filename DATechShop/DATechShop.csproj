@@ -194,6 +194,7 @@
     <Compile Include="Controllers\GmailController.cs" />
     <Compile Include="Controllers\KhuyenMaiUserController.cs" />
     <Compile Include="Controllers\MuaHangController.cs" />
+    <Compile Include="Controllers\ThongTinController.cs" />
     <Compile Include="Controllers\TrangChuController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -2097,6 +2098,8 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="img\banking.jpg" />
+    <Content Include="img\bg_1.jpg" />
+    <Content Include="img\bg_2.jpg" />
     <Content Include="img\icons8-cart-48.png" />
     <Content Include="img\icons8-circuit-50 %281%29.png" />
     <Content Include="img\icons8-circuit-50.png" />
@@ -2107,7 +2110,6 @@
     <Content Include="img\thanhtoan.png" />
     <Content Include="img\tien.png" />
     <Content Include="img\vnpay.png" />
-    <Content Include="img\bgr1.jpg" />
     <Content Include="img\zalopay.png" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -2397,6 +2399,10 @@
     <Content Include="Content\Teamplate\Source\Magnific-Popup-master.zip" />
     <Content Include="Content\Teamplate\Source\OwlCarousel2-2.3.4.zip" />
     <Content Include="Content\Teamplate\Source\SlickNav-master.zip" />
+    <Content Include="Areas\Admin\Views\NguoiDung\forgotPass.cshtml" />
+    <Content Include="Areas\Admin\Views\HoaDon\locDanhSachHoaDon.cshtml" />
+    <Content Include="Areas\Admin\Views\NguoiDung\otp.cshtml" />
+    <Content Include="Areas\Admin\Views\NguoiDung\resetPass.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\MuaHang\row.cshtml" />
     <Content Include="Views\KhuyenMaiUser\DanhSachKM.cshtml" />
@@ -2410,6 +2416,9 @@
     <Content Include="Views\MuaHang\timSP.cshtml" />
     <Content Include="Views\TrangChu\timSP.cshtml" />
     <Content Include="Views\Shared\_layout2.cshtml" />
+    <Content Include="Views\ThongTin\ThongTinTaiKhoan.cshtml" />
+    <Content Include="Views\ThongTin\Layout_info.cshtml" />
+    <Content Include="Views\MuaHang\ChiTietHDNguoiDung.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -34,6 +34,37 @@ namespace DATechShop.Models
 			}
 		}
 
+		public List<HoaDon> locDanhSacHoaDon(int? trangThaiDon)
+		{
+			var db = new DATotNghiepEntities();
+			List<HoaDon> data; // Di chuyển khai báo ra ngoài phạm vi if-else
+
+			if (trangThaiDon != null)
+			{
+				if (trangThaiDon == 4)
+				{
+					data = db.HoaDons.Where(m => m.trangThai == 4 || m.trangThai == 6).ToList();
+					return data;
+				}
+				else
+				{
+					data = db.HoaDons.Where(m => m.trangThai == trangThaiDon).ToList();
+					return data;
+				}
+			}
+			else
+			{
+				data = db.HoaDons.ToList();
+				return data;
+			}
+		}
+		public List<HoaDon> allHoaDon()
+
+		{
+			var db = new DATotNghiepEntities();
+			var data = db.HoaDons.Where(km => km.TrangThaiXoa != false).ToList();
+			return data;
+		}
 
 
 		public List<HoaDon> DanhSacHoaDonKhach(int? trangThaiDon, int? id_nguoiDung)
@@ -76,6 +107,14 @@ namespace DATechShop.Models
 			var loaiThanhToan = db.LoaiThanhToans.Where(d => d.id_HoaDon == id_hoaDon).ToList();
 			return loaiThanhToan;
 		}
+
+		public HoaDon hoaDonID(int id_hoaDon)
+		{
+			var db = new DATotNghiepEntities();
+			var data = db.HoaDons.FirstOrDefault(m => m.id_HoaDon == id_hoaDon);
+			return data;
+		}
+
 
 		public List<LoaiThanhToan> DanhSachLoaiThanhToan()
 

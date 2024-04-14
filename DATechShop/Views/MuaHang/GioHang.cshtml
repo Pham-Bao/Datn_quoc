@@ -102,7 +102,7 @@
                             <tbody>
                                 <tr class="mb-3">
                                     <td class="text-start">Tổng phụ:</td>
-                                    <td class="text-end" id="tongThanhTien">0đ</td>
+                                    <td class="text-end tongThanhTienan" id="tongThanhTienan">0đ</td>
                                 </tr>
                                 <tr class="mb-3">
                                     <td class="text-start">Phần trăm Giảm:</td>
@@ -126,7 +126,7 @@
                             <p class="text-primary">Tôi đã đọc và đồng ý điều khoản và điều kiện của hệ thống</p>
                         </div>
 
-                        <a href="@Url.Action("datHang", "MuaHang")?phanTramGiam= 0" class="primary-btn">Tiến hành đặt hàng</a>
+                        <a href="@Url.Action("datHang", "MuaHang")?phanTramGiam= 0" class="primary-btn" id="datHang">Tiến hành đặt hàng</a>
                         <p class="text-danger mt-2">(*)Phí phụ thu sẽ được tính khi bạn tiến hành thanh toán.</p>
 
                     </div>
@@ -143,52 +143,64 @@
 
 
     $(document).ready(function () {
-        var totalAmount = localStorage.getItem('tongThanhTien');
-
-        var totalAmountFloat = parseFloat(totalAmount);
-        var totalAmounts = totalAmountFloat.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        $('#tongCong').text(totalAmounts + 'đ');
-
         var arrSanPham = CartClass.Get();
-        for (var i = 0; i < arrSanPham.length; i++) {
-            var productId = arrSanPham[i].chiTietSPId;
+        // Tiếp tục thực hiện AJAX request để lấy thông tin chi tiết sản phẩm
+        arrSanPham.forEach(function (item) {
+            var productId = item.chiTietSPId;
+            var soLuong = item.soLuong;
             $.ajax({
-                url: '/MuaHang/row?id=' + productId,
+                url: '/MuaHang/row?id=' + productId + '&soLuong=' + soLuong,
                 type: 'GET',
                 success: function (data) {
                     $("#tableSanPham tbody").append(data);
-
                 },
                 error: function (xhr, status, error) {
                     console.log('Đã xảy ra lỗi khi lấy thông tin sản phẩm:', error);
                 }
             });
-        }
+        });
     });
-    function updateTotalAmount() {
-        var totalAmount = localStorage.getItem('tongThanhTien');
 
-        var totalAmounts = totalAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        if (totalAmount) {
-            $('#tongThanhTien').text(totalAmounts + 'đ');
-        }
-    }
+    $(document).ready(function () {
+        var arrSanPham = CartClass.Get();
+        var tongTien = 0;
+
+        arrSanPham.forEach(function (item) {
+            tongTien += item.soLuong * item.giaSP;
+        });
+
+        var totalAmountFloat = parseFloat(tongTien);
+        var totalAmounts = totalAmountFloat.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        $('#tongCong').text(totalAmounts + 'đ');
+        $('#tongThanhTienan').text(totalAmounts + 'đ');
+
+    });
 
 
 
 
-$("button#applyButton").click(function () {
+
+    $("button#applyButton").click(function () {
+
     var maGiamGia = $("input#maGiamGiaInput").val();
     var phanTramGiamValue = parseFloat($("#phanTramGiam").text().trim().replace('%', '')) || 0;
+        var arrSanPham = CartClass.Get();
+        var tongTien = 0;
+
+        arrSanPham.forEach(function (item) {
+            tongTien += item.soLuong * item.giaSP;
+        });
     $.ajax({
         url: '/MuaHang/KiemTraMaGiamGia',
         type: 'POST',
         data: { maGiamGia: maGiamGia },
         success: function (response) {
             if (response.phanTramGiam !== "Không có") {
+                console.log(tongTien);
 
                 $("td#phanTramGiam").text(response.phanTramGiam);
-                var tongPhu = parseFloat($("#tongThanhTien").text().replace('đ', '').replace(',', ''));
+
+                var tongPhu = tongTien ;
                 var phanTramGiam = parseFloat(response.phanTramGiam.replace('%', ''));
 
                 var tienGiam = tongPhu * phanTramGiam / 100;
@@ -209,16 +221,13 @@ $("button#applyButton").click(function () {
 
             var datHangUrl = "@Url.Action("datHang", "MuaHang")" + "?phanTramGiam=" + encodeURIComponent(phanTramGiamValue);
 
-            $("a.btn-success").attr("href", datHangUrl);
+            $("a#datHang").attr("href", datHangUrl);
         },
         error: function (xhr, status, error) {
             console.error('Đã xảy ra lỗi:', error);
         }
     });
 });
-
-
-
 
 
 </script>

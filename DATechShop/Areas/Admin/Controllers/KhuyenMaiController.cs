@@ -17,8 +17,7 @@ namespace DATechShop.Areas.Admin.Controllers
 		[AdminAuth]
 		public ActionResult DanhSachKhuyenMai(int? page)
 		{
-			ViewBag.Success = TempData["Success"];
-			ViewBag.Error = TempData["Error"];
+			
 			mapKhuyenMai map = new mapKhuyenMai();
 			var data = map.DanhSachKhuyenMai().OrderByDescending(x => x.id_KhuyenMai);
 			int pageSize = 5; // Số mục trên mỗi trang

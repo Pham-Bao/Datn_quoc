@@ -31,17 +31,18 @@
                     <i class="fa fa-minus"></i>
                 </button>
             </div>
-            <input type="text" class="form-control form-control-sm text-center border-0 soLuong" value="1" data-product-id="@Model.id_chiTietSP" onchange="tinhThanhTien(this)">
+            <input type="text" class="form-control form-control-sm text-center border-0 soLuong" value="@ViewBag.SoLuong" onchange="tinhThanhTien(this)">
             <div class="input-group-btn">
                 <button class="btn btn-sm btn-plus rounded-circle bg-light border" type="button" onclick="incrementValue(this)">
                     <i class="fa fa-plus"></i>
                 </button>
             </div>
+
         </div>
     </td>
     
     <td>
-        <p class="mb-0 mt-4 ThanhTien"></p>
+        <p class="mb-0 mt-4 ">@string.Format("{0:#,##0}đ", Convert.ToDecimal(ViewBag.ThanhTien))</p>
     </td>
     <td>
         <button class="btn btn-md rounded-circle bg-light border mt-4 deleteCartItemBtn" onclick="showConfirmModal(@Model.id_chiTietSP)">
@@ -56,7 +57,6 @@
 
 <script>
 
-    //trừ
     function decrementValue(input) {
         var inputElement = $(input).closest('.input-group').find('.soLuong');
         var value = parseInt(inputElement.val());
@@ -64,7 +64,7 @@
             inputElement.val(value - 1).trigger('change');
         }
     }
-    //cộng
+
     function incrementValue(input) {
         var inputElement = $(input).closest('.input-group').find('.soLuong');
         var value = parseInt(inputElement.val());
@@ -73,10 +73,9 @@
         }
     }
 
-
-    function tinhThanhTien(input) {
+      function tinhThanhTien(input) {
         var row = $(input).closest('tr');
-        var gia = parseFloat(@Model.giaSP);
+          var gia = parseFloat(@Model.giaSP);
 
         var soLuong = parseFloat(input.value);
         var chiTietSPId = row.attr('class').split('_')[1];
@@ -91,21 +90,12 @@
 
             var index = cart.findIndex(item => item.chiTietSPId == chiTietSPId);
 
-           
+            // Cập nhật số lượng sản phẩm trong giỏ hàng
             if (index !== -1) {
                 cart[index].soLuong = soLuong;
                 // Lưu giỏ hàng mới vào local storage
                 CartClass.Set(cart);
-
-                // Tính lại tổng thành tiền và cập nhật vào local storage
-                var tongThanhTien = 0;
-                $('.ThanhTien').each(function () {
-                    tongThanhTien += parseFloat($(this).text());
-
-                });
-                localStorage.setItem('tongThanhTien', tongThanhTien.toFixed());
-
-               
+                // Load lại trang để cập nhật tổng thành tiền trên giao diện
                 location.reload();
             }
         } else {
@@ -114,43 +104,6 @@
     }
 
 
-
-
-
-    $(document).ready(function () {
-
-
-        var cart = CartClass.Get();
-
-       
-        $('.soLuong').each(function () {
-            var chiTietSPId = $(this).closest('tr').attr('class').split('_')[1];
-            var item = cart.find(item => item.chiTietSPId == chiTietSPId);
-            if (item) {
-                $(this).val(item.soLuong);
-                var gia = @Model.giaSP;
-                var thanhTien = gia * item.soLuong;
-                var formattedAmount = thanhTien.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-                $(this).closest('tr').find('.ThanhTien').text(formattedAmount);
-            }
-        });
-
-
-    });
-
-
-
-    function loadTongThanhTien() {
-        var tongThanhTien = localStorage.getItem('tongThanhTien');
-        $('#tongThanhTien').text(tongThanhTien + 'đ');
-    }
-
-    $(document).ready(function () {
-        loadTongThanhTien();
-    });
-
-
-    
     function showConfirmModal(chiTietSPId) {
         $('#confirmModal').modal('show');
         console.log(chiTietSPId)
@@ -175,6 +128,16 @@
             location.reload();
         }
     }
+
+    function loadTongThanhTien() {
+        var tongThanhTien = localStorage.getItem('tongThanhTien');
+        $('#tongThanhTien').text(tongThanhTien + 'đ');
+    }
+
+    $(document).ready(function () {
+        loadTongThanhTien();
+    });
+
 
 
 

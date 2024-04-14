@@ -9,12 +9,16 @@ using System.Configuration;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Policy;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.UI;
 using static DATechShop.Areas.Admin.Content.AuthAttribute;
+using static System.Net.WebRequestMethods;
+using System.Web.Helpers;
 
 
 namespace DATechShop.Controllers
@@ -59,10 +63,15 @@ namespace DATechShop.Controllers
         }
 
 
-        public ActionResult row(int id)
+        public ActionResult row(int id, int soLuong)
         {
-            var sp = new mapSP().chiTiet(id);
-            return View(sp);
+			var chiTietSP = db.ChitietSPs.FirstOrDefault(ct => ct.id_chiTietSP == id);
+			var giaSP = chiTietSP.giaSP;
+			var thanhTien = giaSP * soLuong;
+			ViewBag.ThanhTien = thanhTien;
+			var test = soLuong;
+			ViewBag.SoLuong = soLuong;
+			return View(chiTietSP);
 
         }
 
@@ -203,6 +212,9 @@ namespace DATechShop.Controllers
 				var tenNguoiDung = Session["TenNguoiDung"] as string;
 				var soDienThoai = Session["SoDienThoai"] as string;
 				var idNguoiDung = Session["id_NguoiDung"] as int?;
+			    var nguoiDung = db.NguoiDungs.FirstOrDefault(ct => ct.id_NguoiDung == idNguoiDung);
+			    var email = nguoiDung.email;
+
 
 
 			var tenTinhObj = db.provinces.FirstOrDefault(p => p.id == idTinh);
@@ -276,8 +288,9 @@ namespace DATechShop.Controllers
 			string paymentUrl = pay.CreateRequestUrl(url, hashSecret);
 			
 
+		   // SendEmail(email, "TechShop xin cảm ơn!", $"Quý khách đã mua thành công đơn hàng{hoaDonId}");
 
-	     	return Json(new { success = true, hoaDonId = newHoaDon.id_HoaDon, paymentUrl });
+	     	return Json(new { success = true, hoaDonId = newHoaDon.id_HoaDon, paymentUrl});
 			}
 			var id_hoaDon = newHoaDon.id_HoaDon;
 			var newLoaiThanhToan = new LoaiThanhToan
@@ -291,6 +304,11 @@ namespace DATechShop.Controllers
 
 			db.LoaiThanhToans.Add(newLoaiThanhToan);
 			db.SaveChanges();
+			var id_HoaDon = newLoaiThanhToan.id_HoaDon;
+			var loaiThanhToan = newLoaiThanhToan.loaiThanhToan1;
+
+			SendEmail(email, "TechShop xin cảm ơn!", $"Quý khách đã mua thành công đơn hàng. Mã hóa đơn: {id_HoaDon}. Thanh toán bằng{loaiThanhToan}");
+
 
 			return Json(new { success = true, hoaDonId = newHoaDon.id_HoaDon });
 
@@ -371,11 +389,16 @@ namespace DATechShop.Controllers
 				{
 					if (vnp_ResponseCode == "00")
 					{
+						
 						//Thanh toán thành công
 						ViewBag.Message = "Thanh toán thành công hóa đơn " + orderId + " | Mã giao dịch: " + vnpayTranId;
 						var hoaDon = db.HoaDons.Find(orderId);
 						hoaDon.trangThai = 2;
 						db.SaveChanges();
+
+						var emailNguoiDung = hoaDon.NguoiDung.email;
+						SendEmail(emailNguoiDung, "TechShop xin cảm ơn!", $"Quý khách đã mua thành công đơn hàng. Mã hóa đơn: {hoaDon.id_HoaDon}. Thanh toán bằng VNP, mã giao dịch: {vnpayTranId}");
+
 
 
 						int orderIdInt = Convert.ToInt32(orderId);
@@ -421,6 +444,7 @@ namespace DATechShop.Controllers
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 			ViewBag.trangThaiDon = trangThaiDon;
 			ViewBag.id_nguoiDung = id_nguoiDung;
+			ViewBag.DbContext = new DATotNghiepEntities();
 			return View(pagedList);
 		}
 	
@@ -452,7 +476,73 @@ namespace DATechShop.Controllers
 				}
 			}
 		}
-		
 
+
+
+		private void SendEmail(string toAddress, string subject, string body)
+		{
+			var fromAddress = new MailAddress(ConfigurationManager.AppSettings["FromEmailAddress"]);
+			var toAddr = new MailAddress(toAddress);
+			string smtpServer = ConfigurationManager.AppSettings["SMTPServer"];
+			int smtpPort = int.Parse(ConfigurationManager.AppSettings["SMTPPort"]);
+			string username = ConfigurationManager.AppSettings["SMTPUsername"];
+			string password = ConfigurationManager.AppSettings["SMTPPassword"];
+
+			var smtp = new SmtpClient
+			{
+				Host = smtpServer,
+				Port = smtpPort,
+				EnableSsl = true,
+				DeliveryMethod = SmtpDeliveryMethod.Network,
+				UseDefaultCredentials = false,
+				Credentials = new NetworkCredential(username, password)
+			};
+
+			using (var message = new MailMessage(fromAddress, toAddr)
+			{
+				Subject = subject,
+				Body = body
+			})
+			{
+				smtp.Send(message);
+			}
+		}
+
+
+		private DateTime GetExpiryTime()
+		{
+			return DateTime.Now.AddMinutes(1); // Mã OTP chỉ có hiệu lực trong 1 phút
+		}
+
+
+			// Phương thức để kiểm tra địa chỉ email có hợp lệ không
+			private bool IsValidEmail(string email)
+		{
+			try
+			{
+				var addr = new MailAddress(email);
+				return addr.Address == email;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+
+
+		[UserAuth]
+		public ActionResult ChiTietHDNguoiDung(int id_hoaDon, int? page)
+		{
+
+			mapHoaDon map = new mapHoaDon();
+			var data = map.ChiTietHoaDon(id_hoaDon).OrderByDescending(x => x.id_HoaDon);
+			int pageSize = 3;
+			int pageNumber = (page ?? 1);
+			var pagedList = data.ToPagedList(pageNumber, pageSize);
+
+			ViewBag.id_chitietHoaDon = id_hoaDon;
+			return View(pagedList);
+		}
 	}
 }

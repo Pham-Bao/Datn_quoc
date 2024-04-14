@@ -70,6 +70,7 @@
                             <input name="sdt" class="form-control mt-2" type="text" value="@soDienThoai" placeholder="Nhập số liên hệ của bạn người nhận...">
                         </div>
                         <label class="h5"> Địa chỉ:</label>
+                        <p class="text-danger" id="textError">(*)Điền đầy đủ địa chỉ giao hàng</p>
                         <div style="display: flex; flex-direction: row; align-items: center;">
 
                             <select id="provinceSelect" name="idTinh" class="form-control" style="width: 200px;">
@@ -252,7 +253,13 @@
 
         var phamTramGiam = @ViewBag.phamTramGiam;
 
-        var totalAmount = localStorage.getItem('tongThanhTien');
+        var arrSanPham = CartClass.Get();
+        var totalAmount = 0;
+
+        arrSanPham.forEach(function (item) {
+            totalAmount += item.soLuong * item.giaSP;
+        });
+
         var totalAmountFloat = parseFloat(totalAmount);
         var tienGiam = totalAmount * (phamTramGiam / 100);
         var tienGiams = tienGiam.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -401,7 +408,8 @@ $(document).ready(function () {
 
         if (!selectedPaymentMethod) {
 
-            alert('Vui lòng chọn phương thức thanh toán.');
+            $('#errorMessage').text('Chọn phương thức thanh toán');
+            $('#errorAlert').fadeIn('slow').delay(1000).fadeOut('slow');
             return;
         }
         console.log(selectedPaymentMethod);
@@ -415,8 +423,16 @@ $(document).ready(function () {
         var paymentMethod = $('.payment-option.selected').text();
 
         var phamTramGiam = parseFloat(@ViewBag.phamTramGiam);
-        var tongCongText = $('#tongPhu').text();
-        var tongCong = parseFloat(tongCongText.replace('đ', '').replace(',', ''));
+
+        var arrSanPham = CartClass.Get();
+        var tongCong = 0;
+
+        arrSanPham.forEach(function (item) {
+            tongCong += item.soLuong * item.giaSP;
+        });
+
+        
+        
 
         // Gọi AJAX để tạo hóa đơn
         $.ajax({
@@ -460,14 +476,17 @@ $(document).ready(function () {
                         },
                         error: function (xhr, status, error) {
                             console.error('Đã xảy ra lỗi khi tạo chi tiết hóa đơn:', error);
-                            $('#errorMessage').text('Đã có lỗi khi tạo hóa đơn');
+                            $('#textError').text('Đã có lỗi khi tạo hóa đơn').addClass('text-danger');
+                            $('#errorMessage').text('Đã có lỗi khi tạo hóa đơn rồi');
                             $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
                         }
                     });
                 } else {
                     // Không có sản phẩm trong giỏ hàng
                     console.error('Không có sản phẩm trong giỏ hàng để tạo chi tiết hóa đơn.');
-                    $('#errorMessage').text('Đã có lỗi khi tạo hóa đơn');
+                    $('#errorMessage').text('Đã có lỗi khi tạo hóa đơn nhá');
+                    $('#textError').text('Đã có lỗi khi tạo hóa đơn').addClass('text-danger');
+
                     $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
                 }
             },

@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ 
+    var id = Session["id_NguoiDung"];
+
+}
+
+<div class="card container">
+
+    <div class="">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link font-weight-bold" href="@Url.Action("ThongTinTaiKhoan", "ThongTin", new {area = (string)null, id_nguoiDung = id})">Thông tin tài khoản</a>
+                        <a class="nav-link font-weight-bold" href="@Url.Action("DonHang", "MuaHang", new {area = (string)null, id_nguoiDung = id})">Tất cả đơn hàng</a>
+                        <a class="nav-link font-weight-bold" href="#">Lịch Sử</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <hr class="my-1" style="border-top: 1.5px solid #000; opacity: 0.1;" />
+        @RenderBody()
+       
+
+
+    </div>
+</div>
+
+

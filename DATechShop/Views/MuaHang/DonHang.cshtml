@@ -2,7 +2,7 @@
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "DonHang";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/ThongTin/Layout_info.cshtml";
 }
 <div class="container">
     <div class="card-body ">
@@ -10,7 +10,7 @@
             <button type="button" class="btn bnt-primary dropdown-toggle" data-bs-toggle="dropdown">
                 <i class="fas fa-filter"></i> Lọc dữ liệu
             </button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu ">
                 <!-- Các tùy chọn lọc -->
                 <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Tất cả</strong></a></li>
                 <li><a class="dropdown-item" href="@Url.Action("DonHang", "MuaHang", new { trangThaiDon= "1" , id_nguoiDung = ViewBag.id_nguoiDung})"> <strong>Chờ duyệt</strong></a></li>
@@ -21,16 +21,16 @@
             </ul>
         </div>
     </div>
-    <div class="table-responsive mt-2">
+    <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
-
-                    <th>Ngày Tạo</th>
+                    <th>Mã đơn </th>
                     <th>Khách Hàng</th>
+                    <th>Ngày Tạo</th>
                     <th>Địa Chỉ </th>
                     <th>Tổng tiền</th>
-                    <th>Giá Giảm</th>
+                    <th>Thanh Toán</th>
                     <th>Tình trạng</th>
                     <th></th>
                 </tr>
@@ -39,19 +39,42 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-
-                        <td>@Html.DisplayFor(modelItem => item.ngayTao)</td>
+                        <td>
+                            <p>@item.id_HoaDon</p>
+                        </td>
                         <td>
                             <div class="mb-2">
-                                <!-- Thêm một div để bao quanh cả hai phần tử -->
-                                <p class="font-weight-bold mb-0">Phạm Bảo</p> <!-- Class mb-0 để loại bỏ margin bottom -->
+
+                                <p class="font-weight-bold mb-0">@item.NguoiDung.ten</p> <!-- Class mb-0 để loại bỏ margin bottom -->
                                 <p class="mb-0">@item.sdt</p> <!-- Class mb-0 để loại bỏ margin bottom -->
                             </div>
                         </td>
+                        <td>@item.ngayTao.Value.ToString("dd/MM/yyyy")</td>
                         <td>@Html.DisplayFor(modelItem => item.diaChi)</td>
-                        <td>@Html.DisplayFor(modelItem => item.tongTien)</td>
-                        <td>@Html.DisplayFor(modelItem => item.giamGia)</td>
                         <td>
+                            <p class="font-weight-bold mb-1">@String.Format("{0:#,##0}", item.tongTien)đ</p>
+                            <p class="mt-1">-@String.Format("{0:#,##0}", item.giamGia)đ</p>
+                        </td>
+                        <td>
+                            @{
+                                var dbContext = ViewBag.DbContext as DATechShop.Models.DATotNghiepEntities;
+                                if (dbContext != null)
+                                {
+                                    var loaiThanhToan = dbContext.LoaiThanhToans.FirstOrDefault(l => l.id_HoaDon == item.id_HoaDon);
+
+                                    if (loaiThanhToan != null)
+                                    {
+                                        <p class="font-weight-bold mb-1">@loaiThanhToan.loaiThanhToan1</p>
+                                        <p class="font-weight-bold mt-1">@(loaiThanhToan.trangThai == 1 ? "Đã thanh toán" : "Chưa thanh toán")</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Không có thông tin thanh toán</p>
+                                    }
+                                }
+                            }
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
                             @if (item.trangThai == 1)
                             {
                                 <span class="badge bg-primary"><i class="fas fa-clock"></i> Đang đợi duyệt</span>
@@ -85,8 +108,24 @@
                                 </button>
 
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="@Url.Action("doiTrangThai", "muaHang", new { value = 10, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-check-circle text-success"></i>Thanh Toán</a>
-                                    <a class="dropdown-item" href="@Url.Action("doiTrangThai", "muaHang", new { value = 6, id_hoaDon =item.id_HoaDon ,  area = (string)null })"><i class="fas fa-times-circle text-danger"></i> Hủy đơn</a>
+                                    @if (item.trangThai != null)
+                                    {
+
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("ChiTietHDNguoiDung", "MuaHang", new { id_hoaDon = item.id_HoaDon ,  area = (string)null })">
+                                                <i class="fas fa-eye"></i> Xem chi tiết
+                                            </a>
+                                        </li>
+                                    }
+
+
+                                    @if (item.trangThai == 1 || item.trangThai == 2)
+                                    {
+
+                                        <li><a class="dropdown-item" href="#" onclick="showConfirmModal('@item.id_HoaDon')"><i class="fas fa-times-circle text-danger"></i> Hủy đơn</a></li>
+
+                                    }
+
                                 </ul>
                             </div>
                         </td>
@@ -104,5 +143,32 @@
     </div>
 </div>
 
-</div>
 
+<script>
+    function showConfirmModal(id_hoaDon) {
+        $('#confirmModal').modal('show');
+
+        // Gắn sự kiện click vào nút xác nhận trong modal
+        $('#confirmBtn').click(function () {
+            // Gọi hàm để đổi trạng thái với id_hoaDon đã nhận được
+            changeStatus(id_hoaDon);
+            $('#confirmModal').modal('hide');
+        });
+    }
+
+    function changeStatus(id_hoaDon) {
+        // Thực hiện AJAX request để đổi trạng thái với id_hoaDon nhận được
+        $.ajax({
+            url: '/muaHang/doiTrangThai',
+            type: 'POST',
+            data: { value: 6, id_hoaDon: id_hoaDon },
+            success: function (data) {
+                location.reload();
+                console.log('Trạng thái đã được thay đổi');
+            },
+            error: function (xhr, status, error) {
+                console.error('Đã xảy ra lỗi:', error);
+            }
+        });
+    }
+</script>

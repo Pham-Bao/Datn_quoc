@@ -5,15 +5,7 @@
 
 <h2>Send OTP</h2>
 
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger">@ViewBag.Error</div>
-}
 
-@if (ViewBag.Success != null)
-{
-    <div class="alert alert-success">@ViewBag.Success</div>
-}
 
 @using (Html.BeginForm("Send", "Gmail", FormMethod.Post))
 {

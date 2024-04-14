@@ -19,9 +19,9 @@
         this.Set(updatedCart);
     },
     // Hàm addToCart để thêm sản phẩm vào giỏ hàng
-    addToCart: function (productId, color, option) {
+    addToCart: function (productId, color, option, giaSP) {
         console.log('Thêm giỏ');
-        console.log(productId, color, option);
+        console.log(productId, color, option, giaSP);
 
         var cart = this.Get();
 
@@ -43,6 +43,7 @@
                     var cartItem = {
                         chiTietSPId: chiTietSPId,
                         soLuong: 1,
+                        giaSP: giaSP
                     };
                     cart.push(cartItem);
 

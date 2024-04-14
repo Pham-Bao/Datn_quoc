@@ -8,7 +8,7 @@
 <section class=" container-fluid bg-light">
     <div class="container">
         <div class="row mt-4">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <div class="breadcrumb__text">
                     <h3>Đăng nhập</h3>
                     <div class="breadcrumb__links">
@@ -17,6 +17,12 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-6 text-end mt-2">
+                <a href="~/trangChu/home" class="btn btn-link text-danger">
+                    <i class="fas fa-times fa-2x"></i>
+                </a>
+            </div>
+
 
         </div>
     </div>
@@ -38,19 +44,20 @@
                 <label for="password">Mật khẩu:</label>
                 <div class="position-relative">
                     <input type="password" name="mk" id="password" class="form-control">
-                    <i class="far fa-eye position-absolute top-50 translate-middle-y" id="togglePassword" style="cursor: pointer; right: 10px;"></i>
+                    <i class="far fa-eye position-absolute top-50 translate-middle-y" id="togglePassword" style="cursor: pointer; right: 10px;" onclick="togglePassword()"></i>
                 </div>
             </div>
             <p class="text-danger">@ViewBag.Error</p>
             <div class="row">
-                <div class="col-6 col-sm-4">
+                <div class="col-6">
                     <label>
                         <input type="checkbox" name="agree" value="yes" checked> Nhớ mật khẩu
                     </label>
                 </div>
-                <div class="col-6 col-sm-4 ">
-                    <a class="text-end" style="margin-right: 0px">Quên mật khẩu</a>
+                <div class="col-6 text-end">
+                    <a style="margin-right: 0px" class="text-primary" href="@Url.Action("forgotpass", "NguoiDung")">Quên mật khẩu</a>
                 </div>
+
             </div>
 
             <div class="text-center mt-3">
@@ -80,5 +87,19 @@
     var notificationMessage = "@ViewBag.NotificationMessage";
     if (notificationMessage) {
         showNotification(notificationMessage);
+    }
+    function togglePassword() {
+        var passwordInput = document.getElementById("password");
+        var toggleIcon = document.getElementById("togglePassword");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        }
     }
 </script>

@@ -5,15 +5,6 @@
 
 <h2>Verify OTP</h2>
 
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger">@ViewBag.Error</div>
-}
-
-@if (ViewBag.Success != null)
-{
-    <div class="alert alert-success">@ViewBag.Success</div>
-}
 
 @using (Html.BeginForm("Verify", "Gmail", FormMethod.Post))
 {
