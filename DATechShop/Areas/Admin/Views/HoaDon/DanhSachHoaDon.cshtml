@@ -26,13 +26,16 @@
 
         <div class="dropdown me-3">
             <input type="text" class="form-control bg-white" id="selectedStatus" readonly placeholder="Tất cả" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="trangThaiDon">
-            <input id="hiddenStatus" name="trangThaiDonHidden" type="hidden" >
+            <input id="hiddenStatus" name="hiddenStatus" type="hidden" >
             <ul class="dropdown-menu" aria-labelledby="selectedStatus">
                 <li><span class="dropdown-item" data-text="Tất cả" data-value="0">Tất cả</span></li>
                 <li><span class="dropdown-item" data-text="Chờ duyệt" data-value="1">Chờ duyệt</span></li>
-                <li><span class="dropdown-item" data-text="Đang giao" data-value="2">Đang giao</span></li>
-                <li><span class="dropdown-item" data-text="Đã hủy" data-value="3">Đã hủy</span></li>
+                <li><span class="dropdown-item" data-text="Chờ duyệt" data-value="2">Đã Thanh Toán</span></li>
+                <li><span class="dropdown-item" data-text="Đang giao" data-value="3">Đang giao</span></li>
+                <li><span class="dropdown-item" data-text="Đã hủy" data-value="4">Đã hủy</span></li>
                 <li><span class="dropdown-item" data-text="Hoàn thành" data-value="4">Hoàn thành</span></li>
+                <li><span class="dropdown-item" data-text="Hoàn thành" data-value="6">Khách hủy</span></li>
+
             </ul>
         </div>
 
@@ -90,7 +93,7 @@
 
                                         if (loaiThanhToan != null)
                                         {
-                                            <p class="">@loaiThanhToan.loaiThanhToan1</p>
+                                            <p class="mb-1">@loaiThanhToan.loaiThanhToan1</p>
                                             <p>@(loaiThanhToan.trangThai == 1 ? "Đã thanh toán" : "Chưa thanh toán")</p>
                                         }
                                         else
@@ -102,7 +105,7 @@
 
                             </td>
 
-                            <td onclick="window.location.href = '@Url.Action("ChiTietHD", "HoaDon", new { id_hoaDon = item.id_HoaDon })'">
+                            <td style="text-align: center; vertical-align: middle;" >
                                 @if (item.trangThai == 1)
                                 {
                                     <span class="badge bg-primary"><i class="fas fa-clock"></i> Đang đợi duyệt</span>
@@ -209,27 +212,25 @@ $('#submitButton').click(function () {
     var startDate = $('#startDate').val();
     var endDate = $('#endDate').val();
     var trangThaiDon = parseInt($('#hiddenStatus').val());
-    console.log(trangThaiDon);
 
     $.ajax({
         url: '@Url.Action("locDanhSachHoaDon", "HoaDon")',
         method: 'GET',
         data: {
-            
             startDate: startDate,
             endDate: endDate,
             trangThaiDon: trangThaiDon
-            
         },
         success: function (response) {
-            // Chuyển hướng sang view mới với kết quả tìm kiếm
-            window.location.href = '@Url.Action("locDanhSachHoaDon", "HoaDon")';
+            // Chuyển hướng trình duyệt đến view mới
+            window.location.replace('@Url.Action("locDanhSachHoaDon", "HoaDon")?startDate=' + startDate + '&endDate=' + endDate + '&trangThaiDon=' + trangThaiDon);
         },
         error: function (xhr, status, error) {
             console.log('Lỗi: ' + error);
         }
     });
 });
+
 
 
 </script>

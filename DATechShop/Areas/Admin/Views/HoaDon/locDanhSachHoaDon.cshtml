@@ -2,7 +2,7 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "DanhSachHoaDon";
+    ViewBag.Title = "locDanhSachHoaDon";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
@@ -13,7 +13,7 @@
         <h1 class="h4 mb-0 text-gray me-3 mx-3">Thống Kê:</h1>
 
         <div class="form-group mb-4 me-3 mt-4">
-            <input type="date" class="form-control" id="startDate" name="startDate">
+            <input type="date" class="form-control" id="startDate" name="startDate" value="@ViewBag.startDate">
         </div>
 
         <div class="form-group mb-4 me-3 d-flex align-items-center mt-4">
@@ -21,18 +21,20 @@
         </div>
 
         <div class="form-group mb-4 me-3 mt-4">
-            <input type="date" class="form-control" id="endDate" name="endDate">
+            <input type="date" class="form-control" id="endDate" name="endDate" value="@ViewBag.endDate">
         </div>
 
         <div class="dropdown me-3">
             <input type="text" class="form-control bg-white" id="selectedStatus" readonly placeholder="Tất cả" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="trangThaiDon">
-            <input id="hiddenStatus" name="trangThaiDonHidden" type="hidden">
+            <input id="hiddenStatus" name="hiddenStatus" type="hidden">
             <ul class="dropdown-menu" aria-labelledby="selectedStatus">
                 <li><span class="dropdown-item" data-text="Tất cả" data-value="0">Tất cả</span></li>
                 <li><span class="dropdown-item" data-text="Chờ duyệt" data-value="1">Chờ duyệt</span></li>
-                <li><span class="dropdown-item" data-text="Đang giao" data-value="2">Đang giao</span></li>
-                <li><span class="dropdown-item" data-text="Đã hủy" data-value="3">Đã hủy</span></li>
+                <li><span class="dropdown-item" data-text="Chờ duyệt" data-value="2">Đã Thanh Toán</span></li>
+                <li><span class="dropdown-item" data-text="Đang giao" data-value="3">Đang giao</span></li>
+                <li><span class="dropdown-item" data-text="Đã hủy" data-value="4">Đã hủy</span></li>
                 <li><span class="dropdown-item" data-text="Hoàn thành" data-value="4">Hoàn thành</span></li>
+                <li><span class="dropdown-item" data-text="Khách hủy" data-value="6">Khách hủy</span></li>
             </ul>
         </div>
 
@@ -72,7 +74,6 @@
                             <td onclick="window.location.href = '@Url.Action("ChiTietHD", "HoaDon", new { id_hoaDon = item.id_HoaDon })'">
                                 <div class="mb-2">
 
-                                    <p class="font-weight-bold mb-0">@item.NguoiDung.ten </p>
                                     <p class="mb-0">@item.sdt</p>
                                 </div>
                             </td>
@@ -187,45 +188,81 @@
             </table>
             <div class="container center">
                 <div class="pagination">
-                    @Html.PagedListPager(Model, page => Url.Action("DanhSachHoaDon", new { page, trangThaiDon = ViewBag.trangThaiDon }), PagedListRenderOptions.Classic)
+                    @Html.PagedListPager(Model, page => Url.Action("locDanhSachHoaDon", new { page, trangThaiDon = ViewBag.trangThaiDon, startDate = ViewBag.startDate, endDate = ViewBag.endDate }), PagedListRenderOptions.Classic)
                 </div>
             </div>
         </div>
     </div>
 
 </div>
-
 <script>
-    // Xử lý khi người dùng chọn trạng thái từ dropdown menu
-    $('.dropdown-menu .dropdown-item').click(function () {
-        var selectedText = $(this).data('text');
-        var selectedValue = $(this).data('value');
-        $('#selectedStatus').val(selectedText);
-        $('#hiddenStatus').val(selectedValue);
-        console.log(selectedValue);
-    });
-
+        // Xử lý khi người dùng chọn trạng thái từ dropdown menu
+        $('.dropdown-menu .dropdown-item').click(function () {
+            var selectedText = $(this).data('text');
+            var selectedValue = $(this).data('value');
+            $('#selectedStatus').val(selectedText);
+            $('#hiddenStatus').val(selectedValue);
+            console.log(selectedValue);
+        });
+        //đang lỗi gửi
     $('#submitButton').click(function () {
-    var startDate = $('#startDate').val();
-    var endDate = $('#endDate').val();
-    var trangThaiDonHidden = $('#hiddenStatus').val();
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        var trangThaiDon = parseInt($('#hiddenStatus').val());
 
-    $.ajax({
-        url: '@Url.Action("locDanhSachHoaDon", "HoaDon")',
-        method: 'GET',
-        data: {
-            startDate: startDate,
-            endDate: endDate,
-            trangThaiDonHidden: trangThaiDonHidden
-        },
-        success: function (response) {
-            // Chuyển hướng sang view mới với kết quả tìm kiếm
-            window.location.href = '@Url.Action("locDanhSachHoaDon", "HoaDon")';
-        },
-        error: function (xhr, status, error) {
-            console.log('Lỗi: ' + error);
-        }
+        $.ajax({
+            url: '@Url.Action("locDanhSachHoaDon", "HoaDon")',
+            method: 'GET',
+            data: {
+                startDate: startDate,
+                endDate: endDate,
+                trangThaiDon: trangThaiDon
+            },
+            success: function (response) {
+                // Chuyển hướng trình duyệt đến view mới
+                window.location.replace('@Url.Action("locDanhSachHoaDon", "HoaDon")?startDate=' + startDate + '&endDate=' + endDate + '&trangThaiDon=' + trangThaiDon);
+            },
+            error: function (xhr, status, error) {
+                console.log('Lỗi: ' + error);
+            }
+        });
     });
-});
+    // Thiết lập giá trị cho dropdown menu từ ViewBag
+var trangThaiDonValue = parseInt('@ViewBag.trangThaiDon'); // Parse giá trị trạng thái từ ViewBag sang số nguyên
+var trangThaiDonText = ''; // Biến để lưu trữ text tương ứng với giá trị trạng thái
+
+// Xác định text tương ứng với giá trị trạng thái
+switch (trangThaiDonValue) {
+    case 0:
+        trangThaiDonText = 'Tất cả';
+        break;
+    case 1:
+        trangThaiDonText = 'Chờ duyệt';
+        break;
+    case 2:
+        trangThaiDonText = 'Đã thanh toán';
+        break;
+    case 3:
+        trangThaiDonText = 'Đang giao';
+        break;
+    case 4:
+        trangThaiDonText = 'Hủy đơn';
+        break;
+    case 5:
+        trangThaiDonText = 'Đã xong';
+        break;
+    case 6:
+        trangThaiDonText = 'Khách Hủy';
+        break;
+    default:
+        trangThaiDonText = 'Tất cả';
+}
+
+// Đặt giá trị cho input và dropdown menu
+$('#selectedStatus').val(trangThaiDonText);
+$('#hiddenStatus').val(trangThaiDonValue);
+
+
+
 
 </script>

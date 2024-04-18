@@ -4,6 +4,7 @@ using Microsoft.Ajax.Utilities;
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -15,16 +16,15 @@ namespace DATechShop.Areas.Admin.Controllers
     public class HoaDonController : Controller
     {   DATotNghiepEntities db = new DATotNghiepEntities();
 
-		//[AdminAuth]
+		[AdminAuth]
 		public ActionResult DanhSachHoaDon(int? page)
 		{
 			mapHoaDon map = new mapHoaDon();
 			var data = map.allHoaDon().OrderByDescending(x => x.id_HoaDon);
-			int pageSize = 6; // Số mục trên mỗi trang
-			int pageNumber = (page ?? 1); // Số trang hiện tại, mặc định là trang 1 nếu không có giá trị page
+			int pageSize = 6; 
+			int pageNumber = (page ?? 1); 
 			ViewBag.DbContext = new DATotNghiepEntities();
 
-			// Sử dụng PagedList để phân trang dữ liệu
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 
 			return View(pagedList);
@@ -32,33 +32,54 @@ namespace DATechShop.Areas.Admin.Controllers
 
 		}
 
-		public ActionResult locDanhSachHoaDon(string startDate, string endDate, int? trangThaiDon, int? page)
+		[AdminAuth]
+		public ActionResult locDanhSachHoaDon(string startDate, string endDate, string trangThaiDon, int? page)
 		{
-			var dbContext = new DATotNghiepEntities();
-			var data = dbContext.HoaDons.AsQueryable();
-
-			if (trangThaiDon != 0)
+			using (var dbContext = new DATotNghiepEntities())
 			{
-				data = data.Where(x => x.trangThai == trangThaiDon);
+				var data = dbContext.HoaDons.AsQueryable();
+
+				if (!string.IsNullOrEmpty(trangThaiDon) && int.TryParse(trangThaiDon, out int trangThaiDonInt))
+				{
+					if (trangThaiDonInt != 0)
+					{
+						data = data.Where(x => x.trangThai == trangThaiDonInt);
+					}
+				}
+				else
+				{
+				}
+
+				if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+				{
+					if (DateTime.TryParseExact(startDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDateTime) &&
+						DateTime.TryParseExact(endDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDateTime))
+					{
+						endDateTime = endDateTime.AddDays(1);
+
+						data = data.Where(x => x.ngayTao >= startDateTime && x.ngayTao < endDateTime);
+					}
+					else
+					{
+						
+					}
+				}
+
+				data = data.OrderByDescending(x => x.id_HoaDon);
+
+				int pageSize = 6;
+				int pageNumber = (page ?? 1); 
+
+				var pagedList = data.ToPagedList(pageNumber, pageSize);
+				ViewBag.startDate = startDate; 
+				ViewBag.endDate = endDate;
+				ViewBag.trangThaiDon = trangThaiDon;
+				return View("locDanhSachHoaDon", pagedList);
 			}
-
-			if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
-			{
-				DateTime startDateTime = DateTime.Parse(startDate);
-				DateTime endDateTime = DateTime.Parse(endDate).AddDays(1);
-				data = data.Where(x => x.ngayTao >= startDateTime && x.ngayTao < endDateTime);
-			}
-
-			data = data.OrderByDescending(x => x.id_HoaDon);
-
-			int pageSize = 6;
-			int pageNumber = (page ?? 1);
-
-			// Chuyển đổi danh sách thành IPagedList
-			var pagedList = data.ToPagedList(pageNumber, pageSize);
-
-			return View("locDanhSachHoaDon", pagedList);
 		}
+
+
+
 
 
 
@@ -67,7 +88,7 @@ namespace DATechShop.Areas.Admin.Controllers
 		public ActionResult GetChartData()
 		{   DATotNghiepEntities db = new DATotNghiepEntities();
 			var chartData = db.HoaDons
-							.Where(h => h.ngayTao != null) // Lọc bỏ các giá trị null
+							.Where(h => h.ngayTao != null) 
 							.GroupBy(h => new {
 								Year = h.ngayTao.Value.Year,
 								Month = h.ngayTao.Value.Month
@@ -78,7 +99,7 @@ namespace DATechShop.Areas.Admin.Controllers
 							})
 							.OrderBy(g => g.Month) // Sắp xếp theo tháng
 							.ToList();
-
+			 
 			return Json(chartData, JsonRequestBehavior.AllowGet);
 		}
 
@@ -109,6 +130,7 @@ namespace DATechShop.Areas.Admin.Controllers
 				}
 			}
 		}
+		
 		[AdminAuth]
 		public ActionResult ChiTietHD(int id_hoaDon, int? page)
 		{

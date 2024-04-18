@@ -39,34 +39,27 @@ namespace DATechShop.Areas.Admin.Controllers
 		[HttpPost]
 		public JsonResult TinhToan(string startDate, string endDate)
 		{
-			// Khai báo biến để lưu tổng số đơn và tổng tiền
 			int totalOrders = 0;
 			double totalRevenue = 0;
 
-			// Kiểm tra xem startDate và endDate có được cung cấp không
 			if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
 			{
-				// Parse startDate và endDate thành kiểu DateTime
 				DateTime startDateTime = DateTime.Parse(startDate);
-				DateTime endDateTime = DateTime.Parse(endDate).AddDays(1); // Add one day to include end date
+				DateTime endDateTime = DateTime.Parse(endDate).AddDays(1); 
 
-				// Tính tổng số đơn trong khoảng thời gian startDate đến endDate
 				totalOrders = db.HoaDons
 					.Count(dh => dh.ngayTao != null && dh.ngayTao >= startDateTime && dh.ngayTao < endDateTime);
 
-				// Tính tổng tiền trong khoảng thời gian startDate đến endDate
 				totalRevenue = db.HoaDons
 					.Where(dh => dh.ngayTao != null && dh.ngayTao >= startDateTime && dh.ngayTao < endDateTime)
 					.Sum(dh => (double?)dh.tongTien) ?? 0;
 			}
 			else
 			{
-				// Nếu không có startDate và endDate được cung cấp, tính toán tổng số đơn và tổng tiền từ toàn bộ dữ liệu
 				totalOrders = db.HoaDons.Count();
 				totalRevenue = db.HoaDons.Sum(dh => (double?)dh.tongTien) ?? 0;
 			}
 
-			// Trả về kết quả dưới dạng JSON
 			return Json(new { TotalOrders = totalOrders, TotalRevenue = totalRevenue }, JsonRequestBehavior.AllowGet);
 		}
 

@@ -64,24 +64,20 @@ namespace DATechShop.Areas.Admin.Controllers
             var email = model.email;
 			try
 			{
-				// Kiểm tra địa chỉ email có hợp lệ không
 				if (!IsValidEmail(email))
 				{
 					ViewBag.Error = "Địa chỉ email không hợp lệ.";
 					return View("Index");
 				}
 
-				// Tạo mã OTP ngẫu nhiên
 				string otp = GenerateOTP();
 
-				// Gửi mã OTP đến địa chỉ email của người dùng
 				SendEmail(email, "Mã OTP", $"Mã OTP của bạn là: {otp}");
 				string hashedPassword = HashingHelper.HashPassword(matKhau);
 				model.matKhau = hashedPassword;
 
 				db.NguoiDungs.Add(model);
 				db.SaveChanges();
-				// Chuyển hướng đến trang nhập mã OTP để người dùng nhập
 				return RedirectToAction("Verify", new { emailAddress = email, otp = otp });
 			}
 			catch (Exception ex)
@@ -91,9 +87,6 @@ namespace DATechShop.Areas.Admin.Controllers
 				return View("Index");
 			}
 		
-
-			ViewBag.success = "Chúc mừng. Bạn đã đăng ký thành công";
-			return View();
 		}
 		// GET: OTP/Verify
 		public ActionResult Verify(string emailAddress, string otp)
@@ -115,7 +108,6 @@ namespace DATechShop.Areas.Admin.Controllers
 			}
 			else
 			{
-				// Mã OTP nhập không đúng
 				ViewBag.Error = "Mã OTP không đúng. Vui lòng thử lại.";
 			}
 
@@ -279,26 +271,20 @@ namespace DATechShop.Areas.Admin.Controllers
 			var email = otpEntered;
 			try
 			{
-				// Kiểm tra địa chỉ email có hợp lệ không
 				if (!IsValidEmail(email))
 				{
 					ViewBag.Error = "Địa chỉ email không hợp lệ.";
 					return View("Index");
 				}
 
-				// Tạo mã OTP ngẫu nhiên
 				string otp = GenerateOTP();
 
-				// Gửi mã OTP đến địa chỉ email của người dùng
 				SendEmail(email, "Mã OTP", $"Mã OTP của bạn là: {otp}");
 			
-				// Chuyển hướng đến trang nhập mã OTP để người dùng nhập
 				return RedirectToAction("otp", new { emailAddress = email, otp = otp });
 			}
 			catch (Exception ex)
-			{
-				// Xử lý lỗi nếu có
-				ViewBag.Error = "Đã xảy ra lỗi khi gửi mã OTP. Vui lòng thử lại sau.";
+			{				ViewBag.Error = "Đã xảy ra lỗi khi gửi mã OTP. Vui lòng thử lại sau.";
 				return View("Index");
 			}
 		}

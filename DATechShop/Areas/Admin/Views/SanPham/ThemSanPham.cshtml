@@ -24,16 +24,16 @@
             <div class="col">
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    <label>Tên Sản Phẩm</label>
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.tenSP, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.tenSP, "", new { @class = "text-danger" })
-                    </div>
+            <div class="form-group">
+                <label class="font-weight-bold">Tên Sản Phẩm</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.tenSP, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.tenSP, "", new { @class = "text-danger" })
                 </div>
+            </div>
 
                 <div class="form-group">
-                    <label>Loại sản phẩm</label>
+                    <label class="font-weight-bold">Loại sản phẩm</label>
                     <div class="col-md-10">
                         <select id="loaiSP" name="loaiSP" class="form-control">
                             <option value="DienThoai">Điện thoại</option>
@@ -41,22 +41,16 @@
                             <option value="AmThanh">Âm thanh</option>
                             <option value="PhuKien">Phụ kiện</option>
                             <option value="DoChoi">Đồ chơi</option>
-                           
+
                         </select>
                         @Html.ValidationMessageFor(model => model.loaiSP, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Mô tả sản phẩm</label>
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.moTa, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.moTa, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Ghi chú</label>
+                    <label class="font-weight-bold">Những từ khóa liên quan:</label>
+                    <p class="small mb-1 mx-4">(*) Gợi ý cho khách hàng về sản phẩm.</p>
+                    <p class="small mb-1 mx-4">(*) Các từ khóa các nhau bởi dấu ","</p>
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.ghiChu, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ghiChu, "", new { @class = "text-danger" })
@@ -64,7 +58,7 @@
                 </div>
 
                 <div class="form-group mt-3">
-                    <p class="label mx-3">Phần trăm giảm</p>
+                    <p class="font-weight-bold label">Phần trăm giảm</p>
                     <div class="col-md-10">
                         <div class="input-group">
                             @Html.EditorFor(model => model.khuyenMai, new { htmlAttributes = new { @class = "form-control" } })
@@ -75,6 +69,18 @@
                         @Html.ValidationMessageFor(model => model.khuyenMai, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold ">Mô tả sản phẩm</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" id="moTa" name="moTa" rows="5"></textarea>
+                        @Html.ValidationMessageFor(model => model.moTa, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">

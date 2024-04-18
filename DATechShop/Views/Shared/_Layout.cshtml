@@ -204,7 +204,7 @@
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li><a  href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "DienThoai" })">Điện thoại</a></li>
+                            <li><a href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "DienThoai" })">Điện thoại</a></li>
                             <li><a href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "LapTop" })">LapTop</a></li>
                             <li><a href="@Url.Action("chiTietSPLoai", "TrangChu", new {area = (string)null, loaiSP = "AmThanh" })">Âm thanh</a></li>
 
@@ -225,7 +225,7 @@
                             <img src="~/Content/Teamplate/img/icon/cart.png" alt="">
                         </a>
                         <a href="@Url.Action("ThongTinTaiKhoan", "ThongTin", new { area = (string)null, id_nguoiDung = id })">
-                            <i class="fas fa-user text-dark "></i> 
+                            <i class="fas fa-user text-dark "></i>
                         </a>
                     </div>
                 </div>
@@ -233,6 +233,41 @@
             <div class="canvas__open"><i class="fa fa-bars"></i></div>
         </div>
     </header>
+
+
+
+
+
+
+
+
+    <div class="search-model" style="background-color: rgba(0, 0, 0, 0.9);">
+        <div class="h-100 d-flex justify-content-center">
+            <div class="search-close-switch">+</div>
+            <div class="search-model-form" style="margin-top: 80px">
+                <input type="text" id="search-input" placeholder="Tìm kiếm....." onkeyup="searchOnKeyPress()">
+                <button class="btn btn-icon text-white btn-lg">
+                    <i class="fas fa-search"></i>
+                </button>
+
+                <div id="search-result-table" class="mt-3">
+                    <div class="table-responsive">
+                        <table class="table text-bg-light">
+                            <tbody id="search-result-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
 
     @RenderBody()
 
@@ -377,28 +412,73 @@
         z-index: 1000; 
         border-radius: 5px;
     }
-
+    .white-bg {
+        background-color: #ffffff; /* Màu nền trắng */
+    }
+    .table-responsive {
+        overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá rộng */
+    }
 
 </style>
 
 
 <script>
-    
+
     var cartItems = localStorage.getItem('cart');
 
-  
+
     if (cartItems) {
-        // Chuyển chuỗi JSON thành mảng đối tượng
         var cart = JSON.parse(cartItems);
-        // Đếm số lượng sản phẩm trong giỏ hàng
         var itemCount = cart.length;
-        // Hiển thị số lượng trong thẻ span
         document.querySelector('.cart-counter').innerText = itemCount;
     } else {
-        // Nếu giỏ hàng rỗng, hiển thị số 0
         document.querySelector('.cart-counter').innerText = '0';
     }
-   
+    var typingTimer;
+    var doneTypingInterval = 500;
+
+    function searchOnKeyPress() {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(searchProducts, doneTypingInterval);
+    }
+
+    function searchProducts() {
+        var key = $("#search-input").val().trim();
+        var searchModel = document.querySelector('.search-model');
+        var detailUrl = '@Url.Action("LayChiTietSP", "TrangChu")';
+
+        if (key === '') {
+            searchModel.style.display = 'none';
+            return;
+        }
+
+        $.ajax({
+            url: '/TrangChu/SearchProducts',
+            method: 'GET',
+            data: { key: key },
+            success: function (response) {
+                var tableContent = '';
+                if (response.length > 0) {
+                    response.forEach(function (item) {
+                        var rowHtml = '<tr onclick="location.href=\'' + detailUrl + '?id_sanPham=' + item.id_sanPham + '\'">';
+                        rowHtml += '<td class="white-bg align-middle"><img style="width:50px;height:auto" src="/Upload/imgSPChung/' + item.anhSPChung + '"/></td>';
+                        rowHtml += '<td class="white-bg align-middle"><strong>' + item.tenSP + '</strong></td>';
+                        rowHtml += '</tr>';
+                        tableContent += rowHtml;
+
+
+                    });
+                } else {
+                    tableContent = '<tr><td colspan="5">Không tìm thấy sản phẩm</td></tr>';
+                }
+                $('#search-result-body').html(tableContent); // Thêm dữ liệu vào tbody của bảng
+                searchModel.style.display = 'block'; // Hiển thị kết quả tìm kiếm
+            },
+            error: function (xhr, status, error) {
+                console.log('Lỗi khi tìm kiếm sản phẩm: ' + error);
+            }
+        });
+    }
 
 
 </script>

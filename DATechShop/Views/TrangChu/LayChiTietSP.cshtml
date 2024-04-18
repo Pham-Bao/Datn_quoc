@@ -45,9 +45,17 @@
                 <div class="border-top mt-3 container">
                     <div class="mt-3">
                         <div class="row">
-                            <button id="btn_moTa" type="button" class="btn border-secondary btn-outline-secondary col-lg-4 mb-3" onclick="changeStyle(this, 'description')">Mô tả sản phẩm</button>
-                            <button id="btn_ThongSoKT" type="button" class="btn border-secondary btn-outline-secondary col-lg-4 mb-3" onclick="changeStyle(this, 'technical')">Thông số kỹ thuật</button>
-                            <button type="button" class="btn border-secondary btn-outline-secondary col-lg-4 mb-3" onclick="changeStyle(this, 'details')">Khuyến mãi</button>
+                            <div class="container-fluid col-lg-4 ">
+                                <button id="btn_moTa" type="button" class="btn border-secondary btn-outline-secondary mb-3" style="width:100%" onclick="changeStyle(this, 'description')">Mô tả sản phẩm</button>
+                            </div>
+                            <div class="container-fluid col-lg-4">
+                                <button id="btn_ThongSoKT" type="button" class="btn border-secondary btn-outline-secondary -4 mb-3"  style="width:100%" onclick="changeStyle(this, 'technical')">Thông số</button>
+
+                            </div>
+                            <div class="container-fluid col-lg-4">
+                                <button type="button" class="btn border-secondary btn-outline-secondary  mb-3"  style="width:100%" onclick="changeStyle(this, 'details')">Khuyến mãi</button>
+
+                            </div>
                         </div>
 
                     </div>
@@ -374,7 +382,6 @@ var productId = '@Model.id_sanPham';
         var formattedOriginalPrice = giaGoc.toLocaleString('vi-VN');
         var formattedDiscountedPrice = giaGiam.toLocaleString('vi-VN');
 
-        // Update the selected-price-discount and selected-price-original elements
         $('#selected-price-discount').text(formattedDiscountedPrice + 'đ');
         $('#selected-price-original').text(formattedOriginalPrice + 'đ');
 

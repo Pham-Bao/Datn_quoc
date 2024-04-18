@@ -160,13 +160,11 @@ namespace DATechShop.Models
 			var db = new DATotNghiepEntities();
 			var chitietSP = db.ChitietSPs.Find(id);
 
-			// Kiểm tra xem chi tiết sản phẩm có tồn tại không
 			if (chitietSP == null)
 			{
-				return null; // Trả về null nếu không tìm thấy
+				return null; 
 			}
 
-			// Tạo đối tượng DTO và gán các giá trị từ đối tượng chitietSP
 			var chitietSPDTO = new ChiTietSPDTO
 			{
 				ID = chitietSP.id_chiTietSP,
@@ -181,7 +179,7 @@ namespace DATechShop.Models
 		public List<SanPham> timSP(string key)
 		{
 			var db = new DATotNghiepEntities();
-			var data = db.SanPhams.Where(m => m.tenSP.ToLower().Contains(key.ToLower()) || string.IsNullOrEmpty(key)).ToList();
+			var data = db.SanPhams.Where(m => string.IsNullOrEmpty(key) || m.tenSP.ToLower().Contains(key.ToLower())).ToList();
 			return data;
 		}
 

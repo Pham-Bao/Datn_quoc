@@ -27,7 +27,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <p class="h3 text-dark mb-0">Khuyến mãi</p>
                             <a class="btn btn-primary" href="@Url.Action("ThemKM")">
-                                <i class="fas fa-plus"></i> Thêm Sản phẩm
+                                <i class="fas fa-plus"></i> Thêm Khuyến mãi 
                             </a>
                         </div>
                     </th>
@@ -53,12 +53,34 @@
                         <td>@Html.DisplayFor(modelItem => item.ngayHet)</td>
                         <td>@Html.DisplayFor(modelItem => item.trangThai)</td>
                         <td><img style="width:50px;height:auto" src="~/Upload/img/@item.hinhAnh" /></td>
-                        <td>
-                            <div class="d-inline mx-3">
-                                <!-- Sử dụng class confirmDeleteBtn thay vì id để tránh trùng lặp -->
-                                <a data-id-khuyenmai="@item.id_KhuyenMai" class="btn btn-danger btn-circle btn-sm confirmDeleteBtn">
-                                    <i class="fas fa-trash"></i>
-                                </a>
+                        <td  style="text-align: center; vertical-align: middle;">
+                            <div class="dropdown d-inline" >
+                                <button class="btn btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                    <li class="mx-3">
+                                        <i class="fas fa-edit"></i> 
+                                        <strong class="mx-2">Sửa </strong> 
+                                    </li>
+
+                                    <li class=" mx-3">
+                                        <i class="fas fa-eye"></i> 
+                                        <strong class="mx-2">Xem chi tiết</strong> 
+                                    </li>
+                                    <li mb-1>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li class="mx-3">
+                                        <p data-id-khuyenmai="@item.id_KhuyenMai" class="confirmDeleteBtn text-danger">
+                                            <i class="fas fa-trash-alt"></i>
+                                            <strong class="mx-2">Xóa</strong>
+                                        </p>
+                                    </li>
+                                </ul>
+
                             </div>
 
                         </td>

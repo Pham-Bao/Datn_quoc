@@ -143,6 +143,34 @@ namespace DATechShop.Controllers
 		}
 
 
-		
+
+		public ActionResult SearchProducts(string key)
+		{
+			var data = db.SanPhams
+				.Where(m => string.IsNullOrEmpty(key) || m.tenSP.ToLower().Contains(key.ToLower()))
+				.Select(m => new
+				{
+					m.id_sanPham,
+					m.tenSP,
+					m.loaiSP,
+					m.moTa,
+					m.ghiChu,
+					m.khuyenMai,
+					m.anhSPChung
+					// Add more properties if needed
+				})
+				.ToList();
+
+			return Json(data, JsonRequestBehavior.AllowGet);
+		}
+
+
+
+
+
+
+
+
+
 	}
 }

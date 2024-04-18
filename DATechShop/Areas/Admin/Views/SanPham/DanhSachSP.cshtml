@@ -78,26 +78,53 @@
                         @Html.DisplayFor(modelItem => item.ghiChu)
                     </td>
                     <td>
-                       <p>@item.khuyenMai %</p>
+                        <p>@item.khuyenMai %</p>
                     </td>
 
-                    <td>
-                        <div class="d-inline mx-3">
-                            <a href="#" class="btn btn-danger btn-circle btn-sm">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>
-                        <div class="dropdown d-inline">
-                            <button class="btn " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i> <!-- Icon ba chấm của Font Awesome -->
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>@Html.ActionLink("Thêm chi tiết sản phẩm", "ThemChiTietSP", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
-                                <li>@Html.ActionLink("Xem Các SP", "ChiTietSP", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
-                                <li>@Html.ActionLink("Thêm Thông Số", "DanhSachThongSo", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
-                            </ul>
-                        </div>
+                   
 
+                    <td style="text-align: center; vertical-align: middle;">
+                        <div class="dropdown d-inline">
+                            <button class="btn btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bars"></i>
+                            </button>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li>
+                                    <a href="@Url.Action("ThemChiTietSP", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
+                                        <i class="fas fa-plus-circle"></i> <!-- Icon Thêm chi tiết sản phẩm -->
+                                        Thêm chi tiết sản phẩm
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="@Url.Action("ChiTietSP", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
+                                        <i class="fas fa-eye"></i> <!-- Icon Xem Các SP -->
+                                        Xem Các SP
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="@Url.Action("DanhSachThongSo", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
+                                        <i class="fas fa-cog"></i> <!-- Icon Thêm Thông Số -->
+                                        Thêm Thông Số
+                                    </a>
+                                </li>
+
+
+
+                                <li mb-1>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="">
+                                    <p class="confirmDeleteBtn text-danger dropdown-item">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <strong class="">Xóa</strong>
+                                    </p>
+                                </li>
+                            </ul>
+
+                        </div>
 
                     </td>
                 </tr>
