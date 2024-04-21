@@ -151,6 +151,7 @@
                     @{
                         HashSet<string> maMauDaXuatHien = new HashSet<string>();
                     }
+
                     <p class="h6 mt-3">Màu sắc:</p>
                     @foreach (var item in chitietSPs)
                     {
@@ -416,7 +417,7 @@ var productId = '@Model.id_sanPham';
         var color = $('.btn-mausac.selected').data('color');
 
 
-        var option = $('.btn-tuychon.selected').text();
+        var option = $('.btn-tuychon.selected').data('gia');
 
         var giaSP = @Model.giaSP;
         console.log('ở đây có giá'+giaSP);
@@ -495,13 +496,11 @@ var productId = '@Model.id_sanPham';
 
     $(document).ready(function () {
     $('#ratingForm').submit(function (e) {
-        e.preventDefault(); // Ngăn chặn việc gửi form một cách thông thường
+        e.preventDefault(); 
 
-        // Lấy dữ liệu từ form
         var rating = $('input[name=rating]:checked').val();
         var review = $('#review').val();
 
-        // Tạo đối tượng chứa dữ liệu đánh giá
         var data = {
             id_NguoiDung: @id_NguoiDung, 
             id_sanPham: @id_sanPham, 

@@ -84,18 +84,27 @@
 
                 </div>
                 <div class="col-lg-4">
-                    <div class="cart__discount">
-                        <h6>Mã giảm giá</h6>
-                        <form class="d-flex mx-3 mt-3">
-                            <div class="input-group">
-                                <input class="form-control" type="text" id="maGiamGiaInput" placeholder="Mã giảm giá">
-                                <div class="input-group-append">
-                                    <button class="btn btn-secondary" type="button" id="applyButton">Áp Dụng</button>
-                                </div>
-
+                            <div class="cart__discount">
+                                <h6>Mã giảm giá</h6>
+                                <form class="d-flex mx-3 mt-3">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="maGiamGiaInput" placeholder="Mã giảm giá"  onkeyup="giamGiaOnKeyPress()">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-secondary" type="button" id="applyButton">Áp Dụng</button>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table text-bg-light">
+                                                <tr>
+                                                    <td>Mã Giảm giá</td>
+                                                    <td>Phần trăm giảm</td>
+                                                </tr>
+                                                <tbody id="giamgia-result-body">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
-                    </div>
                     <div class="cart__total">
                         <h6>Tổng hóa đơn</h6>
                         <table class="container-fluid mt-3">
@@ -144,7 +153,6 @@
 
     $(document).ready(function () {
         var arrSanPham = CartClass.Get();
-        // Tiếp tục thực hiện AJAX request để lấy thông tin chi tiết sản phẩm
         arrSanPham.forEach(function (item) {
             var productId = item.chiTietSPId;
             var soLuong = item.soLuong;
@@ -227,7 +235,48 @@
             console.error('Đã xảy ra lỗi:', error);
         }
     });
-});
+    });
+
+
+    function searchOnKeyPress() {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(searchProducts, doneTypingInterval);
+}
+
+function searchProducts() {
+    var key = $("#maGiamGiaInput").val().trim();
+    var searchModel = document.querySelector('.search-model');
+    if (key === '') {
+        searchModel.style.display = 'none';
+        return;
+    }
+
+    $.ajax({
+        url: '/MuaHang/KiemTraMaGiamGia',
+        method: 'GET',
+        data: { key: key },
+        success: function (response) {
+            var tableContent = '';
+            if (response.length > 0) {
+                response.forEach(function (item) {
+                    var rowHtml = '<tr>';
+                    rowHtml += '<td class="white-bg align-middle"><strong>' + item.tenMa + '</strong></td>';
+                    rowHtml += '<td class="white-bg align-middle"><strong>' + item.tenSP + '</strong></td>';
+                    rowHtml += '</tr>';
+                    tableContent += rowHtml;
+                });
+            } else {
+                tableContent = '<tr><td colspan="5">Không tìm thấy sản phẩm</td></tr>';
+            }
+            $('#search-result-body').html(tableContent); 
+            searchModel.style.display = 'block';
+        },
+        error: function (xhr, status, error) {
+            console.log('Lỗi khi tìm kiếm sản phẩm: ' + error);
+        }
+    });
+}
+
 
 
 </script>

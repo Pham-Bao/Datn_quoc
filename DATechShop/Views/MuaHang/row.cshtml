@@ -16,9 +16,17 @@
     <td>
         <div class="product__cart__item__text">
             <p class="h5 font-weight-bold">@Model.SanPham.tenSP</p>
-            <h6>@Model.MauSac.tenMau</h6>
-            <h6>@Model.TuyChon.tuyChon1</h6>
-            <p></p>
+            @if (Model.id_Mau == null || Model.id_tuyChon == null)
+            {
+                <p class="">nó đéo có màu</p>
+            }
+            else
+            {
+                <h6>@Model.MauSac.tenMau</h6>
+                <h6>@Model.TuyChon.tuyChon1</h6>
+            }
+
+
         </div>
     </td>
     <td>
@@ -90,12 +98,9 @@
 
             var index = cart.findIndex(item => item.chiTietSPId == chiTietSPId);
 
-            // Cập nhật số lượng sản phẩm trong giỏ hàng
             if (index !== -1) {
                 cart[index].soLuong = soLuong;
-                // Lưu giỏ hàng mới vào local storage
                 CartClass.Set(cart);
-                // Load lại trang để cập nhật tổng thành tiền trên giao diện
                 location.reload();
             }
         } else {
@@ -107,11 +112,9 @@
     function showConfirmModal(chiTietSPId) {
         $('#confirmModal').modal('show');
         console.log(chiTietSPId)
-        // Lưu chiTietSPId vào thuộc tính data của nút xác nhận
         $('#confirmBtn').data('chiTietSPId', chiTietSPId);
     }
 
-    // Gắn sự kiện click vào nút xác nhận trong modal
     $('#confirmBtn').click(function () {
         var chiTietSPId = $(this).data('chiTietSPId');
         removeCartItem(chiTietSPId);

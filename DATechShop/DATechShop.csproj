@@ -70,6 +70,9 @@
     <Reference Include="Google.Apis.Gmail.v1, Version=1.67.0.3287, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.Gmail.v1.1.67.0.3287\lib\net462\Google.Apis.Gmail.v1.dll</HintPath>
     </Reference>
+    <Reference Include="Google.Apis.Sheets.v4, Version=1.67.0.3393, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Sheets.v4.1.67.0.3393\lib\net462\Google.Apis.Sheets.v4.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -2335,6 +2338,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Views\Default\" />
     <Folder Include="Upload\imgSPChung\" />
     <Folder Include="Upload\imgSP\" />
     <Folder Include="Upload\img\" />

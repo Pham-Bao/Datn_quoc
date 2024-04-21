@@ -31,7 +31,9 @@ namespace DATechShop.Controllers
         [HttpPost]
         public ActionResult LayIdChiTietSP(int id_sanPham, string mauSac, string tuyChon)
         {
-            Console.WriteLine($"id_sanPham: {id_sanPham}, mauSac: {mauSac}, tuyChon: {tuyChon}");
+            //Console.WriteLine($"id_sanPham: {id_sanPham}, mauSac: {mauSac}, tuyChon: {tuyChon}");
+
+			
 
 			if (mauSac == null && tuyChon == null)
 			{
@@ -71,6 +73,7 @@ namespace DATechShop.Controllers
 			ViewBag.ThanhTien = thanhTien;
 			var test = soLuong;
 			ViewBag.SoLuong = soLuong;
+			
 			return View(chiTietSP);
 
         }
