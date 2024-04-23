@@ -13,17 +13,15 @@ namespace DATechShop.Areas.Admin.Controllers
 {
     public class KhuyenMaiController : Controller
     {
-		// GET: Admin/KhuyenMai
 		[AdminAuth]
 		public ActionResult DanhSachKhuyenMai(int? page)
 		{
 			
 			mapKhuyenMai map = new mapKhuyenMai();
 			var data = map.DanhSachKhuyenMai().OrderByDescending(x => x.id_KhuyenMai);
-			int pageSize = 5; // Số mục trên mỗi trang
-			int pageNumber = (page ?? 1); // Số trang hiện tại, mặc định là trang 1 nếu không có giá trị page
+			int pageSize = 5; 
+			int pageNumber = (page ?? 1); 
 
-			// Sử dụng PagedList để phân trang dữ liệu
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 
 			return View(pagedList);
@@ -35,7 +33,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View();
 		}
 
-
+		[AdminAuth]
 		[HttpPost]
 		public ActionResult themKM(KhuyenMai km, HttpPostedFileBase uploadhinh)
 		{
@@ -59,7 +57,8 @@ namespace DATechShop.Areas.Admin.Controllers
 				unv.hinhAnh = _FileName;
 				db.SaveChanges();
 				ViewBag.err = "Thêm thành công";
-				return View();
+				TempData["SuccessMessage"] = "Thêm sản phẩm thành công!";
+				return RedirectToAction("DanhSachKhuyenMai", "KhuyenMai");
 			}
 			else
 			{
@@ -82,7 +81,7 @@ namespace DATechShop.Areas.Admin.Controllers
 					{
 						khuyenMai.TrangThaiXoa = false;
 						db.SaveChanges();
-						TempData["Success"] = "Xóa khuyến mãi thành công!";
+						TempData["SuccessMessage"] = "Xóa khuyến mãi thành công!";
 						return Json(new { success = true });
 					}
 					else
@@ -99,8 +98,55 @@ namespace DATechShop.Areas.Admin.Controllers
 			}
 		}
 
+		[AdminAuth]
+		public ActionResult SuaKhuyenMai(int id_khuyenMai)
+		{
+			using (var db = new DATotNghiepEntities())
+			{
+				var khuyenMai = db.KhuyenMais.FirstOrDefault(km => km.id_KhuyenMai == id_khuyenMai);
+				if (khuyenMai == null)
+				{
+					TempData["ErrorMessage"] = "Không tìm thấy khuyến mãi có id " + id_khuyenMai;
+					return RedirectToAction("DanhSachKhuyenMai", "KhuyenMai");
+				}
+				return View(khuyenMai);
+			}
+		}
 
 
+		[HttpPost]
+		[AdminAuth]
+		public ActionResult LuuSuaKhuyenMai(KhuyenMai model)
+		{
+			try
+			{
+				using (var db = new DATotNghiepEntities())
+				{
+					var khuyenMai = db.KhuyenMais.FirstOrDefault(km => km.id_KhuyenMai == model.id_KhuyenMai);
+
+					if (khuyenMai == null)
+					{
+						TempData["ErrorMessage"] = "Không tìm thấy khuyến mãi có ID " + model.id_KhuyenMai;
+						return RedirectToAction("DanhSachKhuyenMai", "KhuyenMai");
+					}
+
+					khuyenMai.tenMa = model.tenMa;
+					khuyenMai.phanTramGiam = model.phanTramGiam;
+					khuyenMai.moTaKhuyenMai = model.moTaKhuyenMai;
+					khuyenMai.ngayHet = model.ngayHet;
+
+					db.SaveChanges();
+
+					TempData["SuccessMessage"] = "Cập nhật thông tin khuyến mãi thành công!";
+					return RedirectToAction("DanhSachKhuyenMai", "KhuyenMai");
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["ErrorMessage"] = "Lỗi khi cập nhật thông tin khuyến mãi: " + ex.Message;
+				return RedirectToAction("DanhSachKhuyenMai", "KhuyenMai");
+			}
+		}
 
 
 	}

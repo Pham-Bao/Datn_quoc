@@ -1,36 +1,33 @@
 ﻿@model DATechShop.Models.SanPham
 
 @{
-    ViewBag.Title = "ThemSanPham";
+    ViewBag.Title = "SuaSanPham";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-@using (Html.BeginForm("ThemSanPham", "SanPham", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("LuuSuaSanPham", "SanPham", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal container " style="width:70%">
-        <h2 class="text-center">Sản Phẩm Mới</h2>
+        <h2 class="text-center">Sửa Sản Phẩm</h2>
 
         <div class="row">
-            <div class="col">
-                <div class="form-group mt-4">
-                    <p class="label">Chọn Hình Ảnh</p>
-                    <input type="file" id="uploadhinh" name="uploadhinh" accept="image/*" onchange="ImagerFileAsURL()" />
-                </div>
-                <div class="mx-3 mt-3 rounded-pill" id="displayImg" style="width:200px"></div>
+            <div class="col-lg-5">
+                <p class="mt-5">Ảnh sản phẩm</p>
+                <img style="width:80%; height:auto" src="~/Upload/imgSPChung/@Model.anhSPChung" />
             </div>
 
-            <div class="col">
+            <div class="col -lg-6">
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                <label class="font-weight-bold">Tên Sản Phẩm</label>
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.tenSP, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.tenSP, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <label class="font-weight-bold">Tên Sản Phẩm</label>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.tenSP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.tenSP, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
                 <div class="form-group">
                     <label class="font-weight-bold">Loại sản phẩm</label>
@@ -41,7 +38,6 @@
                             <option value="AmThanh">Âm thanh</option>
                             <option value="PhuKien">Phụ kiện</option>
                             <option value="DoChoi">Đồ chơi</option>
-
                         </select>
                         @Html.ValidationMessageFor(model => model.loaiSP, "", new { @class = "text-danger" })
                     </div>
@@ -73,13 +69,16 @@
                 <div class="form-group">
                     <label class="font-weight-bold ">Mô tả sản phẩm</label>
                     <div class="col-md-10">
-                        <textarea class="form-control" id="moTa" name="moTa" rows="5"></textarea>
+                        @Html.TextAreaFor(model => model.moTa, new { @class = "form-control", rows = "5" })
                         @Html.ValidationMessageFor(model => model.moTa, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
+                @Html.HiddenFor(model => model.id_sanPham)
+
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <input type="submit" value="Sửa" class="btn btn-primary" />
                     </div>
                 </div>
 
@@ -92,27 +91,4 @@
 }
 
 
-<script type="text/javascript">
-    function ImagerFileAsURL() {
-        var file = document.getElementById('uploadhinh').files;
-        if (file.length > 0) {
-            var fileToLoad = file[0];
-            var fieReader = new FileReader();
-            fieReader.onload = function (fileLoaderEvent) {
-                var srcData = fileLoaderEvent.target.result;
-                var newImage = document.createElement("img");
-                newImage.src = srcData;
-                document.getElementById('displayImg').innerHTML = newImage.outerHTML;
-            }
-            fieReader.readAsDataURL(fileToLoad);
-        }
-    }
-</script>
-
-<style>
-    #displayImg img {
-        max-width: 100%;
-        max-height: 100%;
-    }
-</style>
 

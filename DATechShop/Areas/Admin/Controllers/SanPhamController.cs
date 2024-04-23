@@ -26,7 +26,6 @@ namespace DATechShop.Areas.Admin.Controllers
 				.Sum(dh => (double?)dh.tongTien) ?? 0;
 
 
-			// Gửi các giá trị tính toán qua ViewBag
 			ViewBag.TotalUsers = totalUsers;
 			ViewBag.TotalOrders = totalOders;
 			ViewBag.TotalRevenueByMonth = totalRevenueByMonth;
@@ -64,7 +63,6 @@ namespace DATechShop.Areas.Admin.Controllers
 		}
 
 
-		// GET: Admin/SanPham
 		[AdminAuth]
 		public ActionResult ThemMauSac()
 		{
@@ -82,7 +80,6 @@ namespace DATechShop.Areas.Admin.Controllers
 
 			if (existingColor == null)
 			{
-				// Màu chưa tồn tại trong cơ sở dữ liệu, thêm màu mới
 				MauSac mauSac = new MauSac
 				{
 					tenMau = tenMau,
@@ -98,7 +95,6 @@ namespace DATechShop.Areas.Admin.Controllers
 				TempData["ErrorMessage"] = "Màu đã tồn tại";
 			}
 
-			// Trả về ActionResult (có thể là RedirectToAction hoặc PartialView)
 			return RedirectToAction("DanhSachMau");
 		}
 
@@ -115,7 +111,6 @@ namespace DATechShop.Areas.Admin.Controllers
 			
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 
-			// Truyền thông báo từ TempData đến ViewBag
 			if (TempData["SuccessMessage"] != null)
 			{
 				ViewBag.Success = TempData["SuccessMessage"];
@@ -169,11 +164,10 @@ namespace DATechShop.Areas.Admin.Controllers
 		public ActionResult DanhSachTuyChon(int? page)
 		{
 			mapSP map = new mapSP();
-			var data = map.DanhSachTuyChon().OrderByDescending(x => x.id_tuyChon); // Sắp xếp theo ID hoặc trường khác nếu cần
-			int pageSize = 5; // Số mục trên mỗi trang
-			int pageNumber = (page ?? 1); // Số trang hiện tại, mặc định là trang 1 nếu không có giá trị page
+			var data = map.DanhSachTuyChon().OrderByDescending(x => x.id_tuyChon); 
+			int pageSize = 5; 
+			int pageNumber = (page ?? 1); 
 
-			// Sử dụng PagedList để phân trang dữ liệu
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 			if (TempData["SuccessMessage"] != null)
 			{
@@ -215,17 +209,24 @@ namespace DATechShop.Areas.Admin.Controllers
 					unv.anhSPChung = _FileName;
 					db.SaveChanges();
 
-					ViewBag.err = "Thêm thành công";
-					return View();
+					TempData["SuccessMessage"] = "Thêm sản phẩm thành công!";
+					return RedirectToAction("DanhSachSP", "SanPham");
+					
 				}
 				catch (Exception ex)
 				{
+					ViewBag.Error = "Thêm lỗi!";
 					ViewBag.err = "Lỗi khi thêm sản phẩm: " + ex.Message;
+					TempData["ErrorMessage"] = "Lỗi khi thêm sản phẩm: ";
+
 				}
 			}
 			else
 			{
+				ViewBag.Error = "Thêm lỗi!";
 				ViewBag.err = "Không có ảnh" ;
+				TempData["ErrorMessage"] = "Lỗi khi thêm sản phẩm: ";
+
 			}
 
 			return View();
@@ -239,7 +240,6 @@ namespace DATechShop.Areas.Admin.Controllers
 			int pageSize = 6;
 			int pageNumber = (page ?? 1); 
 
-			// Sử dụng PagedList để phân trang dữ liệu
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 
 			ViewBag.loaiSP = loaiSP;
@@ -250,14 +250,12 @@ namespace DATechShop.Areas.Admin.Controllers
 		[AdminAuth]
 		public ActionResult ThemChiTietSP(int id)
 		{
-			// Lấy thông tin chi tiết của sản phẩm từ id được chọn
 			var sanPham = db.SanPhams.FirstOrDefault(sp => sp.id_sanPham == id);
 
 			
 			var danhSachMau = db.MauSacs.ToList();
 			var danhSachTuyChon = db.TuyChons.ToList();
 
-			// Tạo view model chứa thông tin sản phẩm và danh sách màu sắc, phiên bản
 			var viewModel = new ThemChiTietSPViewModel
 			{
 				SanPham = sanPham,
@@ -272,32 +270,29 @@ namespace DATechShop.Areas.Admin.Controllers
 		[HttpPost]
 		public ActionResult ThemChiTietSP(ThemChiTietSPViewModel viewModel, HttpPostedFileBase uploadhinh)
 		{
+		
 			if (uploadhinh == null || viewModel.ChitietSP.giaSP == null)
 			{
 				ViewBag.Error = "Chưa chọn ảnh hoặc nhập giá.";
 			}
 			else if (ModelState.IsValid)
 			{
-				// Kiểm tra xem đã tồn tại bản ghi trong bảng chi tiết sản phẩm với các giá trị đã cho
 				var existingRecord = db.ChitietSPs.FirstOrDefault(c => c.id_sanPham == viewModel.SanPham.id_sanPham &&
 																		c.id_Mau == viewModel.SelectedMau &&
 																		c.id_tuyChon == viewModel.SelectedTuyChon);
 
 				if (existingRecord != null)
 				{
-					// Nếu bản ghi đã tồn tại, hiển thị thông báo lỗi và quay lại view
 					ViewBag.Error = "Bản ghi đã tồn tại trong bảng chi tiết sản phẩm.";
 					return View(viewModel);
 				}
 
-				// Nếu không có bản ghi tồn tại, tiến hành thêm bản ghi mới
 				var chiTietSP = new ChitietSP();
 				chiTietSP.id_sanPham = viewModel.SanPham.id_sanPham;
 				chiTietSP.id_Mau = viewModel.SelectedMau;
 				chiTietSP.id_tuyChon = viewModel.SelectedTuyChon;
 				chiTietSP.giaSP = viewModel.ChitietSP.giaSP;
 
-				// Xử lý upload ảnh
 				if (uploadhinh != null && uploadhinh.ContentLength > 0)
 				{
 					string _FileName = "";
@@ -307,18 +302,16 @@ namespace DATechShop.Areas.Admin.Controllers
 					string _path = Path.Combine(Server.MapPath("~/Upload/imgSP"), _FileName);
 					uploadhinh.SaveAs(_path);
 
-					// Gán đường dẫn ảnh vào đối tượng chiTietSP
 					chiTietSP.anhSP = _FileName;
 				}
 
-				// Thêm bản ghi mới vào cơ sở dữ liệu
 				db.ChitietSPs.Add(chiTietSP);
 				db.SaveChanges();
 				ViewBag.Success = "Thêm thành công";
+				TempData["SuccessMessage"] = "Thêm sản phẩm thành công!";
 			}
 
-			ViewBag.Error = "Thêm lỗi!";
-			return View(viewModel);
+			return RedirectToAction("ChiTietSP", "SanPham", new { id = viewModel.SanPham.id_sanPham });
 		}
 
 
@@ -328,10 +321,9 @@ namespace DATechShop.Areas.Admin.Controllers
 			mapSP map = new mapSP();
 			var data = map.chiTietSP(id);
 
-			int pageSize = 5; // Số lượng mục trên mỗi trang
-			int pageNumber = (page ?? 1); // Trang hiện tại, mặc định là trang 1 nếu không có giá trị page
+			int pageSize = 5;
+			int pageNumber = (page ?? 1); 
 
-			// Sử dụng PagedList để phân trang dữ liệu
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 			ViewBag.id_sanPham = id;
 			return View(pagedList);
@@ -342,13 +334,12 @@ namespace DATechShop.Areas.Admin.Controllers
 			mapSP map = new mapSP();
 			var data = map.chiTietThongSo(id);
 
-			int pageSize = 5; // Số lượng mục trên mỗi trang
-			int pageNumber = (page ?? 1); // Trang hiện tại, mặc định là trang 1 nếu không có giá trị page
+			int pageSize = 5; 
+			int pageNumber = (page ?? 1); 
 
-			// Sử dụng PagedList để phân trang dữ liệu
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 
-			ViewBag.IdSanPham = id; // Truyền id sản phẩm sang view
+			ViewBag.IdSanPham = id; 
 
 			return View(pagedList);
 		}
@@ -356,26 +347,21 @@ namespace DATechShop.Areas.Admin.Controllers
 		[HttpPost]
 		public ActionResult ThemThongSo(FormCollection form)
 		{
-			// Lấy giá trị id_sanPham từ form post
 			int id_sanPham;
 			if (!int.TryParse(form["id_sanPham"], out id_sanPham))
 			{
-				// Xử lý nếu không có giá trị id_sanPham
 				return HttpNotFound();
 			}
 
-			// Kiểm tra xem id_sanPham có hợp lệ không
 			SanPham sanPham = db.SanPhams.Find(id_sanPham);
 			if (sanPham == null)
 			{
 				return HttpNotFound();
 			}
 
-			// Lấy thông tin từ form post
 			string tenThongSo = form["tenThongSo"];
 			string giaTri = form["giaTri"];
 
-			// Tạo một đối tượng mới ThongSoKyThuat
 			ThongSoKyThuat thongSo = new ThongSoKyThuat
 			{
 				id_sanPham = id_sanPham,
@@ -383,11 +369,9 @@ namespace DATechShop.Areas.Admin.Controllers
 				giaTri = giaTri
 			};
 
-			// Thêm thông số mới vào cơ sở dữ liệu
 			db.ThongSoKyThuats.Add(thongSo);
 			db.SaveChanges();
 
-			// Redirect về action hiển thị danh sách thông số
 			return RedirectToAction("DanhSachThongSo", new { id = id_sanPham });
 		}
 
@@ -413,7 +397,6 @@ namespace DATechShop.Areas.Admin.Controllers
 		{
 			try
 			{
-				// Tìm khuyến mãi theo id
 				using (var db = new DATotNghiepEntities())
 				{
 					var mau = db.MauSacs.FirstOrDefault(km => km.id_Mau == id_mau);
@@ -444,7 +427,6 @@ namespace DATechShop.Areas.Admin.Controllers
 		{
 			try
 			{
-				// Tìm khuyến mãi theo id
 				using (var db = new DATotNghiepEntities())
 				{
 					var tuyChon = db.TuyChons.FirstOrDefault(km => km.id_tuyChon == id_tuyChon);
@@ -476,7 +458,6 @@ namespace DATechShop.Areas.Admin.Controllers
 		{
 			try
 			{
-				// Tìm khuyến mãi theo id
 				using (var db = new DATotNghiepEntities())
 				{
 					var thongSo = db.ThongSoKyThuats.FirstOrDefault(km => km.id_ThongSo  == id_thongSo);
@@ -498,6 +479,137 @@ namespace DATechShop.Areas.Admin.Controllers
 			{
 				TempData["Error"] = "Lỗi: " + ex.Message;
 				return Json(new { success = false, message = "Lỗi: " + ex.Message });
+			}
+		}
+
+
+
+
+
+
+
+		[AdminAuth]
+		public ActionResult SuaSanPham(int id_sanPham)
+		{
+			using (var db = new DATotNghiepEntities())
+			{
+				var sanPham = db.SanPhams.FirstOrDefault(km => km.id_sanPham == id_sanPham);
+				if (sanPham == null)
+				{
+					TempData["ErrorMessage"] = "Không tìm thấy sản phẩm có id " + id_sanPham;
+					return RedirectToAction("DanhSachSP", "SanPham");
+				}
+				var danhSachMau = db.MauSacs.ToList();
+				var danhSachTuyChon = db.TuyChons.ToList();
+
+				var viewModel = new ThemChiTietSPViewModel
+				{
+					SanPham = sanPham,
+					DanhSachMau = danhSachMau,
+					DanhSachTuyChon = danhSachTuyChon
+				};
+
+				return View(viewModel);
+				return View(sanPham);
+			}
+		}
+
+
+
+		[HttpPost]
+		[AdminAuth]
+		public ActionResult LuuSuaSanPham(SanPham model)
+		{
+			try
+			{
+				using (var db = new DATotNghiepEntities())
+				{
+					var sanPham = db.SanPhams.FirstOrDefault(km => km.id_sanPham == model.id_sanPham);
+
+					if (sanPham == null)
+					{
+						TempData["ErrorMessage"] = "Không tìm thấy sản phẩm có ID " + model.id_sanPham;
+						return RedirectToAction("DanhSachSP", "SanPham");
+					}
+
+					sanPham.tenSP = model.tenSP;
+					sanPham.loaiSP = model.loaiSP;
+					sanPham.moTa = model.moTa;
+					sanPham.ghiChu = model.ghiChu;
+					sanPham.khuyenMai = model.khuyenMai;
+
+					db.SaveChanges();
+
+					TempData["SuccessMessage"] = "Cập nhật thông tin  thành công!";
+					return RedirectToAction("DanhSachSP", "SanPham");
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["ErrorMessage"] = "Lỗi khi cập nhật thông tin: " + ex.Message;
+				return RedirectToAction("DanhSachSP", "SanPham");
+			}
+		}
+
+
+
+		[AdminAuth]
+		public ActionResult SuaChiTietSanPham(int id_chiTietSP)
+		{
+			using (var db = new DATotNghiepEntities())
+			{
+				var chiTietSanPham = db.ChitietSPs.FirstOrDefault(km => km.id_chiTietSP == id_chiTietSP);
+				if (chiTietSanPham == null)
+				{
+					TempData["ErrorMessage"] = "Không tìm thấy sản phẩm có id " + id_chiTietSP;
+					return RedirectToAction("DanhSachSP", "SanPham");
+				}
+
+				var danhSachMau = db.MauSacs.ToList();
+				var danhSachTuyChon = db.TuyChons.ToList();
+
+				var viewModel = new ThemChiTietSPViewModel
+				{
+					ChitietSP = chiTietSanPham,
+					DanhSachMau = danhSachMau,
+					DanhSachTuyChon = danhSachTuyChon
+				};
+
+				return View(viewModel);
+			}
+		}
+
+		[HttpPost]
+		[AdminAuth]
+		public ActionResult LuuSuaChiTietSanPham(ChitietSP model)
+		{
+			try
+			{
+				using (var db = new DATotNghiepEntities())
+				{
+					var chitietSP = db.ChitietSPs.FirstOrDefault(km => km.id_chiTietSP == model.id_chiTietSP);
+
+					if (chitietSP == null)
+					{
+						TempData["ErrorMessage"] = "Không tìm thấy sản phẩm có ID " + model.id_chiTietSP;
+						return RedirectToAction("DanhSachSP", "SanPham");
+					}
+
+					chitietSP.id_tuyChon = model.id_tuyChon;
+					chitietSP.id_Mau = model.id_Mau;
+					chitietSP.giaSP = model.giaSP;
+					
+
+					db.SaveChanges();
+
+					TempData["SuccessMessage"] = "Cập nhật thông tin  thành công!";
+					return RedirectToAction("DanhSachSP", "SanPham");
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["ErrorMessage"] = "Lỗi khi cập nhật thông tin: " + ex.Message;
+				return RedirectToAction("DanhSachSP", "SanPham");
 			}
 		}
 

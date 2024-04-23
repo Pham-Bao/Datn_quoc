@@ -40,7 +40,7 @@
     {
         <div id="errorAlert" class="alert alert-danger">
             <i class="fas fa-exclamation-circle"></i>
-            @ViewBag.Error <!-- Thông báo lỗi -->
+            @ViewBag.Error
         </div>
 
 
@@ -54,7 +54,23 @@
         </div>
 
     }
-   
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+
+        <div id="successAlert" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+
+        <div id="successAlert" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            @TempData["ErrorMessage"]
+        </div>
+    }
 
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -137,7 +153,7 @@
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Thêm mới:</h6>
                         <a class="collapse-item" href="~/Admin/SanPham/ThemSanPham">Thêm sản phẩm</a>
-        
+
 
                     </div>
                 </div>

@@ -6,6 +6,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+
 <h2 class="text-center">Danh Sách Sản Phẩm</h2>
 
 <div class="card-body">
@@ -40,19 +41,22 @@
                 </tr>
                 <tr>
                     <th class="text-dark">
-                       Ảnh
+                        Ảnh
                     </th>
                     <th class="text-dark">
-                       Tên sản phẩm
+                        Tên sản phẩm
                     </th>
-                    
+
                     <th class="text-dark">
                         Ghi Chú
                     </th>
                     <th class="text-dark">
                         Khuyến mãi
                     </th>
-                   
+                    <th class="text-dark">
+                        Trạng thái
+                    </th>
+
                     <th class="text-dark">
                         Chức Năng
                     </th>
@@ -69,15 +73,16 @@
                         <p class="h5 text-dark font-weight-bold">@item.tenSP</p>
                         <p>@item.loaiSP</p>
                     </td>
-                  
+
                     <td>
                         @Html.DisplayFor(modelItem => item.ghiChu)
                     </td>
                     <td>
                         <p>@item.khuyenMai %</p>
                     </td>
+                    <td>@item.TrangThaiXoa</td>
 
-                   
+
 
                     <td style="text-align: center; vertical-align: middle;">
                         <div class="dropdown d-inline">
@@ -88,21 +93,21 @@
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li>
                                     <a href="@Url.Action("ThemChiTietSP", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
-                                        <i class="fas fa-plus-circle"></i> <!-- Icon Thêm chi tiết sản phẩm -->
+                                        <i class="fas fa-plus-circle"></i>
                                         Thêm chi tiết sản phẩm
                                     </a>
                                 </li>
 
                                 <li>
                                     <a href="@Url.Action("ChiTietSP", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
-                                        <i class="fas fa-eye"></i> <!-- Icon Xem Các SP -->
+                                        <i class="fas fa-eye"></i>
                                         Xem Các SP
                                     </a>
                                 </li>
 
                                 <li>
                                     <a href="@Url.Action("DanhSachThongSo", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
-                                        <i class="fas fa-cog"></i> <!-- Icon Thêm Thông Số -->
+                                        <i class="fas fa-plus-circle"></i>
                                         Thêm Thông Số
                                     </a>
                                 </li>
@@ -111,6 +116,12 @@
 
                                 <li mb-1>
                                     <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("SuaSanPham", "SanPham", new { id_sanPHam = @item.id_sanPham })" class="dropdown-item">
+                                        <i class="fas fa-cog"></i>
+                                        Sửa sản phấm
+                                    </a>
                                 </li>
                                 <li class="">
                                     <p class="confirmDeleteBtn text-danger dropdown-item">
@@ -130,11 +141,11 @@
 
         <div class="container center">
             <ul class="pagination">
-                @Html.PagedListPager(Model, page => Url.Action("DanhSachSP", new { page, loaiSP= ViewBag.loaiSP }), PagedListRenderOptions.Classic)
+                @Html.PagedListPager(Model, page => Url.Action("DanhSachSP", new { page, loaiSP = ViewBag.loaiSP }), PagedListRenderOptions.Classic)
             </ul>
         </div>
     </div>
-  </div>
+</div>
 
 
 

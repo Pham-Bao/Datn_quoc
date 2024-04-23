@@ -59,12 +59,29 @@
                         {
                             <tr>
                                 <td>
-                                    <p class="mb-1 font-weight-bold">@item.ChitietSP.SanPham.tenSP</p>
-                                    <p class="mt-1">@item.ChitietSP.TuyChon.tuyChon1</p>
+                                    @if (item.ChitietSP.TuyChon != null)
+                                    {
+                                        <p class="mb-1 font-weight-bold">@item.ChitietSP.SanPham.tenSP</p>
+                                        <p class="mt-1">@item.ChitietSP.TuyChon.tuyChon1</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-1 font-weight-bold">@item.ChitietSP.SanPham.tenSP</p>
+                                        <p class="mt-1">NULl</p>
+                                    }
+
+
                                 </td>
                                 <td>
-                                    <div class="color-icon mt-2" style="background-color: @item.ChitietSP.MauSac.maMau"></div>
-                                    <span>@item.ChitietSP.MauSac.tenMau</span>
+                                    @if (item.ChitietSP.MauSac != null)
+                                    {
+                                        <div class="color-icon" style="background-color: @item.ChitietSP.MauSac.maMau"></div>
+                                        <span>@item.ChitietSP.MauSac.tenMau</span>
+                                    }
+                                    else
+                                    {
+                                        <strong>NULL</strong>
+                                    }
                                 </td>
                                 <td>@Html.DisplayFor(modelItem => item.soLuong)</td>
                                 <td>@String.Format("{0:#,##0}đ", item.gia)</td>

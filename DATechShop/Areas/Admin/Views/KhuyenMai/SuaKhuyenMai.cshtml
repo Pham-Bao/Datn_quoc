@@ -1,0 +1,46 @@
+﻿@model DATechShop.Models.KhuyenMai
+
+@{
+    ViewBag.Title = "Sửa Khuyến Mãi";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container">
+    <h2 class="text-center">Sửa Khuyến Mãi</h2>
+
+    <div class="row">
+        <div class="col-lg-5">
+            <p class="mt-2">Ảnh khuyến mãi</p>
+            <img style="width:80% ;height:auto" src="~/Upload/img/@Model.hinhAnh" />
+
+        </div>
+        <div class="col-lg-5">
+            <form action="@Url.Action("LuuSuaKhuyenMai", "KhuyenMai")" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.id_KhuyenMai)
+
+                <div class="form-group">
+                    <label for="tenMa">Tên Khuyến Mãi:</label>
+                    @Html.TextBoxFor(model => model.tenMa, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label for="phanTramGiam">Phần Trăm Giảm:</label>
+                    @Html.TextBoxFor(model => model.phanTramGiam, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label for="moTaKhuyenMai">Mô Tả Khuyến Mãi:</label>
+                    @Html.TextAreaFor(model => model.moTaKhuyenMai, new { @class = "form-control", rows = 3 })
+                </div>
+
+                <div class="form-group">
+                    <label for="ngayHet">Ngày Hết Hạn:</label>
+                    @Html.TextBoxFor(model => model.ngayHet, new { @class = "form-control", type = "date" })
+                </div>
+
+                <button type="submit" class="btn btn-primary">Thay đổi</button>
+            </form>
+            <div>
+            </div>
+        </div>

@@ -37,9 +37,7 @@
                     </td>
 
                     <td>
-                       
-
-                        @if (item.id_tuyChon != null)
+                        @if (item.TuyChon != null)
                         {
                             <p class="h5 text-dark font-weight-bold">@item.SanPham.tenSP</p>
                             <p>Tùy chọn: @item.TuyChon.tuyChon1</p>
@@ -52,30 +50,57 @@
                     </td>
 
                     <td>
-                        <div class="color-icon" style="background-color: @item.MauSac.maMau"></div>
-                        <span>@item.MauSac.tenMau</span>
+                        @if (item.MauSac != null)
+                        {
+                            <div class="color-icon" style="background-color: @item.MauSac.maMau"></div>
+                            <span>@item.MauSac.tenMau</span>
+                        }
+                        else
+                        {
+                            <strong>NULL</strong>
+                        }
                     </td>
+
+
                     <td>
                         <p>@String.Format("{0:#,##0}", item.giaSP) đ</p>
                     </td>
 
-                    <td>
-                        <div class="d-inline mx-3">
-                            <a href="#" class="btn btn-danger btn-circle btn-sm">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>
+                    <td style="text-align: center; vertical-align: middle;">
                         <div class="dropdown d-inline">
-                            <button class="btn " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i> <!-- Icon ba chấm của Font Awesome -->
+                            <button class="btn btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bars"></i>
                             </button>
+
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>@Html.ActionLink("Thêm chi tiết sản phẩm", "ThemChiTietSP", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
-                                <li>@Html.ActionLink("Xem Các SP", "ChiTietSP", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
-                                <li>@Html.ActionLink("Thêm Thông Số", "DanhSachThongSo", new { id = item.id_sanPham }, new { @class = "dropdown-item" })</li>
+
+                                <li>
+                                    <a href="@Url.Action("SuaKhuyenMai", "KhuyenMai", new { id_khuyenMai = @item.id_chiTietSP })" class="btn">
+                                        <i class="fas fa-edit"></i>
+                                        <strong class="">Sửa </strong>
+                                    </a>
+
+                                </li>
+
+                                <li class=" mx-3">
+                                    <i class="fas fa-eye"></i>
+                                    <strong class="mx-2">Xem chi tiết</strong>
+                                </li>
+                                <li mb-1>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="mx-3">
+                                    <p data-id-khuyenmai="@item.id_chiTietSP" class="confirmDeleteBtn text-danger">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <strong class="mx-2">Xóa</strong>
+                                    </p>
+                                </li>
                             </ul>
+
                         </div>
+
                     </td>
+                   
                 </tr>
             }
 
@@ -97,11 +122,11 @@
     }
 
     .alert {
-        position: fixed; /* Định vị cố định */
-        top: 80px; /* Cách lề trên 20px */
-        right: 50px; /* Cách lề phải 20px */
-        z-index: 1000; /* Sắp xếp z-index để đảm bảo nó hiển thị trên các phần tử khác */
-        border-radius: 5px; /* Bo tròn góc */
+        position: fixed; 
+        top: 80px; 
+        right: 50px; 
+        z-index: 1000; 
+        border-radius: 5px; 
     }
 
     .color-icon {

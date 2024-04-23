@@ -135,7 +135,7 @@
                         {
                             if (!tuyChonDaXuatHien.Contains(item.TuyChon.tuyChon1))
                             {
-                                <button class="btn btn-tuychon mx-1" data-gia="@item.giaSP">@item.TuyChon.tuyChon1</button>
+                                <button class="btn btn-tuychon mx-1" data-optios="@item.TuyChon.tuyChon1" data-gia="@item.giaSP">@item.TuyChon.tuyChon1</button>
                                 tuyChonDaXuatHien.Add(item.TuyChon.tuyChon1);
                             }
                         }
@@ -417,7 +417,7 @@ var productId = '@Model.id_sanPham';
         var color = $('.btn-mausac.selected').data('color');
 
 
-        var option = $('.btn-tuychon.selected').data('gia');
+        var option = $('.btn-tuychon.selected').data('optios');
 
         var giaSP = @Model.giaSP;
         console.log('ở đây có giá'+giaSP);

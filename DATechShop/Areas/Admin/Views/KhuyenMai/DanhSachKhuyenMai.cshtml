@@ -61,9 +61,12 @@
 
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                    <li class="mx-3">
-                                        <i class="fas fa-edit"></i> 
-                                        <strong class="mx-2">Sửa </strong> 
+                                    <li>
+                                        <a href="@Url.Action("SuaKhuyenMai", "KhuyenMai", new { id_khuyenMai = @item.id_KhuyenMai })" class="btn">
+                                            <i class="fas fa-edit"></i>
+                                            <strong class="">Sửa </strong>
+                                        </a>
+
                                     </li>
 
                                     <li class=" mx-3">

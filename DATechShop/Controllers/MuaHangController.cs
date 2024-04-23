@@ -31,9 +31,7 @@ namespace DATechShop.Controllers
         [HttpPost]
         public ActionResult LayIdChiTietSP(int id_sanPham, string mauSac, string tuyChon)
         {
-            //Console.WriteLine($"id_sanPham: {id_sanPham}, mauSac: {mauSac}, tuyChon: {tuyChon}");
-
-			
+           
 
 			if (mauSac == null && tuyChon == null)
 			{
@@ -44,21 +42,28 @@ namespace DATechShop.Controllers
 					return Json(new { success = true, id_chiTietSP = chiTietSp.id_chiTietSP });
 				}
 			}
+			else
+			{
+			
+				var chiTietSP = db.ChitietSPs.FirstOrDefault(ct => ct.id_sanPham == id_sanPham && ct.MauSac.maMau == mauSac && ct.TuyChon.tuyChon1 == tuyChon);
+				if (chiTietSP != null)
+				{
 
-			var chiTietSP = db.ChitietSPs.FirstOrDefault(ct => ct.id_sanPham == id_sanPham && ct.MauSac.maMau == mauSac && ct.TuyChon.tuyChon1 == tuyChon);
+					return Json(new { success = true, id_chiTietSP = chiTietSP.id_chiTietSP });
+				}
+				else
+				{
 
-            if (chiTietSP != null)
-            {
-             
-                return Json(new { success = true, id_chiTietSP = chiTietSP.id_chiTietSP });
-            }
-            else
-            {
-                
-                return Json(new { success = false });
-            }
-        }
-        public ActionResult GioHang(List<ChitietSP> chitietSPs)
+					return Json(new { success = false });
+				}
+			}
+
+			return Json(new { success = false });
+
+
+
+		}
+		public ActionResult GioHang(List<ChitietSP> chitietSPs)
         {
 			ViewBag.CartItems = chitietSPs;
 			return View(chitietSPs);
@@ -71,11 +76,8 @@ namespace DATechShop.Controllers
 			var giaSP = chiTietSP.giaSP;
 			var thanhTien = giaSP * soLuong;
 			ViewBag.ThanhTien = thanhTien;
-			var test = soLuong;
 			ViewBag.SoLuong = soLuong;
-			
 			return View(chiTietSP);
-
         }
 
         [HttpPost]
@@ -547,5 +549,28 @@ namespace DATechShop.Controllers
 			ViewBag.id_chitietHoaDon = id_hoaDon;
 			return View(pagedList);
 		}
+
+		public ActionResult SearchGiamGia(string key)
+		{
+			var data = db.KhuyenMais
+				.Where(m => string.IsNullOrEmpty(key) || m.moTaKhuyenMai.ToLower().Contains(key.ToLower()))
+				.Select(m => new
+				{
+					m.hinhAnh,
+					m.tenMa,
+					m.phanTramGiam,
+					m.moTaKhuyenMai
+					
+					// Add more properties if needed
+				})
+				.ToList();
+
+			return Json(data, JsonRequestBehavior.AllowGet);
+		}
+
+
+
+
+
 	}
 }

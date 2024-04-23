@@ -66,8 +66,8 @@ namespace DATechShop.Areas.Admin.Controllers
 			{
 				if (!IsValidEmail(email))
 				{
-					ViewBag.Error = "Địa chỉ email không hợp lệ.";
-					return View("Index");
+					ViewBag.error = "Địa chỉ email không hợp lệ.";
+					return View();
 				}
 
 				string otp = GenerateOTP();
@@ -82,11 +82,10 @@ namespace DATechShop.Areas.Admin.Controllers
 			}
 			catch (Exception ex)
 			{
-				// Xử lý lỗi nếu có
-				ViewBag.Error = "Đã xảy ra lỗi khi gửi mã OTP. Vui lòng thử lại sau.";
-				return View("Index");
+				ViewBag.error = "Đã xảy ra lỗi khi gửi mã OTP. Vui lòng thử lại sau.";
+				return View();
 			}
-		
+
 		}
 		// GET: OTP/Verify
 		public ActionResult Verify(string emailAddress, string otp)
@@ -138,17 +137,12 @@ namespace DATechShop.Areas.Admin.Controllers
 			}
 			if (user != null && HashingHelper.VerifyPassword(mk, user.matKhau))
 			{
-				// Đăng nhập thành công
 				Session["id_NguoiDung"] = user.id_NguoiDung;
 				Session["TenNguoiDung"] = user.ten;
 				Session["SoDienThoai"] = user.sdt;
 				Session["DiaChi"] = user.diaChi;
 
-				ViewBag.Success = "Đăng Nhập thành công";
-				TempData["SuccessMessage"] = "Thêm sản phẩm thành công";
 
-				// Gọi hàm JavaScript để hiển thị thông báo
-				ViewBag.NotificationMessage = TempData["SuccessMessage"];
 				return RedirectToAction("Home", "TrangChu", new { area = "" });
 
 			}
@@ -214,7 +208,6 @@ namespace DATechShop.Areas.Admin.Controllers
 			}
 		}
 
-		// Phương thức để kiểm tra địa chỉ email có hợp lệ không
 		private bool IsValidEmail(string email)
 		{
 			try

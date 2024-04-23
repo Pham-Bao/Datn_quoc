@@ -84,24 +84,25 @@
 
                 </div>
                 <div class="col-lg-4">
-                            <div class="cart__discount">
+                            <div class="cart__discount" id="hienthi">
                                 <h6>Mã giảm giá</h6>
                                 <form class="d-flex mx-3 mt-3">
                                     <div class="input-group">
-                                        <input class="form-control" type="text" id="maGiamGiaInput" placeholder="Mã giảm giá"  onkeyup="giamGiaOnKeyPress()">
+
+                                        <input class="form-control" type="text" id="maGiamGiaInput" placeholder="Mã giảm giá" onkeyup="searchOnKey()">
                                         <div class="input-group-append">
                                             <button class="btn btn-secondary" type="button" id="applyButton">Áp Dụng</button>
                                         </div>
-                                        <div class="table-responsive">
+
+                                        <div class="table-responsive model_giamGia">
                                             <table class="table text-bg-light">
-                                                <tr>
-                                                    <td>Mã Giảm giá</td>
-                                                    <td>Phần trăm giảm</td>
-                                                </tr>
+                                               
                                                 <tbody id="giamgia-result-body">
+                                                   
                                                 </tbody>
                                             </table>
                                         </div>
+
                                     </div>
                                 </form>
                             </div>
@@ -183,8 +184,26 @@
         $('#tongThanhTienan').text(totalAmounts + 'đ');
 
     });
+   
+ //   $(document).ready(function () {
+ //       $("#maGiamGiaInput").focusout(function () {
+//         $(".model_giamGia").hide(); // Ẩn bảng mã giảm giá khi người dùng thoát khỏi ô input
+//        });
+//    });
+
+    $(document).ready(function () {
+        $("#maGiamGiaInput").focus(function () {
+            $(".model_giamGia").show(); // Hiển thị bảng mã giảm giá khi người dùng chọn vào ô input
+        });
+    });
+
+    function selectMaGiamGia(tenMa) {
+    $("#maGiamGiaInput").val(tenMa);
+    $(".model_giamGia").hide(); // Ẩn bảng mã giảm giá sau khi chọn
+}
 
 
+  
 
 
 
@@ -238,38 +257,38 @@
     });
 
 
-    function searchOnKeyPress() {
+    function searchOnKey() {
     clearTimeout(typingTimer);
-    typingTimer = setTimeout(searchProducts, doneTypingInterval);
+        typingTimer = setTimeout(searchgiamGia, doneTypingInterval);
 }
 
-function searchProducts() {
+function searchgiamGia() {
     var key = $("#maGiamGiaInput").val().trim();
-    var searchModel = document.querySelector('.search-model');
-    if (key === '') {
-        searchModel.style.display = 'none';
-        return;
-    }
+    console.log("ok nhá")
+   
 
     $.ajax({
-        url: '/MuaHang/KiemTraMaGiamGia',
+        url: '/MuaHang/SearchGiamGia',
         method: 'GET',
         data: { key: key },
         success: function (response) {
-            var tableContent = '';
+            var tableGiamGia = '';
             if (response.length > 0) {
                 response.forEach(function (item) {
-                    var rowHtml = '<tr>';
-                    rowHtml += '<td class="white-bg align-middle"><strong>' + item.tenMa + '</strong></td>';
-                    rowHtml += '<td class="white-bg align-middle"><strong>' + item.tenSP + '</strong></td>';
+                    var rowHtml = '<tr onclick="selectMaGiamGia(\'' + item.tenMa + '\')">';
+                    rowHtml += '<td class="white-bg align-middle"><img style="width:50px;height:auto" src="/Upload/img/' + item.hinhAnh + '"/></td>';
+                    rowHtml += '<td class="white-bg align-middle"><strong>' + item.moTaKhuyenMai + '</strong></td>';
+                    rowHtml += '<td class="white-bg align-middle"><strong>' + item.phanTramGiam + '%</strong></td>';
                     rowHtml += '</tr>';
-                    tableContent += rowHtml;
+                    tableGiamGia += rowHtml;
+
+
+
                 });
             } else {
-                tableContent = '<tr><td colspan="5">Không tìm thấy sản phẩm</td></tr>';
+                tableGiamGia = '<tr><td colspan="2">Không tìm thấy sản phẩm</td></tr>';
             }
-            $('#search-result-body').html(tableContent); 
-            searchModel.style.display = 'block';
+            $('#giamgia-result-body').html(tableGiamGia);
         },
         error: function (xhr, status, error) {
             console.log('Lỗi khi tìm kiếm sản phẩm: ' + error);
@@ -280,3 +299,22 @@ function searchProducts() {
 
 
 </script>
+<style>
+    .cart__discount {
+        margin-bottom: 20px; /* Tạo khoảng cách dưới cho phần mã giảm giá */
+    }
+
+    .cart__total {
+        position: relative; /* Sử dụng vị trí tương đối để kiểm soát vị trí của bảng tổng hóa đơn */
+    }
+
+    .model_giamGia {
+        position: absolute; /* Sử dụng vị trí tuyệt đối để đặt bảng mã giảm giá */
+        top: 100%; /* Đặt top là 100% so với phần tử cha (phần tổng hóa đơn) */
+        left: 0; /* Đặt left là 0 để nó nằm bên trái của phần tổng hóa đơn */
+        width: 100%; /* Đảm bảo bảng mã giảm giá chiếm toàn bộ chiều rộng của phần tử cha */
+        background-color: #ffffff; /* Màu nền của bảng mã giảm giá */
+        z-index: 1; /* Đảm bảo bảng mã giảm giá hiển thị trên phần tổng hóa đơn */
+    }
+
+</style>

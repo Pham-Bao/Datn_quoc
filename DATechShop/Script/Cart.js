@@ -30,7 +30,6 @@
             type: 'POST',
             data: { id_sanPham: productId, mauSac: color, tuyChon: option },
             success: function (response) {
-                // Xử lý phản hồi từ server
                 if (response.success) {
                     var chiTietSPId = response.id_chiTietSP;
                     var existingItem = cart.find(item => item.chiTietSPId == chiTietSPId);
