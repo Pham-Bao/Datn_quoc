@@ -64,7 +64,7 @@
             </thead>
 
             @foreach (var item in Model)
-            {
+            { 
                 <tr>
                     <td>
                         <img style="width:50px;height:auto" src="~/Upload/imgSPChung/@item.anhSPChung" />
@@ -80,7 +80,24 @@
                     <td>
                         <p>@item.khuyenMai %</p>
                     </td>
-                    <td>@item.TrangThaiXoa</td>
+                    @{
+                        var trangThaiXoa = @item.TrangThaiXoa;
+                    }
+                    @if (trangThaiXoa != false)
+                    {
+                        <td class="align-middle text-center">
+                            <span class="badge badge-success d-flex justify-content-center"><i class="fas fa-check-circle align-self-center"></i> Đang bán</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="align-middle text-center">
+                            <span class="badge badge-danger d-flex justify-content-center"><i class="fas fa-times-circle align-self-center"></i> Ngừng bán</span>
+                        </td>
+                    }
+
+
+
 
 
 
@@ -91,12 +108,15 @@
                             </button>
 
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <a href="@Url.Action("ThemChiTietSP", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
-                                        <i class="fas fa-plus-circle"></i>
-                                        Thêm chi tiết sản phẩm
-                                    </a>
-                                </li>
+                                @if (trangThaiXoa != false)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("ThemChiTietSP", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
+                                            <i class="fas fa-plus-circle"></i>
+                                            Thêm chi tiết sản phẩm
+                                        </a>
+                                    </li>
+                                }
 
                                 <li>
                                     <a href="@Url.Action("ChiTietSP", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
@@ -104,29 +124,31 @@
                                         Xem Các SP
                                     </a>
                                 </li>
+                                @if (trangThaiXoa != false)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("DanhSachThongSo", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
+                                            <i class="fas fa-plus-circle"></i>
+                                            Thêm Thông Số
+                                        </a>
+                                    </li>
 
-                                <li>
-                                    <a href="@Url.Action("DanhSachThongSo", "SanPham", new { id = item.id_sanPham })" class="dropdown-item">
-                                        <i class="fas fa-plus-circle"></i>
-                                        Thêm Thông Số
-                                    </a>
-                                </li>
 
 
-
-                                <li mb-1>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("SuaSanPham", "SanPham", new { id_sanPHam = @item.id_sanPham })" class="dropdown-item">
-                                        <i class="fas fa-cog"></i>
-                                        Sửa sản phấm
-                                    </a>
-                                </li>
-                                <li class="">
-                                    <p class="confirmDeleteBtn text-danger dropdown-item">
+                                    <li mb-1>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("SuaSanPham", "SanPham", new { id_sanPHam = @item.id_sanPham })" class="dropdown-item">
+                                            <i class="fas fa-cog"></i>
+                                            Sửa sản phấm
+                                        </a>
+                                    </li>
+                                }
+                                <li class="mb-1">
+                                    <p data-id-khuyenmai="@item.id_sanPham" class="confirmDeleteBtn text-danger dropdown-item">
                                         <i class="fas fa-trash-alt"></i>
-                                        <strong class="">Xóa</strong>
+                                        <strong class="mx-2">Xóa</strong>
                                     </p>
                                 </li>
                             </ul>
@@ -149,3 +171,32 @@
 
 
 
+<script>
+    $(document).ready(function () {
+        $('.confirmDeleteBtn').click(function () {
+            var id_sanPham = $(this).data('id-khuyenmai');
+            console.log(id_sanPham)
+
+            $('#confirmModal').modal('show');
+
+            $('#confirmBtn').click(function () {
+                $.ajax({
+                    url: '/Admin/SanPham/xoaSanPham',
+                    type: 'POST',
+                    data: { id_sanPham: id_sanPham },
+                    success: function (result) {
+                        if (result.success) {
+                            location.reload();
+                        } else {
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                    }
+                });
+                $('#confirmModal').modal('hide');
+            });
+        });
+    });
+</script>

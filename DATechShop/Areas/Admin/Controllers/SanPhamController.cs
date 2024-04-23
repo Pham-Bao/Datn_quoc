@@ -499,17 +499,6 @@ namespace DATechShop.Areas.Admin.Controllers
 					TempData["ErrorMessage"] = "Không tìm thấy sản phẩm có id " + id_sanPham;
 					return RedirectToAction("DanhSachSP", "SanPham");
 				}
-				var danhSachMau = db.MauSacs.ToList();
-				var danhSachTuyChon = db.TuyChons.ToList();
-
-				var viewModel = new ThemChiTietSPViewModel
-				{
-					SanPham = sanPham,
-					DanhSachMau = danhSachMau,
-					DanhSachTuyChon = danhSachTuyChon
-				};
-
-				return View(viewModel);
 				return View(sanPham);
 			}
 		}
@@ -554,65 +543,62 @@ namespace DATechShop.Areas.Admin.Controllers
 
 
 		[AdminAuth]
-		public ActionResult SuaChiTietSanPham(int id_chiTietSP)
-		{
-			using (var db = new DATotNghiepEntities())
-			{
-				var chiTietSanPham = db.ChitietSPs.FirstOrDefault(km => km.id_chiTietSP == id_chiTietSP);
-				if (chiTietSanPham == null)
-				{
-					TempData["ErrorMessage"] = "Không tìm thấy sản phẩm có id " + id_chiTietSP;
-					return RedirectToAction("DanhSachSP", "SanPham");
-				}
-
-				var danhSachMau = db.MauSacs.ToList();
-				var danhSachTuyChon = db.TuyChons.ToList();
-
-				var viewModel = new ThemChiTietSPViewModel
-				{
-					ChitietSP = chiTietSanPham,
-					DanhSachMau = danhSachMau,
-					DanhSachTuyChon = danhSachTuyChon
-				};
-
-				return View(viewModel);
-			}
-		}
-
-		[HttpPost]
-		[AdminAuth]
-		public ActionResult LuuSuaChiTietSanPham(ChitietSP model)
+		public ActionResult xoaChiTietSP(int id_chiTietSP)
 		{
 			try
 			{
 				using (var db = new DATotNghiepEntities())
 				{
-					var chitietSP = db.ChitietSPs.FirstOrDefault(km => km.id_chiTietSP == model.id_chiTietSP);
-
-					if (chitietSP == null)
+					var chiTietSP = db.ChitietSPs.FirstOrDefault(km => km.id_chiTietSP == id_chiTietSP);
+					if (chiTietSP != null)
 					{
-						TempData["ErrorMessage"] = "Không tìm thấy sản phẩm có ID " + model.id_chiTietSP;
-						return RedirectToAction("DanhSachSP", "SanPham");
+						chiTietSP.TrangThaiXoa = false;
+						db.SaveChanges();
+						TempData["SuccessMessage"] = "Xóa khuyến mãi thành công!";
+						return Json(new { success = true });
 					}
-
-					chitietSP.id_tuyChon = model.id_tuyChon;
-					chitietSP.id_Mau = model.id_Mau;
-					chitietSP.giaSP = model.giaSP;
-					
-
-					db.SaveChanges();
-
-					TempData["SuccessMessage"] = "Cập nhật thông tin  thành công!";
-					return RedirectToAction("DanhSachSP", "SanPham");
+					else
+					{
+						TempData["ErrorMessage"] = "Không tìm thấy khuyến mãi có id " + chiTietSP;
+						return Json(new { success = false, message = "Không tìm thấy khuyến mãi có id " + chiTietSP });
+					}
 				}
 			}
 			catch (Exception ex)
 			{
-				TempData["ErrorMessage"] = "Lỗi khi cập nhật thông tin: " + ex.Message;
-				return RedirectToAction("DanhSachSP", "SanPham");
+				TempData["ErrorMessage"] = "Lỗi: " + ex.Message;
+				return Json(new { success = false, message = "Lỗi: " + ex.Message });
 			}
 		}
 
 
+		[AdminAuth]
+		public ActionResult xoaSanPham(int id_sanPham)
+		{
+			try
+			{
+				using (var db = new DATotNghiepEntities())
+				{
+					var sanPham = db.SanPhams.FirstOrDefault(km => km.id_sanPham == id_sanPham);
+					if (sanPham != null)
+					{
+						sanPham.TrangThaiXoa = false;
+						db.SaveChanges();
+						TempData["SuccessMessage"] = "Xóa khuyến mãi thành công!";
+						return Json(new { success = true });
+					}
+					else
+					{
+						TempData["ErrorMessage"] = "Không tìm thấy khuyến mãi có id " + id_sanPham;
+						return Json(new { success = false, message = "Không tìm thấy khuyến mãi có id " + id_sanPham });
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["ErrorMessage"] = "Lỗi: " + ex.Message;
+				return Json(new { success = false, message = "Lỗi: " + ex.Message });
+			}
+		}
 	}
 }

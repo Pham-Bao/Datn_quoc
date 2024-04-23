@@ -2409,6 +2409,7 @@
     <Content Include="Areas\Admin\Views\NguoiDung\resetPass.cshtml" />
     <Content Include="Areas\Admin\Views\KhuyenMai\SuaKhuyenMai.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\SuaSanPham.cshtml" />
+    <Content Include="Areas\Admin\Views\SanPham\SuaChiTietSanPham.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\MuaHang\row.cshtml" />
     <Content Include="Views\KhuyenMaiUser\DanhSachKM.cshtml" />
@@ -2426,7 +2427,9 @@
     <Content Include="Views\ThongTin\Layout_info.cshtml" />
     <Content Include="Views\MuaHang\ChiTietHDNguoiDung.cshtml" />
     <None Include="Properties\PublishProfiles\baodau89-001-site1 - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\baodau89-001-site1 - FTP1.pubxml" />
     <None Include="Properties\PublishProfiles\baodau89-001-site1 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\baodau89-001-site1 - Web Deploy1.pubxml" />
     <None Include="Properties\PublishProfiles\baodautechshop-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\baodautechshop-001-site1 - FTP1.pubxml" />
     <None Include="Properties\PublishProfiles\baodautechshop-001-site1 - Web Deploy.pubxml" />

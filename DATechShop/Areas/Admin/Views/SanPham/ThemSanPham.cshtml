@@ -9,23 +9,23 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal container " style="width:70%">
-        <h2 class="text-center">Sản Phẩm Mới</h2>
+    <div class="form-horizontal container ">
+        <h2 class="text-center text-dark">Sản Phẩm Mới</h2>
 
-        <div class="row">
-            <div class="col">
+        <div class="row ">
+            <div class="col-lg-5 border-right">
                 <div class="form-group mt-4">
-                    <p class="label">Chọn Hình Ảnh</p>
+                    <p class="label text-dark">Chọn Hình Ảnh</p>
                     <input type="file" id="uploadhinh" name="uploadhinh" accept="image/*" onchange="ImagerFileAsURL()" />
                 </div>
-                <div class="mx-3 mt-3 rounded-pill" id="displayImg" style="width:200px"></div>
+                <div class="mx-3 mt-3 rounded-pill" id="displayImg" style="width:250px"></div>
             </div>
 
-            <div class="col">
+            <div class="col-lg-7">
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
-                <label class="font-weight-bold">Tên Sản Phẩm</label>
+                <label class="font-weight-bold text-dark">Tên Sản Phẩm</label>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.tenSP, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.tenSP, "", new { @class = "text-danger" })
@@ -33,7 +33,7 @@
             </div>
 
                 <div class="form-group">
-                    <label class="font-weight-bold">Loại sản phẩm</label>
+                    <label class="font-weight-bold text-dark">Loại sản phẩm</label>
                     <div class="col-md-10">
                         <select id="loaiSP" name="loaiSP" class="form-control">
                             <option value="DienThoai">Điện thoại</option>
@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="font-weight-bold">Những từ khóa liên quan:</label>
+                    <label class="font-weight-bold text-dark">Những từ khóa liên quan:</label>
                     <p class="small mb-1 mx-4">(*) Gợi ý cho khách hàng về sản phẩm.</p>
                     <p class="small mb-1 mx-4">(*) Các từ khóa các nhau bởi dấu ","</p>
                     <div class="col-md-10">
@@ -57,21 +57,21 @@
                     </div>
                 </div>
 
-                <div class="form-group mt-3">
-                    <p class="font-weight-bold label">Phần trăm giảm</p>
-                    <div class="col-md-10">
-                        <div class="input-group">
-                            @Html.EditorFor(model => model.khuyenMai, new { htmlAttributes = new { @class = "form-control" } })
-                            <div class="input-group-append">
-                                <span class="input-group-text">%</span>
+                    <div class="form-group mt-3">
+                        <p class="font-weight-bold label text-dark">Phần trăm giảm</p>
+                        <div class="col-md-10">
+                            <div class="input-group">
+                                <input type="number" id="khuyenMai" name="khuyenMai" class="form-control" value="0" max="100" maxlength="2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
                             </div>
+                            <div id="khuyenMaiError" class="text-danger"></div>
                         </div>
-                        @Html.ValidationMessageFor(model => model.khuyenMai, "", new { @class = "text-danger" })
                     </div>
-                </div>
 
                 <div class="form-group">
-                    <label class="font-weight-bold ">Mô tả sản phẩm</label>
+                    <label class="font-weight-bold text-dark">Mô tả sản phẩm</label>
                     <div class="col-md-10">
                         <textarea class="form-control" id="moTa" name="moTa" rows="5"></textarea>
                         @Html.ValidationMessageFor(model => model.moTa, "", new { @class = "text-danger" })
@@ -79,7 +79,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <input type="submit" value="Thêm sản phẩm" class="btn btn-primary" />
                     </div>
                 </div>
 
@@ -107,6 +107,18 @@
             fieReader.readAsDataURL(fileToLoad);
         }
     }
+
+    document.getElementById('khuyenMai').addEventListener('input', function () {
+        var khuyenMaiValue = this.value;
+        var khuyenMaiError = document.getElementById('khuyenMaiError');
+
+        if (khuyenMaiValue > 100) {
+            khuyenMaiError.textContent = 'Giá trị không thể lớn hơn 100.';
+            this.value = ''; 
+        } else {
+            khuyenMaiError.textContent = '';
+        }
+    });
 </script>
 
 <style>

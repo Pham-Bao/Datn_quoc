@@ -56,7 +56,7 @@ namespace DATechShop.Models
 		public List<ChitietSP> chiTietSP(int id)
 		{
 			var db = new DATotNghiepEntities();
-			var data = db.ChitietSPs.Where(m => m.id_sanPham == id).ToList();
+			var data = db.ChitietSPs.Where(m => m.id_sanPham == id && m.TrangThaiXoa != false).ToList();
 			return data;
 		}
 

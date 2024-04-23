@@ -73,7 +73,6 @@ namespace DATechShop.Areas.Admin.Controllers
 		{
 			try
 			{
-				// Tìm khuyến mãi theo id
 				using (var db = new DATotNghiepEntities())
 				{
 					var khuyenMai = db.KhuyenMais.FirstOrDefault(km => km.id_KhuyenMai == id_khuyenMai);

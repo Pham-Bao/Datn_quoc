@@ -1,0 +1,62 @@
+﻿@model DATechShop.Models.ThemChiTietSPViewModel
+
+@{
+    ViewBag.Title = "SuaChiTietSP";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="text-center">Sửa Chi Tiết Sản Phẩm</h2>
+
+@using (Html.BeginForm("LuuSuaChiTietSanPham", "SanPham", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.ChitietSP.id_chiTietSP)
+
+    <div class="form-horizontal container" style="width:100%">
+        <div class="row">
+            <div class="col-lg-5 mt-2">
+                <p>Ảnh sản phẩm</p>
+                <img style="width:80% ;height:auto" src="~/Upload/imgSP/@Model.ChitietSP.anhSP" />
+            </div>
+            <div class="col-lg-7">
+                <div class="form-group">
+                    <p class="h4 mt-3"><b>Sản Phẩm</b></p>
+                    <div class="col-md-10 ">
+                        <p class="mb-1">ID: @Model.ChitietSP.id_sanPham</p>
+                        <strong class="h3">@Model.SanPham.tenSP</strong>
+                        <p>@Model.SanPham.loaiSP</p>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span>Chọn Tùy chọn</span><span class="text-danger">(*)</span>
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.ChitietSP.id_tuyChon, new SelectList(Model.DanhSachTuyChon, "id_tuyChon", "tuyChon1"), "Chọn phiên bản...", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ChitietSP.id_tuyChon, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group mt-3">
+                    <span class="label mx-3">Giá</span><span class="text-danger">(*)</span>
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.ChitietSP.giaSP, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ChitietSP.giaSP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span>Chọn Màu:</span><span class="text-danger">(*)</span>
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.ChitietSP.id_Mau, new SelectList(Model.DanhSachMau, "id_Mau", "tenMau"), "Chọn màu...", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ChitietSP.id_Mau, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Lưu" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
