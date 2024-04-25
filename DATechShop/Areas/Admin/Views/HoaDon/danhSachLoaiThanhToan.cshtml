@@ -15,10 +15,20 @@
                 <tr>
                     <th colspan="7" class="text-end">
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="h3 text-dark mb-0">Khuyến mãi</p>
-                            <a class="btn btn-success" href="#">
-                                <i class="fas fa-file-export"></i> Xuất Excel
-                            </a>
+                            <p class="h3 text-dark mb-0">Lịch sử chuyển tiền</p>
+                            <div class="d-flex align-items-center">
+                                <div class="form-group mb-4 d-flex align-items-center mt-4">
+                                    <input type="date" class="form-control" id="startDate">
+                                </div>
+                                <div class="form-group mb-4d-flex align-items-center mt-4">
+                                    <i class="fas fa-arrow-right fa-lg mx-2"></i>
+                                </div>
+                                <div class="form-group mb-4 d-flex align-items-center mt-4 ">
+                                    <input type="date" class="form-control" id="endDate">
+                                </div>
+                                <button class="btn btn-success mx-3" id="exportExcelButton">Xuất Excel</button>
+
+                            </div>
                         </div>
                     </th>
 
@@ -31,7 +41,7 @@
                     <th>Tổng giao dịch</th>
                     <th>Trạng thái</th>
                     <th>Ngày thanh toán</th>
-                    
+
                 </tr>
             </thead>
             <tbody>
@@ -62,4 +72,31 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const exportExcelButton = document.getElementById("exportExcelButton");
 
+        exportExcelButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
+            if (!startDate || !endDate) {
+                alert("Vui lòng nhập cả ngày bắt đầu và ngày kết thúc.");
+                return;
+            }
+
+            const today = new Date();
+            const selectedStartDate = new Date(startDate);
+
+
+            if (startDate > endDate) {
+                alert("Ngày bắt đầu không thể lớn hơn ngày kết thúc.");
+                return;
+            }
+
+            window.location.href = `/Admin/Excel/ExportToExcel?startDate=${startDate}&endDate=${endDate}`;
+        });
+    });
+
+</script>

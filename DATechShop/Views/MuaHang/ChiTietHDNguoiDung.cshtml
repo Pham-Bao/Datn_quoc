@@ -93,7 +93,7 @@
                 </table>
                 <div class="container center">
                     <div class="pagination">
-                        @Html.PagedListPager(Model, page => Url.Action("CHiTietHD", new { page, id_hoaDon = ViewBag.id_chitietHoaDon }), PagedListRenderOptions.Classic)
+                        @Html.PagedListPager(Model, page => Url.Action("CHiTietHDNguoiDung", new { page, id_hoaDon = ViewBag.id_chitietHoaDon }), PagedListRenderOptions.Classic)
                     </div>
                 </div>
             </div>

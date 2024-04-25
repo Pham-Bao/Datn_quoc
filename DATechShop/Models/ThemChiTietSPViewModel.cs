@@ -13,7 +13,7 @@ namespace DATechShop.Models
 		
 
 		public List<MauSac> DanhSachMau { get; set; }
-		public List<TuyChon> DanhSachTuyChon { get; set; } // Thêm DanhSachTuyChon
+		public List<TuyChon> DanhSachTuyChon { get; set; }
 
 		// Thêm các thuộc tính khác nếu cần
 		public int? SelectedMau { get; set; }

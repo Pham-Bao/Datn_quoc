@@ -250,8 +250,14 @@ namespace DATechShop.Areas.Admin.Controllers
 		[AdminAuth]
 		public ActionResult ThemChiTietSP(int id)
 		{
-			var sanPham = db.SanPhams.FirstOrDefault(sp => sp.id_sanPham == id);
 
+
+			var sanPham = db.SanPhams.FirstOrDefault(sp => sp.id_sanPham == id);
+			if (sanPham.TrangThaiXoa != null)
+			{
+				TempData["ErrorMessage"] = "Sản phẩm đã được xóa khỏi hệ thống không thể thêm! ";
+				return RedirectToAction("DanhSachSP", "SanPham");
+			}
 			
 			var danhSachMau = db.MauSacs.ToList();
 			var danhSachTuyChon = db.TuyChons.ToList();
@@ -262,6 +268,7 @@ namespace DATechShop.Areas.Admin.Controllers
 				DanhSachMau = danhSachMau,
 				DanhSachTuyChon = danhSachTuyChon
 			};
+
 
 			return View(viewModel);
 		}
@@ -320,12 +327,13 @@ namespace DATechShop.Areas.Admin.Controllers
 		{
 			mapSP map = new mapSP();
 			var data = map.chiTietSP(id);
-
+			var sanPham = map.sanPham(id);
 			int pageSize = 5;
 			int pageNumber = (page ?? 1); 
 
 			var pagedList = data.ToPagedList(pageNumber, pageSize);
 			ViewBag.id_sanPham = id;
+			ViewBag.sanPham = sanPham;
 			return View(pagedList);
 		}
 		[AdminAuth]
@@ -554,13 +562,13 @@ namespace DATechShop.Areas.Admin.Controllers
 					{
 						chiTietSP.TrangThaiXoa = false;
 						db.SaveChanges();
-						TempData["SuccessMessage"] = "Xóa khuyến mãi thành công!";
+						TempData["SuccessMessage"] = "Sản phẩm đã không được bán";
 						return Json(new { success = true });
 					}
 					else
 					{
-						TempData["ErrorMessage"] = "Không tìm thấy khuyến mãi có id " + chiTietSP;
-						return Json(new { success = false, message = "Không tìm thấy khuyến mãi có id " + chiTietSP });
+						TempData["ErrorMessage"] = "Không tìm thấy sản phẩm muốn xóa " + chiTietSP;
+						return Json(new { success = false, message = "Không tìm thấy sản phẩm muốn xóa" + chiTietSP });
 					}
 				}
 			}
@@ -589,8 +597,8 @@ namespace DATechShop.Areas.Admin.Controllers
 					}
 					else
 					{
-						TempData["ErrorMessage"] = "Không tìm thấy khuyến mãi có id " + id_sanPham;
-						return Json(new { success = false, message = "Không tìm thấy khuyến mãi có id " + id_sanPham });
+						TempData["ErrorMessage"] = "Không tìm thấy khuyến mãi có id ";
+						return Json(new { success = false, message = "Không tìm thấy khuyến mãi có id "});
 					}
 				}
 			}

@@ -146,17 +146,15 @@
 
         var colorValue = document.getElementById("inputColor").value;
 
-        // Gán giá trị mã màu vào ô maMau
         document.getElementById("maMauInput").value = colorValue;
     }
     document.addEventListener("DOMContentLoaded", function () {
-        // Tự động loại bỏ lớp 'fade-out' sau 5 giây
         setTimeout(function () {
             var errorAlert = document.getElementById('errorAlert');
             var successAlert = document.getElementById('successAlert');
             if (errorAlert) errorAlert.classList.add('fade-out');
             if (successAlert) successAlert.classList.add('fade-out');
-        }, 2000); // 5 giây
+        }, 2000);
     });
 
     $(document).ready(function () {
@@ -199,11 +197,11 @@
     }
 
     .alert {
-        position: fixed; /* Định vị cố định */
-        top: 80px; /* Cách lề trên 20px */
-        right: 50px; /* Cách lề phải 20px */
-        z-index: 1000; /* Sắp xếp z-index để đảm bảo nó hiển thị trên các phần tử khác */
-        border-radius: 5px; /* Bo tròn góc */
+        position: fixed;
+        top: 80px;
+        right: 50px; 
+        z-index: 1000; 
+        border-radius: 5px; 
     }
     .color-icon {
         display: inline-block;

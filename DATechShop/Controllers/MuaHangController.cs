@@ -293,7 +293,6 @@ namespace DATechShop.Controllers
 			string paymentUrl = pay.CreateRequestUrl(url, hashSecret);
 			
 
-		   // SendEmail(email, "TechShop xin cảm ơn!", $"Quý khách đã mua thành công đơn hàng{hoaDonId}");
 
 	     	return Json(new { success = true, hoaDonId = newHoaDon.id_HoaDon, paymentUrl});
 			}
@@ -325,44 +324,43 @@ namespace DATechShop.Controllers
 		[HttpPost]
 		public ActionResult TaoChiTietHoaDon(int hoaDonId, List<int> chiTietSPIds, List<int> soLuongs)
 		{
-			
-				
-				if (chiTietSPIds.Count != soLuongs.Count)
+
+
+			if (chiTietSPIds.Count != soLuongs.Count)
+			{
+				return Json(new { success = false, message = "Số lượng chi tiết sản phẩm không khớp với số lượng sản phẩm." });
+			}
+
+
+			for (int i = 0; i < chiTietSPIds.Count; i++)
+			{
+				var chiTietSPId = chiTietSPIds[i];
+				var soLuong = soLuongs[i];
+
+				var chiTietSP = db.ChitietSPs.FirstOrDefault(ct => ct.id_chiTietSP == chiTietSPId);
+				if (chiTietSP == null)
 				{
-					return Json(new { success = false, message = "Số lượng chi tiết sản phẩm không khớp với số lượng sản phẩm." });
+					return Json(new { success = false, message = $"Không tìm thấy chi tiết sản phẩm với ID {chiTietSPId}." });
 				}
 
-				
-				for (int i = 0; i < chiTietSPIds.Count; i++)
+
+				var chiTietHoaDon = new ChiTietHoaDon
 				{
-					var chiTietSPId = chiTietSPIds[i];
-					var soLuong = soLuongs[i];
+					id_HoaDon = hoaDonId,
+					id_chiTietSP = chiTietSPId,
+					soLuong = soLuong,
+					gia = chiTietSP.giaSP * soLuong
+				};
 
-					var chiTietSP = db.ChitietSPs.FirstOrDefault(ct => ct.id_chiTietSP == chiTietSPId);
-					if (chiTietSP == null)
-					{
-						return Json(new { success = false, message = $"Không tìm thấy chi tiết sản phẩm với ID {chiTietSPId}." });
-					}
 
-					
-					var chiTietHoaDon = new ChiTietHoaDon
-					{
-						id_HoaDon = hoaDonId,
-						id_chiTietSP = chiTietSPId,
-						soLuong = soLuong,
-						gia = chiTietSP.giaSP * soLuong
-					};
+				db.ChiTietHoaDons.Add(chiTietHoaDon);
+			}
 
-				
-					db.ChiTietHoaDons.Add(chiTietHoaDon);
-				}
 
-			
-				db.SaveChanges();
-			//var url = paymentUrl;
+			db.SaveChanges();
 			return Redirect("~/trangChu/home");
-			
-			
+
+
 		}
 
 

@@ -396,7 +396,6 @@
 
 $(document).ready(function () {
     $('#taoHoaDonBtn').on('click', function () {
-        // Kiểm tra trạng thái của checkbox
 
         var agreeCheckbox = $('#agreeCheckbox');
         if (!agreeCheckbox.prop('checked')) {
@@ -413,7 +412,6 @@ $(document).ready(function () {
             return;
         }
         console.log(selectedPaymentMethod);
-        // Tiếp tục với việc lấy thông tin từ form và gọi AJAX để tạo hóa đơn
         var sdt = $('input[name="sdt"]').val();
         var idTinh = $('select[name="idTinh"]').val();
         var idHuyen = $('select[name="idHuyen"]').val();
@@ -434,7 +432,6 @@ $(document).ready(function () {
         
         
 
-        // Gọi AJAX để tạo hóa đơn
         $.ajax({
             url: '@Url.Action("TaoHoaDon", "MuaHang")',
             type: 'POST',
@@ -445,13 +442,11 @@ $(document).ready(function () {
                 idXa: idXa,
                 soNha: soNha,
                 note: note,
-              //  paymentMethod: paymentMethod,
                 phamTramGiam: phamTramGiam,
                 tongCong: tongCong,
                 selectedPaymentMethod: selectedPaymentMethod
             },
             success: function (response) {
-                // Xử lý khi tạo hóa đơn thành công
                 var hoaDonId = response.hoaDonId;
                 var products = CartClass.Get();
                 var paymentUrl = response.paymentUrl;
@@ -471,8 +466,13 @@ $(document).ready(function () {
                                 window.location.href = paymentUrl;
                             } else {
                                 $('#successMessage').text('Đã đặt hàng thành công');
-                                $('#successAlert').fadeIn('slow').delay(2000).fadeOut('slow');
+                                $('#successAlert').fadeIn('slow', function () {
+                                    $(this).delay(5).fadeOut('slow', function () {
+                                        window.location.href = '/';
+                                    });
+                                });
                             }
+
                         },
                         error: function (xhr, status, error) {
                             console.error('Đã xảy ra lỗi khi tạo chi tiết hóa đơn:', error);

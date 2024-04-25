@@ -59,24 +59,21 @@
 
 
 <section class="mt-5">
+
     <div class="container">
+        <p class="text-dark h2 font-weight-bold text-center">Đáng chú ý</p>
 
-        <div class="text-center mt-6">
-            <ul class="d-flex mt-6">
-                <li class="text-dark @(ViewBag.FilterType == "onsale" ? "active" : "")">
-                    <a class="btn" href="@Url.Action("Home", "TrangChu", new { filterType ="onsale" })"><span class="text-dark h4 font-weight-bold">Giảm nhiều</span></a>
-                </li>
-                <li class="text-dark @(ViewBag.FilterType == "bestseller" ? "active" : "")">
-                    <a class=" btn" href="@Url.Action("Home", "TrangChu", new { filterType ="bestseller" })"><span class="text-dark h4 font-weight-bold ">Bán chạy</span></a>
-                </li>
-                <li class="text-dark @(ViewBag.FilterType == "newarrival" ? "active" : "")">
-                    <a class="btn" href="@Url.Action("Home", "TrangChu", new { filterType ="newarrival" })"><span class="text-dark h4 font-weight-bold">Mới nhất</span></a>
-                </li>
-            </ul>
-
-
-        </div>
-
+        <ul class="d-flex">
+            <li class="text-dark @(ViewBag.FilterType == "onsale" ? "active" : "")">
+                <a class="btn" href="@Url.Action("Home", "TrangChu", new { filterType ="onsale" })"><span class="text-dark h4 font-weight-bold">Giảm nhiều</span></a>
+            </li>
+            <li class="text-dark @(ViewBag.FilterType == "bestseller" ? "active" : "")">
+                <a class=" btn" href="@Url.Action("Home", "TrangChu", new { filterType ="bestseller" })"><span class="text-dark h4 font-weight-bold ">Bán chạy</span></a>
+            </li>
+            <li class="text-dark @(ViewBag.FilterType == "newarrival" ? "active" : "")">
+                <a class="btn" href="@Url.Action("Home", "TrangChu", new { filterType ="newarrival" })"><span class="text-dark h4 font-weight-bold">Mới nhất</span></a>
+            </li>
+        </ul>
 
         <div class="row">
 
@@ -100,7 +97,7 @@
                                     var gia = item.ChitietSPs.FirstOrDefault()?.giaSP;
                                     if (gia != null)
                                     {
-                                        var giaGocNguyen = (int)gia; // Chuyển giá thành số nguyên
+                                        var giaGocNguyen = (int)gia;
                                         var giaGocFormatted = giaGocNguyen.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"));
 
 
@@ -130,11 +127,29 @@
                 <p>Danh sách sản phẩm trống</p>
             }
         </div>
-
-
-
-
     </div>
 
+    <div class="container mt-6" style="width: 60%">
+        <div class="blog__details__comment">
+            <h4>Đánh giá shop của bạn</h4>
+            <form action="#">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4">
+                        <input type="text" placeholder="Tên của bạn">
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <input type="text" placeholder="Email">
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <input type="text" placeholder="Số điện thoại">
+                    </div>
+                    <div class="col-lg-12 text-center">
+                        <textarea placeholder="Comment"></textarea>
+                        <button type="submit" class="site-btn">Gửi đánh giá</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </section>
 

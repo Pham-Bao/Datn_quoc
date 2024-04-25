@@ -25,13 +25,19 @@ namespace DATechShop.Controllers
 			}
 
 
-			else if (filterType == "newarrival")
+			else if (filterType == "newarrival" || filterType == null)
 			{
-				products = db.SanPhams.OrderByDescending(x => x.id_sanPham).ToList();
+				products = db.SanPhams
+							 .OrderByDescending(x => x.id_sanPham)
+							 .Take(4)
+							 .ToList();
 			}
 			else if (filterType == "onsale")
 			{
-				products = db.SanPhams.OrderByDescending(x => x.khuyenMai).ToList();
+				products = db.SanPhams
+						 .OrderByDescending(x => x.khuyenMai)
+						 .Take(4)
+						 .ToList();
 			}
 			ViewBag.FilterType = filterType;
 
@@ -79,7 +85,6 @@ namespace DATechShop.Controllers
 
 		public ActionResult LayChiTietSP(int id_sanPham)
 		{
-			// Tìm bản ghi trong bảng ChiTietSP theo id_sanPham
 			var chiTietSP = db.ChitietSPs.FirstOrDefault(ct => ct.id_sanPham == id_sanPham);
 
 			if (chiTietSP == null)
@@ -87,7 +92,6 @@ namespace DATechShop.Controllers
 				return HttpNotFound();
 			}
 
-			// Trả về view với dữ liệu của bản ghi tìm được
 			return View(chiTietSP);
 		}
 
@@ -97,7 +101,6 @@ namespace DATechShop.Controllers
 			mapSP map = new mapSP();
 			var data = map.chiTietThongSo(id_sanPham);
 
-			// Trả về dữ liệu JSON thay vì view
 			return Json(data);
 		}
 
@@ -110,12 +113,10 @@ namespace DATechShop.Controllers
 			{
 				using (var db = new DATotNghiepEntities())
 				{
-					// Kiểm tra xem người dùng đã mua sản phẩm hay chưa
 					bool hasPurchased = db.ChiTietHoaDons.Any(cthd => cthd.HoaDon.id_NguoiDung == id_NguoiDung && cthd.ChitietSP.SanPham.id_sanPham == id_sanPham);
 
 					if (hasPurchased)
 					{
-						// Thêm dữ liệu đánh giá vào cơ sở dữ liệu
 						var danhGia = new DanhGia
 						{
 							id_sanPham = id_sanPham,
@@ -157,17 +158,11 @@ namespace DATechShop.Controllers
 					m.ghiChu,
 					m.khuyenMai,
 					m.anhSPChung
-					// Add more properties if needed
 				})
 				.ToList();
 
 			return Json(data, JsonRequestBehavior.AllowGet);
 		}
-
-
-
-
-
 
 
 

@@ -66,11 +66,22 @@
     @if (TempData["ErrorMessage"] != null)
     {
 
-       <div id="errorAlert" class="alert alert-danger">
-           <i class="fas fa-exclamation-circle"></i>
-           @TempData["ErrorMessage"]
-       </div>
+        <div id="errorAlert" class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i>
+            @TempData["ErrorMessage"]
+        </div>
     }
+
+    <div id="errorAlert" class="alert alert-danger" style="display:none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="errorMessage"></span>
+    </div>
+
+    <div id="successAlert" class="alert alert-success" style="display:none;">
+        <i class="fas fa-check-circle"></i>
+        <span id="successMessage"></span>
+    </div>
+
 
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -174,7 +185,7 @@
 
                         <a class="collapse-item" href="@Url.Action("DanhSachHoaDon", "HoaDon")">Tất cả đơn</a>
                         <a class="collapse-item" href="@Url.Action("danhSachLoaiThanhToan", "HoaDon")">Lịch sử chuyển tiền</a>
-                        <a class="collapse-item" href="utilities-other.html">Thông kê</a>
+                        <a class="collapse-item" href="~/Admin/SanPham/ThongKe">Thống kê</a>
 
                     </div>
                 </div>

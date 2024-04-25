@@ -68,9 +68,9 @@ namespace DATechShop.Models
 
 				if(value == null)
 				{
-				data = db.SanPhams.Where(m => m.loaiSP.ToLower().Contains(loaiSP.ToLower()) || string.IsNullOrEmpty(loaiSP)).ToList();
+				data = db.SanPhams.Where(m => (m.loaiSP.ToLower().Contains(loaiSP.ToLower()) || string.IsNullOrEmpty(loaiSP)) && m.TrangThaiXoa != false).ToList();
 
-				}
+			}
 
 			// giảm dần
 			if (value == 1)
