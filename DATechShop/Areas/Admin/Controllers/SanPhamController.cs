@@ -255,7 +255,7 @@ namespace DATechShop.Areas.Admin.Controllers
 			var sanPham = db.SanPhams.FirstOrDefault(sp => sp.id_sanPham == id);
 			if (sanPham.TrangThaiXoa != null)
 			{
-				TempData["ErrorMessage"] = "Sản phẩm đã được xóa khỏi hệ thống không thể thêm! ";
+				TempData["ErrorMessage"] = "Sản phẩm đã được xóa khỏi hệ thống không thể thêm!";
 				return RedirectToAction("DanhSachSP", "SanPham");
 			}
 			
@@ -273,52 +273,65 @@ namespace DATechShop.Areas.Admin.Controllers
 			return View(viewModel);
 		}
 
+
+		//Action này chỉ cho phép người dùng có quyền admin thêm thông tin chi tiết cho sản phẩm.
+		//Chi tiết sản phẩm
 		[AdminAuth]
 		[HttpPost]
 		public ActionResult ThemChiTietSP(ThemChiTietSPViewModel viewModel, HttpPostedFileBase uploadhinh)
 		{
-		
-			if (uploadhinh == null || viewModel.ChitietSP.giaSP == null)
-			{
-				ViewBag.Error = "Chưa chọn ảnh hoặc nhập giá.";
-			}
-			else if (ModelState.IsValid)
-			{
-				var existingRecord = db.ChitietSPs.FirstOrDefault(c => c.id_sanPham == viewModel.SanPham.id_sanPham &&
-																		c.id_Mau == viewModel.SelectedMau &&
-																		c.id_tuyChon == viewModel.SelectedTuyChon);
-
-				if (existingRecord != null)
+			try
+			{   // Kiểm tra sự toàn vẹn của dữ liệu
+				if (uploadhinh == null || viewModel.ChitietSP.giaSP == null)
 				{
-					ViewBag.Error = "Bản ghi đã tồn tại trong bảng chi tiết sản phẩm.";
-					return View(viewModel);
+					ViewBag.Error = "Chưa chọn ảnh hoặc nhập giá.";
+				}
+				else if (ModelState.IsValid)
+				{
+					// Kiểm tra trùng lặp
+					var existingRecord = db.ChitietSPs.FirstOrDefault(c => c.id_sanPham == viewModel.SanPham.id_sanPham &&
+																			c.id_Mau == viewModel.SelectedMau &&
+																			c.id_tuyChon == viewModel.SelectedTuyChon);
+					// nếu mà nội dung này đã có trong cơ sở dữ liệu thì hiển thị thông báo đã tồn tại.
+					if (existingRecord != null)
+					{
+						ViewBag.Error = "Bản ghi đã tồn tại trong bảng chi tiết sản phẩm.";
+						return View(viewModel);
+					}
+					// trường hợp có thể thêm mới được 
+
+
+					var chiTietSP = new ChitietSP();
+					chiTietSP.id_sanPham = viewModel.SanPham.id_sanPham;
+					chiTietSP.id_Mau = viewModel.SelectedMau;
+					chiTietSP.id_tuyChon = viewModel.SelectedTuyChon;
+					chiTietSP.giaSP = viewModel.ChitietSP.giaSP;
+
+					if (uploadhinh != null && uploadhinh.ContentLength > 0)
+					{
+						string _FileName = "";
+						int id = int.Parse(db.ChitietSPs.ToList().Last().id_chiTietSP.ToString());
+						int index = uploadhinh.FileName.IndexOf('.');
+						_FileName = "anhSP_" + id.ToString() + "." + uploadhinh.FileName.Substring(index + 1);
+						string _path = Path.Combine(Server.MapPath("~/Upload/imgSP"), _FileName);
+						uploadhinh.SaveAs(_path);
+
+						chiTietSP.anhSP = _FileName;
+					}
+
+					db.ChitietSPs.Add(chiTietSP);
+					db.SaveChanges();
+					ViewBag.Success = "Thêm thành công";
+					TempData["SuccessMessage"] = "Thêm sản phẩm thành công!";
 				}
 
-				var chiTietSP = new ChitietSP();
-				chiTietSP.id_sanPham = viewModel.SanPham.id_sanPham;
-				chiTietSP.id_Mau = viewModel.SelectedMau;
-				chiTietSP.id_tuyChon = viewModel.SelectedTuyChon;
-				chiTietSP.giaSP = viewModel.ChitietSP.giaSP;
-
-				if (uploadhinh != null && uploadhinh.ContentLength > 0)
-				{
-					string _FileName = "";
-					int id = int.Parse(db.ChitietSPs.ToList().Last().id_chiTietSP.ToString());
-					int index = uploadhinh.FileName.IndexOf('.');
-					_FileName = "anhSP_" + id.ToString() + "." + uploadhinh.FileName.Substring(index + 1);
-					string _path = Path.Combine(Server.MapPath("~/Upload/imgSP"), _FileName);
-					uploadhinh.SaveAs(_path);
-
-					chiTietSP.anhSP = _FileName;
-				}
-
-				db.ChitietSPs.Add(chiTietSP);
-				db.SaveChanges();
-				ViewBag.Success = "Thêm thành công";
-				TempData["SuccessMessage"] = "Thêm sản phẩm thành công!";
+				return RedirectToAction("ChiTietSP", "SanPham", new { id = viewModel.SanPham.id_sanPham });
 			}
-
-			return RedirectToAction("ChiTietSP", "SanPham", new { id = viewModel.SanPham.id_sanPham });
+			catch (Exception ex)
+			{
+				ViewBag.Error = "Đã xảy ra lỗi khi thêm chi tiết sản phẩm. Vui lòng thử lại sau.";
+				return View(viewModel);
+			}
 		}
 
 

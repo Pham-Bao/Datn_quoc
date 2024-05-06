@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.Mvc;
+using static DATechShop.Areas.Admin.Content.AuthAttribute;
 
 
 namespace DATechShop.Controllers
@@ -14,8 +15,9 @@ namespace DATechShop.Controllers
     public class TrangChuController : Controller
     {
         DATotNghiepEntities db = new DATotNghiepEntities();
-        // GET: TrangChu
-        public ActionResult Home(string filterType)
+		// GET: TrangChu
+		[AdminAuth]
+		public ActionResult Home(string filterType)
         {
 			List<SanPham> products = new List<SanPham>();
 

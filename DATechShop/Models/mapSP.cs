@@ -53,6 +53,7 @@ namespace DATechShop.Models
 			var db = new DATotNghiepEntities();
 			return db.ChitietSPs.Find(id);
 		}
+
 		public List<ChitietSP> chiTietSP(int id)
 		{
 			var db = new DATotNghiepEntities();
@@ -170,7 +171,6 @@ namespace DATechShop.Models
 				ID = chitietSP.id_chiTietSP,
 				tenSP = chitietSP.SanPham.tenSP,
 				giaSP = chitietSP.giaSP,
-				// Gán các thuộc tính khác cần thiết
 			};
 
 			return chitietSPDTO;

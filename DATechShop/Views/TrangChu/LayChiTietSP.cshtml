@@ -425,8 +425,15 @@ var productId = '@Model.id_sanPham';
         console.log('Color:', color);
         console.log('Option:', option);
 
+        if (productId == null && color == null && option == null) {
+            $('#errorMessage').text('Phải chọn màu và tùy chọn');
+            $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
+        }
+        else {
+            CartClass.addToCart(productId, color, option, giaSP);
+        }
 
-        CartClass.addToCart(productId, color, option, giaSP);
+
     });
 
 

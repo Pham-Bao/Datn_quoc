@@ -20,9 +20,7 @@
     },
     // Hàm addToCart để thêm sản phẩm vào giỏ hàng
     addToCart: function (productId, color, option, giaSP) {
-        console.log('Thêm giỏ');
-        console.log(productId, color, option, giaSP);
-
+        
         var cart = this.Get();
 
         $.ajax({
@@ -50,7 +48,7 @@
                     $('#successMessage').text('Sản phẩm đã được thêm vào giỏ hàng.');
                     $('#successAlert').fadeIn('slow').delay(2000).fadeOut('slow');
                 } else {
-                    $('#errorMessage').text('Không thể lấy được id_chiTietSP.');
+                    $('#errorMessage').text('Sản phẩm không còn tồn tại');
                     $('#errorAlert').fadeIn('slow').delay(2000).fadeOut('slow');
                 }
             },
