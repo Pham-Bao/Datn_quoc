@@ -16,7 +16,6 @@ namespace DATechShop.Controllers
     {
         DATotNghiepEntities db = new DATotNghiepEntities();
 		// GET: TrangChu
-		[AdminAuth]
 		public ActionResult Home(string filterType)
         {
 			List<SanPham> products = new List<SanPham>();
